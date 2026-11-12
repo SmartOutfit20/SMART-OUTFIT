@@ -14,6 +14,7 @@ import auth from './routes/auth.js'
 import orders from './routes/orders.js'
 import coupons from './routes/coupons.js'
 import admin from './routes/admin.js'
+import storefront from './routes/storefront.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const clientDistPath = path.resolve(__dirname, '../../client/dist')
@@ -35,6 +36,7 @@ app.use('/api/categories', categories)
 app.use('/api/orders', orders)
 app.use('/api/coupons', coupons)
 app.use('/api/admin', admin)
+app.use('/api/storefront', storefront)
 
 // Serve the Vite production build from the same Render web service.
 app.use(express.static(clientDistPath))
