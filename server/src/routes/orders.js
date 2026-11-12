@@ -84,7 +84,7 @@ router.post('/',requireRole('customer'),async(req,res,next)=>{
  }
 })
 router.get('/mine',async(req,res,next)=>{try{res.json(await Order.find({customer:req.user.sub}).sort({createdAt:-1}).lean())}catch(e){next(e)}})
-router.get('/admin/all',requireRole('super_admin','admin','support'),async(req,res,next)=>{try{res.json(await Order.find().populate('customer','name email phone').sort({createdAt:-1}).limit(200).lean())}catch(e){next(e)}})
+router.get('/admin/all',requireRole('super_admin','admin','support'),async(req,res,next)=>{try{res.json(await Order.find().populate('customer','name email phone').populate('items.product','name sku images').sort({createdAt:-1}).limit(200).lean())}catch(e){next(e)}})
 router.patch('/:id/status',requireRole('super_admin','admin'),async(req,res,next)=>{try{
  const allowed=['confirmed','processing','shipped','delivered','cancelled','returned']
  if(!allowed.includes(req.body.status))return res.status(400).json({message:'Invalid order status'})
