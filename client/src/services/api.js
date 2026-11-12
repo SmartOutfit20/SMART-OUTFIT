@@ -20,6 +20,10 @@ export async function getCategories() {
   const { data } = await api.get('/categories')
   return data
 }
+export async function getAdminCategories() {
+  const { data } = await api.get('/categories/admin/all')
+  return data
+}
 export async function createProduct(payload) {
   const { data } = await api.post('/products', payload)
   return data
