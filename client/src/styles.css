@@ -742,3 +742,13 @@ html,body,#root{min-height:100%;background:#fff}
 @media(max-width:650px){
   .detail-gallery .detail-art{aspect-ratio:4/5;min-height:0;height:auto}
 }
+
+
+/* Product detail purchase actions */
+.detail-action-buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
+.detail-action-buttons .btn{width:100%;min-width:0;min-height:50px;margin:0;padding:12px 10px;font-size:10px;letter-spacing:.7px}
+.detail-action-buttons .detail-add-btn{background:#fff;border:1px solid var(--deep);color:var(--deep)}
+.detail-action-buttons .detail-add-btn:hover{background:#f5f1f8}
+.detail-action-buttons .detail-buy-btn{background:var(--deep);color:#fff}
+.detail-action-buttons .btn:disabled{opacity:.45;cursor:not-allowed}
+@media(max-width:420px){.detail-action-buttons{gap:8px}.detail-action-buttons .btn{min-height:46px;padding:10px 6px;font-size:9px;letter-spacing:.35px}}
