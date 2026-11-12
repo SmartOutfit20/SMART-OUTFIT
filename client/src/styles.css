@@ -1034,3 +1034,20 @@ body{padding-bottom:0!important;}
 .pwa-install-button:hover{background:#352052}
 @media(max-width:760px){.pwa-install-button{right:14px;bottom:calc(82px + env(safe-area-inset-bottom));padding:11px 15px;font-size:12px}}
 @media(min-width:761px){.pwa-install-button{bottom:24px}}
+
+
+/* Installed-app launch screen: cached brand mark with a short, lightweight reveal */
+.app-launch-splash{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse at 50% 42%,#392454 0%,#21113c 58%,#170d29 100%);animation:app-splash-exit .38s ease 0.72s both}
+.app-launch-content{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:17px;padding:28px;text-align:center;animation:app-brand-enter .72s cubic-bezier(.2,.8,.2,1) both}
+.app-launch-logo{display:block;width:auto;height:auto;max-width:min(66vw,260px);max-height:150px;object-fit:contain;filter:drop-shadow(0 12px 28px #08041155);animation:app-logo-settle .85s cubic-bezier(.2,.8,.2,1) both}
+.app-launch-fallback{width:82px;height:82px;display:grid;place-items:center;border:1px solid #c7a7e5;border-radius:24px;background:#ffffff0d;color:#fff;font:800 48px Manrope,sans-serif;box-shadow:0 12px 35px #08041155}
+.app-launch-tagline{color:#d8c7e9;font:700 9px 'DM Sans',sans-serif;letter-spacing:2.5px;opacity:0;animation:app-tagline-enter .4s ease .25s forwards}
+.app-launch-loader{display:flex;align-items:center;gap:6px;height:10px;margin-top:5px}
+.app-launch-loader i{width:5px;height:5px;border-radius:50%;background:#c5a6e8;animation:app-loader-pulse .7s ease-in-out infinite alternate}
+.app-launch-loader i:nth-child(2){animation-delay:.14s}.app-launch-loader i:nth-child(3){animation-delay:.28s}
+@keyframes app-brand-enter{from{opacity:0;transform:translateY(13px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes app-logo-settle{0%{transform:scale(.88);filter:blur(3px) drop-shadow(0 12px 28px #08041155)}65%{transform:scale(1.035)}100%{transform:scale(1);filter:drop-shadow(0 12px 28px #08041155)}}
+@keyframes app-tagline-enter{to{opacity:1}}
+@keyframes app-loader-pulse{from{opacity:.35;transform:scale(.75)}to{opacity:1;transform:scale(1.2)}}
+@keyframes app-splash-exit{to{opacity:0;visibility:hidden;pointer-events:none}}
+@media(prefers-reduced-motion:reduce){.app-launch-splash,.app-launch-content,.app-launch-logo,.app-launch-tagline,.app-launch-loader i{animation-duration:.01ms!important;animation-delay:0ms!important}}
