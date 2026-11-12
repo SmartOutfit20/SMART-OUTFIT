@@ -26,12 +26,13 @@ export function AuthProvider({ children }) {
       return data.user
     } finally { setBusy(false) }
   }
+  function setProfile(next) { setUser(next); localStorage.setItem('so-user', JSON.stringify(next)) }
   function logout() {
     localStorage.removeItem('so-token')
     localStorage.removeItem('so-user')
     setUser(null)
   }
-  const value = useMemo(() => ({ user, busy, login, register, logout }), [user, busy])
+  const value = useMemo(() => ({ user, busy, login, register, setProfile, logout }), [user, busy])
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 export const useAuth = () => useContext(AuthContext)
