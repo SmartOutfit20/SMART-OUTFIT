@@ -16,6 +16,16 @@ export function AuthProvider({ children }) {
       return data.user
     } finally { setBusy(false) }
   }
+  async function adminLogin(identity, password) {
+    setBusy(true)
+    try {
+      const { data } = await api.post('/auth/admin-login', { identity, password })
+      localStorage.setItem('so-token', data.token)
+      localStorage.setItem('so-user', JSON.stringify(data.user))
+      setUser(data.user)
+      return data.user
+    } finally { setBusy(false) }
+  }
   async function register(payload) {
     setBusy(true)
     try {
@@ -32,7 +42,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem('so-user')
     setUser(null)
   }
-  const value = useMemo(() => ({ user, busy, login, register, setProfile, logout }), [user, busy])
+  const value = useMemo(() => ({ user, busy, login, adminLogin, register, setProfile, logout }), [user, busy])
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 export const useAuth = () => useContext(AuthContext)
