@@ -1,29 +1,21 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="theme-color" content="#21113c"/><meta name="mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-status-bar-style" content="default"/><meta name="apple-mobile-web-app-title" content="SMART OUTFIT"/><link rel="manifest" href="/manifest.webmanifest"/><link rel="icon" type="image/svg+xml" href="/icons/app-icon.svg"/><link rel="apple-touch-icon" href="/icons/app-icon.svg"/><meta name="description" content="SMART OUTFIT — Your Style, Our Inspiration."/><title>SMART OUTFIT | Your Style, Our Inspiration</title>
-<style>
-html,body{margin:0;min-height:100%;background:#21113c}
-#app-boot-splash{position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 42%,#392454 0%,#21113c 58%,#170d29 100%);opacity:1;visibility:visible;transition:opacity .2s ease,visibility .2s ease;animation:boot-dismiss .2s ease .8s forwards}
-#app-boot-splash.is-hidden{opacity:0;visibility:hidden;pointer-events:none}
-#app-boot-splash .boot-content{display:flex;flex-direction:column;align-items:center;gap:16px;padding:24px;text-align:center;animation:boot-in .55s cubic-bezier(.2,.8,.2,1) both}
-#app-boot-splash img{display:none;max-width:min(68vw,260px);max-height:145px;width:auto;height:auto;object-fit:contain;filter:drop-shadow(0 12px 26px #08041155)}
-#app-boot-splash .boot-fallback{width:78px;height:78px;display:grid;place-items:center;border:1px solid #c7a7e5;border-radius:23px;background:#ffffff0d;color:#fff;font:800 46px Arial,sans-serif}
-#app-boot-splash .boot-tagline{color:#d8c7e9;font:700 9px Arial,sans-serif;letter-spacing:2.4px}
-#app-boot-splash .boot-dots{display:flex;gap:6px;margin-top:3px}
-#app-boot-splash .boot-dots i{width:5px;height:5px;border-radius:50%;background:#c5a6e8;animation:boot-pulse .7s ease-in-out infinite alternate}
-#app-boot-splash .boot-dots i:nth-child(2){animation-delay:.14s}#app-boot-splash .boot-dots i:nth-child(3){animation-delay:.28s}
-@keyframes boot-in{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}\n@keyframes boot-dismiss{to{opacity:0;visibility:hidden;pointer-events:none}}
-@keyframes boot-pulse{from{opacity:.35;transform:scale(.75)}to{opacity:1;transform:scale(1.2)}}
-@media(prefers-reduced-motion:reduce){#app-boot-splash,#app-boot-splash *{animation:none!important;transition:none!important}}
-</style>
-</head><body>
-<div id="app-boot-splash" role="status" aria-label="Opening SMART OUTFIT"><div class="boot-content"><img id="boot-brand-logo" alt="SMART OUTFIT"/><div id="boot-brand-fallback" class="boot-fallback">S</div><span class="boot-dots"><i></i><i></i><i></i></span></div></div><script>
-(function(){
- var splash=document.getElementById('app-boot-splash'),logo=document.getElementById('boot-brand-logo'),fallback=document.getElementById('boot-brand-fallback'),timer;
- function setLogo(value){if(!logo||!fallback)return;if(value){logo.src=value;logo.style.display='block';fallback.style.display='none'}else{logo.removeAttribute('src');logo.style.display='none';fallback.style.display='grid'}}
- try{var saved=localStorage.getItem('so-store-logo');if(saved)setLogo(saved)}catch(e){}
- window.__soSetBootLogo=setLogo;
- window.__soHideBootSplash=function(){if(timer)clearTimeout(timer);timer=setTimeout(function(){splash&&splash.classList.add('is-hidden')},520)};
- timer=setTimeout(function(){splash&&splash.classList.add('is-hidden')},1050);
-})();
-</script>
-<div id="root"></div><script type="module" src="/src/main.jsx"></script></body></html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="theme-color" content="#21113c"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+<meta name="apple-mobile-web-app-title" content="SMART OUTFIT"/>
+<link rel="manifest" href="/manifest.webmanifest"/>
+<link rel="icon" type="image/svg+xml" href="/icons/app-icon.svg"/>
+<link rel="apple-touch-icon" href="/icons/app-icon.svg"/>
+<meta name="description" content="SMART OUTFIT — Your Style, Our Inspiration."/>
+<title>SMART OUTFIT | Your Style, Our Inspiration</title>
+</head>
+<body>
+<div id="root"></div>
+<script type="module" src="/src/main.jsx"></script>
+</body>
+</html>
