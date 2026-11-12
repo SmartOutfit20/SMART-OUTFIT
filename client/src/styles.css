@@ -963,10 +963,7 @@ html,body,#root{min-height:100%;background:#fff}
   color:#bdb3c6;font-size:10px;line-height:1.5;letter-spacing:.15px;
 }
 .footer-complete .copyright-copy{display:inline-flex;align-items:center;gap:7px;min-width:0}
-.footer-complete .copyright-copy:before{
-  content:"©";width:23px;height:23px;display:grid;place-items:center;flex:0 0 23px;
-  border:1px solid rgba(255,255,255,.18);border-radius:50%;color:#d6c4e8;font-size:11px;font-weight:700;
-}
+.footer-complete .copyright-copy:before{content:none;display:none}
 .footer-complete .copyright-meta{display:inline-flex;align-items:center;justify-content:flex-end;gap:9px;flex-wrap:wrap;color:#d5cbdc}
 .footer-complete .copyright-origin{display:inline-flex;align-items:center;gap:7px;color:#c8bdcf}
 .footer-complete .copyright-origin:before{
