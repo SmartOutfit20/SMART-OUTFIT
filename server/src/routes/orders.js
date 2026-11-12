@@ -39,12 +39,25 @@ router.post('/',requireRole('customer'),async(req,res,next)=>{
    const id=String(line.productId||'')
    const quantity=Number(line.quantity)
    if(!/^([a-f0-9]{24})$/i.test(id)||!Number.isInteger(quantity)||quantity<1||quantity>20)throw Object.assign(new Error('Invalid cart item or quantity.'),{status:400})
-   const product=await Product.findOneAndUpdate({_id:id,isPublished:true,stock:{$gte:quantity}},{ $inc:{stock:-quantity} },{new:true})
-   if(!product)throw Object.assign(new Error('A product is unavailable or has insufficient stock. Refresh your cart and try again.'),{status:409})
-   reserved.push({id,quantity})
+   const size=String(line.size||''),color=String(line.color||'')
+   const current=await Product.findOne({_id:id,isPublished:true})
+   if(!current)throw Object.assign(new Error('A product is unavailable. Refresh your cart and try again.'),{status:409})
+   let product
+   const hasVariants=Array.isArray(current.variantStocks)&&current.variantStocks.length>0
+   if(hasVariants){
+    const variant=current.variantStocks.find(v=>v.size.toLowerCase()===size.toLowerCase()&&v.color.toLowerCase()===color.toLowerCase())
+    if(!variant)throw Object.assign(new Error('This size and colour combination is unavailable. Please choose another variant.'),{status:409})
+    product=await Product.findOneAndUpdate({_id:id,isPublished:true,variantStocks:{$elemMatch:{size:variant.size,color:variant.color,stock:{$gte:quantity}}}},{ $inc:{'variantStocks.$.stock':-quantity,stock:-quantity} },{new:true})
+    if(!product)throw Object.assign(new Error('Insufficient stock for '+size+' / '+color+'. Refresh your cart and try again.'),{status:409})
+    reserved.push({id,quantity,size:variant.size,color:variant.color,variant:true})
+   }else{
+    product=await Product.findOneAndUpdate({_id:id,isPublished:true,stock:{$gte:quantity}},{ $inc:{stock:-quantity} },{new:true})
+    if(!product)throw Object.assign(new Error('A product is unavailable or has insufficient stock. Refresh your cart and try again.'),{status:409})
+    reserved.push({id,quantity,variant:false})
+   }
    const unitPrice=product.price
    subtotal+=unitPrice*quantity
-   lineItems.push({product:product._id,name:product.name,sku:product.sku,quantity,unitPrice,size:String(line.size||''),color:String(line.color||'')})
+   lineItems.push({product:product._id,name:product.name,sku:product.sku,quantity,unitPrice,size,color})
   }
   let discount=0
   const couponCode=String(req.body.couponCode||'').trim().toUpperCase()
@@ -66,7 +79,7 @@ router.post('/',requireRole('customer'),async(req,res,next)=>{
   if(couponToConsume)await Coupon.updateOne({_id:couponToConsume._id},{$inc:{usageCount:1}})
   return res.status(201).json({message:'Order placed successfully. Pay cash on delivery.',order})
  }catch(e){
-  await Promise.all(reserved.map(x=>Product.updateOne({_id:x.id},{$inc:{stock:x.quantity}}).catch(()=>null)))
+  await Promise.all(reserved.map(x=>x.variant?Product.updateOne({_id:x.id,'variantStocks.size':x.size,'variantStocks.color':x.color},{$inc:{stock:x.quantity,'variantStocks.$.stock':x.quantity}}).catch(()=>null):Product.updateOne({_id:x.id},{$inc:{stock:x.quantity}}).catch(()=>null)))
   next(e)
  }
 })
@@ -82,7 +95,12 @@ router.patch('/:id/status',requireRole('super_admin','admin'),async(req,res,next
   const reason=String(req.body.cancellationReason||'').trim()
   if(reason.length<5)return res.status(400).json({message:'Please enter a cancellation reason (at least 5 characters) so the customer can see the notice.'})
   order.cancellationReason=reason.slice(0,500)
-  for(const line of order.items)if(line.product)await Product.updateOne({_id:line.product},{$inc:{stock:line.quantity||0}})
+  for(const line of order.items)if(line.product){
+   const product=await Product.findById(line.product).select('variantStocks').lean()
+   const variant=product?.variantStocks?.find(v=>v.size===line.size&&v.color===line.color)
+   if(variant)await Product.updateOne({_id:line.product,'variantStocks.size':line.size,'variantStocks.color':line.color},{$inc:{stock:line.quantity||0,'variantStocks.$.stock':line.quantity||0}})
+   else await Product.updateOne({_id:line.product},{$inc:{stock:line.quantity||0}})
+  }
  }
  order.status=req.body.status
  order.statusHistory=order.statusHistory||[]
