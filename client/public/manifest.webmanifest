@@ -1,0 +1,20 @@
+{
+  "id": "/",
+  "name": "SMART OUTFIT",
+  "short_name": "SMART OUTFIT",
+  "description": "Your Style, Our Inspiration.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#21113c",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icons/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
