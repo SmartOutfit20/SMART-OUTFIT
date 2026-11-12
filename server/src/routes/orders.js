@@ -60,7 +60,7 @@ router.post('/',requireRole('customer'),async(req,res,next)=>{
   const deliveryCharge=freeShippingThreshold>0&&subtotal>=freeShippingThreshold?0:configuredDelivery
   const order=await Order.create({
    orderNumber:'SO-'+Date.now()+'-'+randomBytes(3).toString('hex').toUpperCase(),
-   customer:req.user.sub,items:lineItems,subtotal,deliveryCharge,discount,total:subtotal-discount+deliveryCharge,couponCode:couponToConsume?.code||'',
+   customer:req.user.sub,items:lineItems,subtotal,deliveryCharge,discount,total:subtotal-discount+deliveryCharge,couponCode:couponToConsume?.code||'',statusHistory:[{status:'pending',note:'Order placed successfully.'}],
    paymentMethod:'cod',paymentStatus:'unpaid',deliveryAddress:address
   })
   if(couponToConsume)await Coupon.updateOne({_id:couponToConsume._id},{$inc:{usageCount:1}})
@@ -79,9 +79,14 @@ router.patch('/:id/status',requireRole('super_admin','admin'),async(req,res,next
  if(!order)return res.status(404).json({message:'Order not found'})
  if(order.status==='cancelled'&&req.body.status!=='cancelled')return res.status(409).json({message:'Cancelled orders cannot be reopened; create a new order instead.'})
  if(req.body.status==='cancelled'&&order.status!=='cancelled'){
+  const reason=String(req.body.cancellationReason||'').trim()
+  if(reason.length<5)return res.status(400).json({message:'Please enter a cancellation reason (at least 5 characters) so the customer can see the notice.'})
+  order.cancellationReason=reason.slice(0,500)
   for(const line of order.items)if(line.product)await Product.updateOne({_id:line.product},{$inc:{stock:line.quantity||0}})
  }
  order.status=req.body.status
+ order.statusHistory=order.statusHistory||[]
+ order.statusHistory.push({status:req.body.status,note:req.body.status==='cancelled'?order.cancellationReason:(req.body.note?String(req.body.note).slice(0,300):'Order status updated.'),createdAt:new Date()})
  if(req.body.status==='delivered'&&order.paymentMethod==='cod')order.paymentStatus='paid'
  await order.save()
  res.json(order)
