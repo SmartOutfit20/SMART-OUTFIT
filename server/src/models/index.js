@@ -1,0 +1,21 @@
+import mongoose from 'mongoose'
+const {Schema,model,models}=mongoose
+const opts={timestamps:true}
+const userSchema=new Schema({name:{type:String,required:true,trim:true},email:{type:String,lowercase:true,trim:true,sparse:true,unique:true},phone:{type:String,trim:true,sparse:true,unique:true},passwordHash:{type:String,required:true},role:{type:String,enum:['customer','super_admin','admin','support','editor','viewer'],default:'customer'},isActive:{type:Boolean,default:true} },opts)
+const productSchema=new Schema({name:{type:String,required:true,trim:true},slug:{type:String,required:true,unique:true},sku:{type:String,unique:true,sparse:true},description:String,category:{type:Schema.Types.ObjectId,ref:'Category'},price:{type:Number,required:true,min:0},compareAtPrice:{type:Number,min:0},images:[String],sizes:[String],colors:[String],stock:{type:Number,default:0,min:0},isPublished:{type:Boolean,default:false},tags:[String]},opts)
+const categorySchema=new Schema({name:{type:String,required:true},slug:{type:String,required:true,unique:true},parent:{type:Schema.Types.ObjectId,ref:'Category'},sortOrder:{type:Number,default:0},isActive:{type:Boolean,default:true}},opts)
+const orderSchema=new Schema({orderNumber:{type:String,required:true,unique:true},customer:{type:Schema.Types.ObjectId,ref:'User',required:true},items:[{product:{type:Schema.Types.ObjectId,ref:'Product'},name:String,sku:String,quantity:Number,unitPrice:Number,size:String,color:String}],subtotal:Number,deliveryCharge:Number,discount:Number,total:Number,status:{type:String,enum:['pending','confirmed','processing','shipped','delivered','cancelled','returned'],default:'pending'},paymentMethod:{type:String,enum:['cod','bkash','nagad','rocket'],default:'cod'},paymentStatus:{type:String,enum:['unpaid','pending','paid','failed','refunded'],default:'unpaid'},deliveryAddress:{name:String,phone:String,division:String,district:String,upazila:String,address:String}},opts)
+const reviewSchema=new Schema({product:{type:Schema.Types.ObjectId,ref:'Product',required:true},customer:{type:Schema.Types.ObjectId,ref:'User',required:true},rating:{type:Number,min:1,max:5,required:true},comment:String,isApproved:{type:Boolean,default:false}},opts)
+const couponSchema=new Schema({code:{type:String,unique:true,uppercase:true},type:{type:String,enum:['percentage','fixed'],default:'percentage'},value:{type:Number,min:0},minimumOrder:{type:Number,default:0},usageLimit:Number,expiresAt:Date,isActive:{type:Boolean,default:true}},opts)
+const supportSchema=new Schema({name:String,email:String,phone:String,subject:String,message:{type:String,required:true},status:{type:String,enum:['open','in_progress','closed'],default:'open'}},opts)
+const settingSchema=new Schema({key:{type:String,unique:true},value:Schema.Types.Mixed},opts)
+const activitySchema=new Schema({actor:{type:Schema.Types.ObjectId,ref:'User'},action:String,resource:String,resourceId:String,ip:String,metadata:Schema.Types.Mixed},opts)
+export const User=models.User||model('User',userSchema)
+export const Product=models.Product||model('Product',productSchema)
+export const Category=models.Category||model('Category',categorySchema)
+export const Order=models.Order||model('Order',orderSchema)
+export const Review=models.Review||model('Review',reviewSchema)
+export const Coupon=models.Coupon||model('Coupon',couponSchema)
+export const SupportTicket=models.SupportTicket||model('SupportTicket',supportSchema)
+export const Setting=models.Setting||model('Setting',settingSchema)
+export const ActivityLog=models.ActivityLog||model('ActivityLog',activitySchema)
