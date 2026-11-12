@@ -1026,3 +1026,5 @@ body{padding-bottom:0!important;}
 .admin-order-shipping,.admin-order-cancel-reason{padding:11px 13px;border-radius:8px;background:#fff;border:1px solid #e8e8e8;font-size:12px;display:flex;gap:12px;flex-wrap:wrap}
 .admin-order-cancel-reason{display:block;color:#8a3838}
 @media(max-width:650px){.admin-order-details{padding:14px}.admin-order-details-columns{grid-template-columns:1fr}.admin-order-item{gap:9px;padding:10px}.admin-order-item-image{width:48px;height:58px;flex-basis:48px}.admin-order-details-heading{align-items:flex-start}.admin-order-details-heading>b{font-size:10px}}
+
+.admin-order-print-actions{display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:wrap}.admin-order-print-actions .admin-action{white-space:nowrap}@media(max-width:640px){.admin-order-print-actions{justify-content:flex-start}.admin-order-print-actions .admin-action{width:100%;justify-content:center}}
