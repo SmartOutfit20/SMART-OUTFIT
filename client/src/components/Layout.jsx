@@ -1,5 +1,5 @@
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { ShoppingBag, Package, Menu, X, UserRound, Heart, House, ChevronDown, ChevronRight, Shirt, Tag, ShoppingBag, Star, Sparkles, Heart, Watch, Footprints, Baby, Gem, Gift, Flame, Crown, Glasses, Backpack, Search, Facebook, Instagram, Youtube, Music2 } from 'lucide-react'
+import { ShoppingBag, Package, Menu, X, UserRound, Heart, House, ChevronDown, ChevronRight, Shirt, Tag, Star, Sparkles, Watch, Footprints, Baby, Gem, Gift, Flame, Crown, Glasses, Backpack, Search, Facebook, Instagram, Youtube, Music2 } from 'lucide-react'
 import { useShop } from '../context/ShopContext'
 import { useEffect, useLayoutEffect, useState } from 'react'
 import api from '../services/api'
