@@ -2,7 +2,7 @@ import {Router} from 'express'
 import {requireAuth,requireRole} from '../middleware/auth.js'
 import {Coupon} from '../models/index.js'
 const router=Router()
-router.use(requireAuth,requireRole('super_admin','admin'))
+router.use(requireAuth,requireRole('super_admin','admin','editor'))
 router.get('/',async(req,res,next)=>{try{res.json(await Coupon.find().sort({createdAt:-1}).lean())}catch(e){next(e)}})
 router.post('/',async(req,res,next)=>{try{
  const code=String(req.body.code||'').trim().toUpperCase(),type=req.body.type==='fixed'?'fixed':'percentage',value=Number(req.body.value),minimumOrder=Number(req.body.minimumOrder||0),usageLimit=req.body.usageLimit===''||req.body.usageLimit==null?undefined:Number(req.body.usageLimit)
