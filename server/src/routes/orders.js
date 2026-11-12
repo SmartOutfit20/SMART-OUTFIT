@@ -52,8 +52,15 @@ router.get('/admin/all',requireRole('super_admin','admin','support'),async(req,r
 router.patch('/:id/status',requireRole('super_admin','admin'),async(req,res,next)=>{try{
  const allowed=['confirmed','processing','shipped','delivered','cancelled','returned']
  if(!allowed.includes(req.body.status))return res.status(400).json({message:'Invalid order status'})
- const order=await Order.findByIdAndUpdate(req.params.id,{status:req.body.status},{new:true})
+ const order=await Order.findById(req.params.id)
  if(!order)return res.status(404).json({message:'Order not found'})
+ if(order.status==='cancelled'&&req.body.status!=='cancelled')return res.status(409).json({message:'Cancelled orders cannot be reopened; create a new order instead.'})
+ if(req.body.status==='cancelled'&&order.status!=='cancelled'){
+  for(const line of order.items)if(line.product)await Product.updateOne({_id:line.product},{$inc:{stock:line.quantity||0}})
+ }
+ order.status=req.body.status
+ if(req.body.status==='delivered'&&order.paymentMethod==='cod')order.paymentStatus='paid'
+ await order.save()
  res.json(order)
 }catch(e){next(e)}})
 export default router
