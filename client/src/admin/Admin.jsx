@@ -29,7 +29,16 @@ export function AdminProducts(){
  const variantSeen=new Set();const sizeOptions=new Set(form.sizes.split(',').map(x=>x.trim().toLowerCase()).filter(Boolean)),colorOptions=new Set(form.colors.split(',').map(x=>x.trim().toLowerCase()).filter(Boolean));const variantPreview=form.variantStocks.split('\n').filter(line=>line.trim()).map((line,index)=>{const parts=line.split('|').map(x=>x.trim()),size=parts[0]||'',color=parts[1]||'',quantity=parts[2]??'',formatValid=parts.length===3&&!!size&&!!color&&/^\d+$/.test(quantity),key=size.toLowerCase()+'|'+color.toLowerCase(),duplicate=variantSeen.has(key);variantSeen.add(key);const optionValid=sizeOptions.has(size.toLowerCase())&&colorOptions.has(color.toLowerCase());return {index:index+1,size,color,quantity,valid:formatValid&&optionValid&&!duplicate,reason:duplicate?'Duplicate combination':!optionValid?'Check available options':!formatValid?'Incomplete row':''}});const variantTotal=variantPreview.reduce((n,v)=>n+(v.valid?Number(v.quantity):0),0);
  return <><div className="admin-welcome"><div><span className="eyebrow">CATALOGUE MANAGEMENT</span><h1>Products</h1><p>Manage product details, pricing, variants, inventory and visibility.</p></div><div className="admin-product-actions"><button className="admin-refresh" type="button" onClick={importStarter} disabled={importBusy}>{importBusy?'Importing…':'Import 30 starter products'}</button><button className="admin-action" onClick={()=>{close();setShow(true)}}><Plus size={15}/> Add product</button></div></div>{error&&<p className="api-notice">{error}</p>}{notice&&<p className="admin-success">{notice}</p>}{show&&<form className="admin-product-form admin-product-editor" onSubmit={save}>
  <div className="admin-form-heading admin-product-editor-heading"><div><span className="eyebrow">{editing?'EDIT LISTING':'NEW LISTING'}</span><h3>{editing?'Update product':'Create a product'}</h3><p>Complete each section below. Your changes are saved together.</p></div><button type="button" className="admin-cancel" onClick={close}>Close</button></div>
- <section className="admin-product-section">
+ <nav className="admin-product-section-nav" aria-label="Product form sections">
+  <a href="#product-details"><span>01</span> Details</a><a href="#product-images"><span>02</span> Photos</a><a href="#product-pricing"><span>03</span> Pricing</a><a href="#product-inventory"><span>04</span> Inventory</a><a href="#product-publish"><span>05</span> Publish</a>
+ </nav>
+ <div className="admin-product-at-a-glance">
+  <div><small>LISTING STATUS</small><b><i className={form.isPublished?'is-published':'is-draft'}/>{form.isPublished?'Ready to publish':'Saved as draft'}</b></div>
+  <div><small>PRODUCT PHOTOS</small><b>{form.images.length} <span>/ 8</span></b></div>
+  <div><small>AVAILABLE STOCK</small><b>{(form.variantStocks.trim()?variantTotal:Number(form.stock)||0).toLocaleString()} <span>units</span></b></div>
+  <div><small>SELLING PRICE</small><b>{form.price!==''?money(Number(form.price)||0):'৳ —'}</b></div>
+ </div>
+ <section id="product-details" className="admin-product-section">
   <div className="admin-product-section-heading"><span className="admin-product-section-icon"><Package size={17}/></span><div><span className="eyebrow">01 / PRODUCT DETAILS</span><h4>Basic information</h4><p>Give your product a clear name and organise it in your catalogue.</p></div></div>
   <div className="admin-product-section-grid">
    <label className="admin-field-wide">Product name *<input required maxLength="120" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} placeholder="e.g. Premium Cotton T-Shirt"/></label>
@@ -39,7 +48,7 @@ export function AdminProducts(){
    <label className="admin-field-wide">Search tags<input value={form.tags} onChange={e=>setForm({...form,tags:e.target.value})} placeholder="cotton, casual, summer"/></label>
   </div>
  </section>
- <section className="admin-product-section">
+ <section id="product-images" className="admin-product-section">
   <div className="admin-product-section-heading"><span className="admin-product-section-icon"><Camera size={17}/></span><div><span className="eyebrow">02 / PRODUCT PHOTOGRAPHY</span><h4>Product images</h4><p>Add clear photos. The first image will be used as the main product image.</p></div></div>
   <div className="admin-image-uploader admin-image-uploader-enhanced"><div className="admin-image-upload-top"><div><b>Upload product photos</b><small>JPG, PNG, WEBP or GIF · maximum 8 MB each · up to 8 images</small></div><label className="admin-upload-button"><Plus size={16}/>{uploading?'Uploading images…':'Choose images'}<input type="file" accept="image/png,image/jpeg,image/webp,image/gif" multiple disabled={uploading||form.images.length>=8} onChange={e=>{uploadImages(e.target.files);e.target.value=''}} hidden/></label></div>
    {uploadError&&<p className="api-notice">{uploadError}</p>}
@@ -47,7 +56,7 @@ export function AdminProducts(){
    <details><summary>Or add image URLs manually</summary><textarea rows="2" value={form.images.join('\n')} onChange={e=>setForm({...form,images:e.target.value.split('\n').map(x=>x.trim()).filter(Boolean).slice(0,8)})} placeholder="One HTTPS image URL per line"/></details>
   </div>
  </section>
- <section className="admin-product-section">
+ <section id="product-pricing" className="admin-product-section">
   <div className="admin-product-section-heading"><span className="admin-product-section-icon"><Tag size={17}/></span><div><span className="eyebrow">03 / PRICING</span><h4>Set your price</h4><p>Enter the selling price and an optional original price for sale display.</p></div></div>
   <div className="admin-product-section-grid admin-product-pricing-grid">
    <label>Selling price (BDT) *<input required min="0" step="1" type="number" value={form.price} onChange={e=>setForm({...form,price:e.target.value})} placeholder="1290"/></label>
@@ -55,7 +64,7 @@ export function AdminProducts(){
    <div className="admin-price-preview"><span>STORE PRICE PREVIEW</span><b>{form.price!==''?money(Number(form.price)||0):'৳ —'}</b>{Number(form.compareAtPrice)>Number(form.price)&&Number(form.price)>=0?<small><del>{money(Number(form.compareAtPrice))}</del> · {Math.round((1-Number(form.price)/Number(form.compareAtPrice))*100)}% off</small>:<small>Enter an old price to show a discount</small>}</div>
   </div>
  </section>
- <section className="admin-product-section">
+ <section id="product-inventory" className="admin-product-section">
   <div className="admin-product-section-heading"><span className="admin-product-section-icon"><Boxes size={17}/></span><div><span className="eyebrow">04 / OPTIONS & STOCK</span><h4>Variants and inventory</h4><p>Set available sizes and colours, then track stock for each combination.</p></div></div>
   <div className="admin-product-section-grid">
    <label>Available sizes<input value={form.sizes} onChange={e=>setForm({...form,sizes:e.target.value})} placeholder="S, M, L, XL"/><small>Separate each size with a comma.</small></label>
@@ -65,7 +74,7 @@ export function AdminProducts(){
    <label>Shared stock quantity *<input required min="0" step="1" type="number" value={form.stock} onChange={e=>setForm({...form,stock:e.target.value})} disabled={!!form.variantStocks.trim()}/><small>{form.variantStocks.trim()?'Disabled while variant stock is being used.':'Used when this product has no size/colour stock rows.'}</small></label>
   </div>
  </section>
- <section className="admin-product-section admin-product-publish-section">
+ <section id="product-publish" className="admin-product-section admin-product-publish-section">
   <div className="admin-product-section-heading"><span className="admin-product-section-icon"><Eye size={17}/></span><div><span className="eyebrow">05 / STOREFRONT VISIBILITY</span><h4>Visibility and merchandising</h4><p>Control publication and optional product placements on your storefront.</p></div></div>
   <div className="admin-product-feature-grid">
    <label className="admin-product-publish-toggle"><input type="checkbox" checked={form.isPublished} onChange={e=>setForm({...form,isPublished:e.target.checked})}/><span><b>{form.isPublished?'Publish product':'Save as draft'}</b><small>{form.isPublished?'Visible to customers on the storefront.':'Only visible in the admin catalogue.'}</small></span><span className={form.isPublished?'status-published':'status-draft'}>{form.isPublished?'PUBLISHED':'DRAFT'}</span></label>
