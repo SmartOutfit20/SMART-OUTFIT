@@ -32,7 +32,6 @@ router.post('/',async(req,res,next)=>{
   const requested=Array.isArray(req.body.items)?req.body.items:[]
   if(!requested.length||requested.length>30)return res.status(400).json({message:'Your cart is empty or contains too many items.'})
   const advancePaymentMethod=String(req.body.advancePaymentMethod||'').toLowerCase();const advancePaymentSender=String(req.body.advancePaymentSender||'').trim();const advancePaymentTransactionId=String(req.body.advancePaymentTransactionId||'').trim();
-  if(!['bkash','nagad'].includes(advancePaymentMethod))return res.status(400).json({message:'Choose bKash or Nagad to pay the delivery charge in advance.'});
   const lineItems=[]
   let subtotal=0
   for(const line of requested){
@@ -67,18 +66,20 @@ router.post('/',async(req,res,next)=>{
    discount=Math.min(subtotal,couponToConsume.type==='fixed'?Number(couponToConsume.value||0):Math.floor(subtotal*Number(couponToConsume.value||0)/100))
    if(discount<=0)throw Object.assign(new Error('Coupon discount is invalid.'),{status:400})
   }
-  const [deliverySetting,freeThresholdSetting]=await Promise.all([Setting.findOne({key:'deliveryCharge'}).lean(),Setting.findOne({key:'freeShippingThreshold'}).lean()])
+  const [deliverySetting,freeThresholdSetting,advanceEnabledSetting]=await Promise.all([Setting.findOne({key:'deliveryCharge'}).lean(),Setting.findOne({key:'freeShippingThreshold'}).lean(),Setting.findOne({key:'advancePaymentEnabled'}).lean()])
   const configuredDelivery=Number(deliverySetting?.value??process.env.DELIVERY_CHARGE_BDT??100)
   const freeShippingThreshold=Number(freeThresholdSetting?.value??3000)
+  const advancePaymentEnabled=advanceEnabledSetting?.value!==false
   const deliveryCharge=freeShippingThreshold>0&&subtotal>=freeShippingThreshold?0:configuredDelivery
-  if(deliveryCharge>0&&(!['bkash','nagad'].includes(advancePaymentMethod)||!/^01[3-9]\d{8}$/.test(advancePaymentSender)||advancePaymentTransactionId.length<6||advancePaymentTransactionId.length>80))return res.status(400).json({message:'Enter a valid bKash/Nagad sender mobile number and transaction ID for the delivery charge.'})
+  const advancePaymentAmount=advancePaymentEnabled?deliveryCharge:0
+  if(advancePaymentAmount>0&&(!['bkash','nagad'].includes(advancePaymentMethod)||!/^01[3-9]\d{8}$/.test(advancePaymentSender)||advancePaymentTransactionId.length<6||advancePaymentTransactionId.length>80))return res.status(400).json({message:'Enter a valid bKash/Nagad sender mobile number and transaction ID for the delivery charge.'})
   const order=await Order.create({
    orderNumber:'SO-'+Date.now()+'-'+randomBytes(3).toString('hex').toUpperCase(),
    customer:req.user.sub,items:lineItems,subtotal,deliveryCharge,discount,total:subtotal-discount+deliveryCharge,couponCode:couponToConsume?.code||'',statusHistory:[{status:'pending',note:'Order placed successfully.'}],
-   paymentMethod:'cod',paymentStatus:deliveryCharge>0?'pending':'unpaid',advancePaymentAmount:deliveryCharge,advancePaymentMethod:deliveryCharge>0?advancePaymentMethod:'',advancePaymentSender:deliveryCharge>0?advancePaymentSender:'',advancePaymentTransactionId:deliveryCharge>0?advancePaymentTransactionId:'',advancePaymentSubmittedAt:deliveryCharge>0?new Date():undefined,deliveryAddress:address
+   paymentMethod:'cod',paymentStatus:advancePaymentAmount>0?'pending':'unpaid',advancePaymentAmount,advancePaymentMethod:advancePaymentAmount>0?advancePaymentMethod:'',advancePaymentSender:advancePaymentAmount>0?advancePaymentSender:'',advancePaymentTransactionId:advancePaymentAmount>0?advancePaymentTransactionId:'',advancePaymentSubmittedAt:advancePaymentAmount>0?new Date():undefined,deliveryAddress:address
   })
-  if(couponToConsume&&deliveryCharge===0)await Coupon.updateOne({_id:couponToConsume._id},{$inc:{usageCount:1}})
-  return res.status(201).json({message:deliveryCharge>0?'Order submitted. Delivery charge payment is awaiting manual verification; remaining product amount is Cash on Delivery.':'Order placed. Product amount is Cash on Delivery.',order})
+  if(couponToConsume&&advancePaymentAmount===0)await Coupon.updateOne({_id:couponToConsume._id},{$inc:{usageCount:1}})
+  return res.status(201).json({message:advancePaymentAmount>0?'Order submitted. Delivery charge payment is awaiting manual verification; remaining product amount is Cash on Delivery.':'Order placed. Product amount is Cash on Delivery.',order})
  }catch(e){
   await Promise.all(reserved.map(x=>x.variant?Product.updateOne({_id:x.id,variantStocks:{$elemMatch:{size:x.size,color:x.color}}},{$inc:{stock:x.quantity,'variantStocks.$.stock':x.quantity}}).catch(()=>null):Product.updateOne({_id:x.id},{$inc:{stock:x.quantity}}).catch(()=>null)))
   next(e)
