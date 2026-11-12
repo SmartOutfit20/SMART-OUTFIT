@@ -16,7 +16,8 @@ const cleanProduct = body => ({
   images: Array.isArray(body.images) ? body.images.filter(x => typeof x === 'string').slice(0, 8) : [],
   sizes: Array.isArray(body.sizes) ? body.sizes.map(String).slice(0, 20) : [],
   colors: Array.isArray(body.colors) ? body.colors.map(String).slice(0, 20) : [],
-  stock: Number(body.stock ?? 0),
+  variantStocks: Array.isArray(body.variantStocks) ? body.variantStocks.map(v => ({ size: String(v.size || '').trim(), color: String(v.color || '').trim(), stock: Number(v.stock) })).filter(v => v.size && v.color && Number.isInteger(v.stock) && v.stock >= 0).slice(0, 100) : [],
+  stock: Array.isArray(body.variantStocks) && body.variantStocks.length ? body.variantStocks.reduce((n, v) => n + Math.max(0, Number(v.stock) || 0), 0) : Number(body.stock ?? 0),
   isPublished: Boolean(body.isPublished),
   tags: Array.isArray(body.tags) ? body.tags.map(String).slice(0, 20) : []
 })
@@ -77,6 +78,30 @@ router.get('/admin/all', ...adminOnly, async (req, res, next) => {
   catch (e) { next(e) }
 })
 
+
+
+router.patch('/admin/:id/variant-stock', ...adminOnly, async (req, res, next) => {
+  try {
+    const size = String(req.body.size || '').trim().slice(0, 30)
+    const color = String(req.body.color || '').trim().slice(0, 40)
+    const delta = Number(req.body.delta)
+    if (!/^[a-f0-9]{24}$/i.test(req.params.id) || !size || !color || !Number.isInteger(delta) || delta === 0 || Math.abs(delta) > 100000) return res.status(400).json({ message: 'Provide a valid size, colour and whole-number stock adjustment.' })
+    const product = await Product.findById(req.params.id)
+    if (!product) return res.status(404).json({ message: 'Product not found.' })
+    const index = product.variantStocks.findIndex(v => v.size.toLowerCase() === size.toLowerCase() && v.color.toLowerCase() === color.toLowerCase())
+    if (index < 0) {
+      if (delta < 0) return res.status(409).json({ message: 'This variant has no stock record.' })
+      product.variantStocks.push({ size, color, stock: delta })
+    } else {
+      if (product.variantStocks[index].stock + delta < 0) return res.status(409).json({ message: 'Insufficient stock for this variant.' })
+      product.variantStocks[index].stock += delta
+    }
+    product.stock = product.variantStocks.reduce((n, v) => n + Number(v.stock || 0), 0)
+    await product.save()
+    ActivityLog.create({ actor: req.user.sub, action: 'variant_inventory_adjusted', resource: 'product', resourceId: product._id.toString(), metadata: { size, color, delta } }).catch(() => {})
+    res.json(product)
+  } catch (e) { next(e) }
+})
 
 router.patch('/admin/:id/stock', ...adminOnly, async (req, res, next) => {
   try {
