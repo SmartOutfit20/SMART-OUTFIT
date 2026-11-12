@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { Product, Category } from '../models/index.js'
+import { Product, Category, ActivityLog } from '../models/index.js'
 import { starterProducts } from '../data/starterProducts.js'
 import { requireAuth, requireRole } from '../middleware/auth.js'
 
@@ -75,6 +75,26 @@ router.get('/', async (req, res, next) => {
 router.get('/admin/all', ...adminOnly, async (req, res, next) => {
   try { res.json(await Product.find().populate('category', 'name').sort({ createdAt: -1 }).lean()) }
   catch (e) { next(e) }
+})
+
+
+router.patch('/admin/:id/stock', ...adminOnly, async (req, res, next) => {
+  try {
+    const delta = Number(req.body.delta)
+    const note = String(req.body.note || 'Manual inventory adjustment').trim().slice(0, 200)
+    if (!/^[a-f0-9]{24}$/i.test(req.params.id) || !Number.isInteger(delta) || delta === 0 || Math.abs(delta) > 100000) {
+      return res.status(400).json({ message: 'Provide a valid product ID and a non-zero whole-number stock adjustment (maximum 100,000).' })
+    }
+    const filter = { _id: req.params.id }
+    if (delta < 0) filter.stock = { $gte: Math.abs(delta) }
+    const product = await Product.findOneAndUpdate(filter, { $inc: { stock: delta } }, { new: true, runValidators: true }).populate('category', 'name')
+    if (!product) {
+      const exists = await Product.exists({ _id: req.params.id })
+      return res.status(exists ? 409 : 404).json({ message: exists ? 'Insufficient stock. Refresh inventory and try again.' : 'Product not found.' })
+    }
+    ActivityLog.create({ actor: req.user.sub, action: 'inventory_adjusted', resource: 'product', resourceId: product._id.toString(), metadata: { delta, stockAfter: product.stock, note } }).catch(() => {})
+    res.json(product)
+  } catch (e) { next(e) }
 })
 
 router.post('/', ...adminOnly, async (req, res, next) => {
