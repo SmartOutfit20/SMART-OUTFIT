@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 const {Schema,model,models}=mongoose
 const opts={timestamps:true}
-const userSchema=new Schema({name:{type:String,required:true,trim:true},email:{type:String,lowercase:true,trim:true,sparse:true,unique:true},phone:{type:String,trim:true,sparse:true,unique:true},passwordHash:{type:String,required:true},role:{type:String,enum:['customer','super_admin','admin','support','editor','viewer'],default:'customer'},isActive:{type:Boolean,default:true} },opts)
+const userSchema=new Schema({name:{type:String,required:true,trim:true},email:{type:String,lowercase:true,trim:true,sparse:true,unique:true},phone:{type:String,trim:true,sparse:true,unique:true},passwordHash:{type:String,required:true},role:{type:String,enum:['customer','super_admin','admin','support','editor','viewer'],default:'customer'},isActive:{type:Boolean,default:true},profileImage:{type:String,default:''},defaultAddress:{division:String,district:String,upazila:String,address:String} },opts)
 userSchema.index({role:1},{unique:true,partialFilterExpression:{role:'super_admin'}})
 const productSchema=new Schema({name:{type:String,required:true,trim:true},slug:{type:String,required:true,unique:true},sku:{type:String,unique:true,sparse:true},description:String,category:{type:Schema.Types.ObjectId,ref:'Category'},price:{type:Number,required:true,min:0},compareAtPrice:{type:Number,min:0},images:[String],sizes:[String],colors:[String],stock:{type:Number,default:0,min:0},isPublished:{type:Boolean,default:false},tags:[String]},opts)
 const categorySchema=new Schema({name:{type:String,required:true},slug:{type:String,required:true,unique:true},parent:{type:Schema.Types.ObjectId,ref:'Category'},sortOrder:{type:Number,default:0},isActive:{type:Boolean,default:true}},opts)
