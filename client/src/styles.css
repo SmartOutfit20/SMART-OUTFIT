@@ -1170,3 +1170,6 @@ body{padding-bottom:0!important;}
  .admin-product-feature-grid{grid-template-columns:1fr}
  .admin-product-feature-grid>.admin-product-publish-toggle:first-child{grid-column:auto}
 }
+
+.admin-table-tools select{min-width:130px;padding:11px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:10px;color:var(--ink)}.admin-product-status-cell{display:flex;flex-direction:column;align-items:flex-start;gap:5px}.admin-product-flag{padding:3px 6px;border-radius:5px;background:#f1ebf7;color:#69458a;font-size:8px;font-weight:700}
+@media(max-width:650px){.admin-table-tools select{flex:1;min-width:130px}}
