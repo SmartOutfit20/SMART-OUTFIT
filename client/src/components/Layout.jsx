@@ -1,12 +1,13 @@
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { ShoppingBag, Package, Menu, X, UserRound, House, ChevronDown, Shirt, Tag, Facebook, Instagram, Youtube, Music2 } from 'lucide-react'
 import { useShop } from '../context/ShopContext'
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 import api from '../services/api'
 export function Layout(){
  const {cart}=useShop()
  const location=useLocation()
  const [menuOpen,setMenuOpen]=useState(false)
+ useLayoutEffect(()=>{window.scrollTo(0,0)},[location.pathname,location.search])
  const [store,setStore]=useState({storeName:'SMART OUTFIT',tagline:'Your Style, Our Inspiration.',storeNotice:'FREE DELIVERY ON ORDERS OVER ৳3,000 • NEW SEASON, NEW YOU',announcementEnabled:true,supportEmail:'',supportPhone:'',aboutText:''})
  useEffect(()=>{api.get('/storefront').then(({data})=>setStore(s=>({...s,...data}))).catch(()=>{})},[])
  useEffect(()=>{try{let visitorId=localStorage.getItem('so-visitor-id');if(!visitorId){visitorId=window.crypto?.randomUUID?.()||('so-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2));localStorage.setItem('so-visitor-id',visitorId)}api.post('/analytics/visit',{visitorId,path:location.pathname+location.search}).catch(()=>{})}catch{}},[location.pathname,location.search])
