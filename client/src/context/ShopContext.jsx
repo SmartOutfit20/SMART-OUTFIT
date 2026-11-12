@@ -12,8 +12,9 @@ export function ShopProvider({children}) {
    return found ? old.map(x=>x.key===key?{...x,qty:x.qty+1}:x) : [...old,{...product,key,size,qty:1}]
  })
  const changeQty = (key,qty) => setCart(old=>qty<1?old.filter(x=>x.key!==key):old.map(x=>x.key===key?{...x,qty}:x))
+ const clearCart = () => setCart([])
  const toggleWish = id => setWishlist(old=>old.includes(id)?old.filter(x=>x!==id):[...old,id])
- const value = useMemo(()=>({cart,wishlist,language,setLanguage,addToCart,changeQty,toggleWish}),[cart,wishlist,language])
+ const value = useMemo(()=>({cart,wishlist,language,setLanguage,addToCart,changeQty,clearCart,toggleWish}),[cart,wishlist,language])
  return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>
 }
 export const useShop = () => useContext(ShopContext)
