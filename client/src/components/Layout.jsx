@@ -1,5 +1,5 @@
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
-import { ShoppingBag, Package, Menu, X, UserRound, House, ChevronDown, Shirt, Tag } from 'lucide-react'
+import { ShoppingBag, Package, Menu, X, UserRound, House, ChevronDown, Shirt, Tag, Facebook, Instagram, Youtube, Music2 } from 'lucide-react'
 import { useShop } from '../context/ShopContext'
 import { useEffect, useState } from 'react'
 import api from '../services/api'
