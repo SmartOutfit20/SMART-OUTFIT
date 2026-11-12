@@ -128,3 +128,22 @@
  .admin-shell{grid-template-columns:1fr}
 }
 @media(min-width:821px){.header{position:sticky;top:0}.mobile-bottom-nav{display:none}}
+
+/* Admin workspace navigation on narrow screens */
+@media(max-width:650px){
+ .admin-sidebar{position:relative;display:flex;flex-direction:row;align-items:center;gap:5px;padding:9px 10px;overflow-x:auto;white-space:nowrap;scrollbar-width:thin}
+ .admin-brand,.admin-label,.admin-sidebar-bottom{display:none}
+ .admin-sidebar>a{flex:0 0 auto;padding:10px 11px;font-size:10px}
+ .admin-main{min-width:0}
+ .admin-top{position:sticky;top:0;z-index:850;height:56px;padding:0 14px}
+ .admin-top-user{font-size:9px}
+ .admin-content{padding:16px 12px}
+ .admin-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:18px 0}
+ .admin-stat,.admin-panel{padding:14px}
+ .admin-stat strong{font-size:21px}
+ .admin-table-wrap{overflow-x:auto}
+ .admin-table{min-width:680px}
+ .admin-product-form{padding:13px;gap:12px}
+ .admin-form-heading{align-items:flex-start}
+ .admin-form-actions{display:flex;flex-wrap:wrap}
+}
