@@ -79,7 +79,7 @@ router.post('/',requireRole('customer'),async(req,res,next)=>{
   if(couponToConsume)await Coupon.updateOne({_id:couponToConsume._id},{$inc:{usageCount:1}})
   return res.status(201).json({message:'Order placed successfully. Pay cash on delivery.',order})
  }catch(e){
-  await Promise.all(reserved.map(x=>x.variant?Product.updateOne({_id:x.id,'variantStocks.size':x.size,'variantStocks.color':x.color},{$inc:{stock:x.quantity,'variantStocks.$.stock':x.quantity}}).catch(()=>null):Product.updateOne({_id:x.id},{$inc:{stock:x.quantity}}).catch(()=>null)))
+  await Promise.all(reserved.map(x=>x.variant?Product.updateOne({_id:x.id,variantStocks:{$elemMatch:{size:x.size,color:x.color}}},{$inc:{stock:x.quantity,'variantStocks.$.stock':x.quantity}}).catch(()=>null):Product.updateOne({_id:x.id},{$inc:{stock:x.quantity}}).catch(()=>null)))
   next(e)
  }
 })
@@ -98,7 +98,7 @@ router.patch('/:id/status',requireRole('super_admin','admin'),async(req,res,next
   for(const line of order.items)if(line.product){
    const product=await Product.findById(line.product).select('variantStocks').lean()
    const variant=product?.variantStocks?.find(v=>v.size===line.size&&v.color===line.color)
-   if(variant)await Product.updateOne({_id:line.product,'variantStocks.size':line.size,'variantStocks.color':line.color},{$inc:{stock:line.quantity||0,'variantStocks.$.stock':line.quantity||0}})
+   if(variant)await Product.updateOne({_id:line.product,variantStocks:{$elemMatch:{size:line.size,color:line.color}}},{$inc:{stock:line.quantity||0,'variantStocks.$.stock':line.quantity||0}})
    else await Product.updateOne({_id:line.product},{$inc:{stock:line.quantity||0}})
   }
  }
