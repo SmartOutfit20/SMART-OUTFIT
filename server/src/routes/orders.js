@@ -54,8 +54,10 @@ router.post('/',requireRole('customer'),async(req,res,next)=>{
    discount=Math.min(subtotal,couponToConsume.type==='fixed'?Number(couponToConsume.value||0):Math.floor(subtotal*Number(couponToConsume.value||0)/100))
    if(discount<=0)throw Object.assign(new Error('Coupon discount is invalid.'),{status:400})
   }
-  const deliverySetting=await Setting.findOne({key:'deliveryCharge'}).lean()
-  const deliveryCharge=Number(deliverySetting?.value??process.env.DELIVERY_CHARGE_BDT??100)
+  const [deliverySetting,freeThresholdSetting]=await Promise.all([Setting.findOne({key:'deliveryCharge'}).lean(),Setting.findOne({key:'freeShippingThreshold'}).lean()])
+  const configuredDelivery=Number(deliverySetting?.value??process.env.DELIVERY_CHARGE_BDT??100)
+  const freeShippingThreshold=Number(freeThresholdSetting?.value??3000)
+  const deliveryCharge=freeShippingThreshold>0&&subtotal>=freeShippingThreshold?0:configuredDelivery
   const order=await Order.create({
    orderNumber:'SO-'+Date.now()+'-'+randomBytes(3).toString('hex').toUpperCase(),
    customer:req.user.sub,items:lineItems,subtotal,deliveryCharge,discount,total:subtotal-discount+deliveryCharge,couponCode:couponToConsume?.code||'',
