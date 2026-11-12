@@ -7,7 +7,7 @@ const router = Router()
 const adminOnly = [requireAuth, requireRole('super_admin', 'admin', 'editor')]
 const cleanProduct = body => ({
   name: String(body.name || '').trim(),
-  slug: String(body.slug || body.name || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+  slug: String(body.slug || body.name || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'product',
   sku: body.sku ? String(body.sku).trim() : undefined,
   description: body.description || '',
   category: body.category || undefined,
@@ -16,7 +16,7 @@ const cleanProduct = body => ({
   images: Array.isArray(body.images) ? body.images.filter(x => typeof x === 'string').slice(0, 8) : [],
   sizes: Array.isArray(body.sizes) ? body.sizes.map(String).slice(0, 20) : [],
   colors: Array.isArray(body.colors) ? body.colors.map(String).slice(0, 20) : [],
-  variantStocks: Array.isArray(body.variantStocks) ? body.variantStocks.map(v => ({ size: String(v.size || '').trim(), color: String(v.color || '').trim(), stock: Number(v.stock) })).filter(v => v.size && v.color && Number.isInteger(v.stock) && v.stock >= 0).slice(0, 100) : [],
+  variantStocks: Array.isArray(body.variantStocks) ? body.variantStocks.slice(0, 100).map(v => ({ size: String(v.size || '').trim(), color: String(v.color || '').trim(), stock: v.stock === '' || v.stock == null ? NaN : Number(v.stock) })) : [],
   stock: Array.isArray(body.variantStocks) && body.variantStocks.length ? body.variantStocks.reduce((n, v) => n + Math.max(0, Number(v.stock) || 0), 0) : Number(body.stock ?? 0),
   isPublished: Boolean(body.isPublished),
   isFeatured: Boolean(body.isFeatured),
@@ -29,17 +29,59 @@ function validateProduct(p) {
     err.status = 400
     throw err
   }
-  const combinations = p.variantStocks.map(v => v.size.toLowerCase() + '|' + v.color.toLowerCase())
-  if (combinations.some((v, i) => combinations.indexOf(v) !== i)) {
-    const err = new Error('Each size and colour combination must appear only once.')
+  if (p.compareAtPrice != null && (!Number.isFinite(p.compareAtPrice) || p.compareAtPrice < 0)) {
+    const err = new Error('Compare-at price must be a valid non-negative amount.')
     err.status = 400
     throw err
   }
-  if (p.variantStocks.some(v => !p.sizes.includes(v.size) || !p.colors.includes(v.color))) {
-    const err = new Error('Every stock variant must use a size and colour listed in the product options.')
+  if (p.variantStocks.length > 100 || p.variantStocks.some(v => !v.size || !v.color || v.size.length > 30 || v.color.length > 40 || !Number.isInteger(v.stock) || v.stock < 0 || v.stock > 1000000)) {
+    const err = new Error('Each variant needs a size, colour and whole-number stock from 0 to 1,000,000.')
     err.status = 400
     throw err
   }
+  const sizeMap = new Map(p.sizes.map(value => [String(value).trim().toLowerCase(), String(value).trim()]))
+  const colorMap = new Map(p.colors.map(value => [String(value).trim().toLowerCase(), String(value).trim()]))
+  const combinations = new Set()
+  p.variantStocks = p.variantStocks.map(v => {
+    const size = sizeMap.get(v.size.toLowerCase())
+    const color = colorMap.get(v.color.toLowerCase())
+    if (!size || !color) {
+      const err = new Error('Variant "' + v.size + ' | ' + v.color + '" does not match the available sizes and colours. Check spelling and options.')
+      err.status = 400
+      throw err
+    }
+    const key = size.toLowerCase() + '|' + color.toLowerCase()
+    if (combinations.has(key)) {
+      const err = new Error('Duplicate variant "' + size + ' | ' + color + '". Each size and colour combination can be added only once.')
+      err.status = 400
+      throw err
+    }
+    combinations.add(key)
+    return { ...v, size, color }
+  })
+  if (p.variantStocks.length) p.stock = p.variantStocks.reduce((total, variant) => total + variant.stock, 0)
+}
+async function uniqueProductSlug(base, excludeId) {
+  const root = String(base || 'product').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'product'
+  let candidate = root
+  let suffix = 2
+  while (await Product.exists({ slug: candidate, ...(excludeId ? { _id: { $ne: excludeId } } : {}) })) {
+    candidate = root + '-' + suffix++
+  }
+  return candidate
+}
+function productWriteError(error) {
+  if (error?.code === 11000 && error?.keyPattern?.slug) {
+    const err = new Error('A product with this URL slug already exists. Please try saving again; a unique slug will be assigned automatically.')
+    err.status = 409
+    return err
+  }
+  if (error?.code === 11000 && error?.keyPattern?.sku) {
+    const err = new Error('This SKU / Product code is already in use. Enter a unique SKU or leave it blank.')
+    err.status = 409
+    return err
+  }
+  return error
 }
 
 router.post('/admin/import-starter', ...adminOnly, async (req, res, next) => {
@@ -139,18 +181,20 @@ router.patch('/admin/:id/stock', ...adminOnly, async (req, res, next) => {
 router.post('/', ...adminOnly, async (req, res, next) => {
   try {
     const payload = cleanProduct(req.body); validateProduct(payload)
+    payload.slug = await uniqueProductSlug(payload.slug)
     const product = await Product.create(payload)
     res.status(201).json(product)
-  } catch (e) { next(e) }
+  } catch (e) { next(productWriteError(e)) }
 })
 
 router.patch('/:id', ...adminOnly, async (req, res, next) => {
   try {
     const payload = cleanProduct(req.body); validateProduct(payload)
+    payload.slug = await uniqueProductSlug(payload.slug, req.params.id)
     const product = await Product.findByIdAndUpdate(req.params.id, payload, { new: true, runValidators: true })
     if (!product) return res.status(404).json({ message: 'Product not found' })
     res.json(product)
-  } catch (e) { next(e) }
+  } catch (e) { next(productWriteError(e)) }
 })
 
 router.delete('/:id', ...adminOnly, async (req, res, next) => {
