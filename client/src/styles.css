@@ -1325,3 +1325,5 @@ body{padding-bottom:0!important;}
  .admin-top-title small{display:none}
  .admin-content{padding-left:12px!important;padding-right:12px!important}
 }
+
+.admin-auth-check{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#21152d;color:#cbb9d9;font-size:9px;font-weight:800;letter-spacing:2px}.admin-auth-check-mark{width:54px;height:54px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(135deg,#a47bc5,#583779);color:#fff;font:800 17px Manrope;box-shadow:0 12px 34px #0003}
