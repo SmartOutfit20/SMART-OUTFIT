@@ -19,6 +19,8 @@ const cleanProduct = body => ({
   variantStocks: Array.isArray(body.variantStocks) ? body.variantStocks.map(v => ({ size: String(v.size || '').trim(), color: String(v.color || '').trim(), stock: Number(v.stock) })).filter(v => v.size && v.color && Number.isInteger(v.stock) && v.stock >= 0).slice(0, 100) : [],
   stock: Array.isArray(body.variantStocks) && body.variantStocks.length ? body.variantStocks.reduce((n, v) => n + Math.max(0, Number(v.stock) || 0), 0) : Number(body.stock ?? 0),
   isPublished: Boolean(body.isPublished),
+  isFeatured: Boolean(body.isFeatured),
+  isBestSeller: Boolean(body.isBestSeller),
   tags: Array.isArray(body.tags) ? body.tags.map(String).slice(0, 20) : []
 })
 function validateProduct(p) {
