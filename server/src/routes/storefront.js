@@ -18,7 +18,7 @@ router.get('/manifest.webmanifest',async(req,res,next)=>{
   const [appLogo,storeLogo,storeName,tagline]=await Promise.all(['appLogo','storeLogo','storeName','tagline'].map(key=>Setting.findOne({key}).lean()));
   const hasLogo=/^data:image\/webp;base64,[A-Za-z0-9+/=]+$/.test(String(appLogo?.value||storeLogo?.value||''));
   const name=String(storeName?.value||'SMART OUTFIT').slice(0,100);
-  const manifest={id:'/',name,short_name:name.slice(0,24),description:String(tagline?.value||'Your Style, Our Inspiration.').slice(0,180),start_url:'/',scope:'/',display:'standalone',background_color:'#ffffff',theme_color:'#21113c',orientation:'portrait',icons:hasLogo?[{src:'/api/storefront/app-icon',sizes:'192x192',type:'image/webp',purpose:'any'},{src:'/api/storefront/app-icon',sizes:'512x512',type:'image/webp',purpose:'any maskable'}]:[]};
+  const iconUrl='/api/storefront/app-icon?v='+Date.now();const manifest={id:'/',name,short_name:name.slice(0,24),description:String(tagline?.value||'Your Style, Our Inspiration.').slice(0,180),start_url:'/',scope:'/',display:'standalone',background_color:'#ffffff',theme_color:'#21113c',orientation:'portrait',icons:hasLogo?[{src:iconUrl,sizes:'192x192',type:'image/webp',purpose:'any'},{src:iconUrl,sizes:'512x512',type:'image/webp',purpose:'any maskable'}]:[]};
   res.set({'Content-Type':'application/manifest+json; charset=utf-8','Cache-Control':'no-store, no-cache, must-revalidate, proxy-revalidate','Pragma':'no-cache','Expires':'0'});
   res.json(manifest);
  }catch(e){next(e)}
