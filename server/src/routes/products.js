@@ -104,6 +104,7 @@ router.patch('/admin/:id/variant-stock', ...adminOnly, async (req, res, next) =>
     }
     product.stock = product.variantStocks.reduce((n, v) => n + Number(v.stock || 0), 0)
     await product.save()
+    await product.populate('category', 'name')
     ActivityLog.create({ actor: req.user.sub, action: 'variant_inventory_adjusted', resource: 'product', resourceId: product._id.toString(), metadata: { size, color, delta } }).catch(() => {})
     res.json(product)
   } catch (e) { next(e) }
