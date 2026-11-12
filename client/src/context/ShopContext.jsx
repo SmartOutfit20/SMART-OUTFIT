@@ -3,7 +3,7 @@ const ShopContext = createContext(null)
 export function ShopProvider({children}) {
  const [cart,setCart] = useState(() => JSON.parse(localStorage.getItem('so-cart') || '[]'))
  const [wishlist,setWishlist] = useState(() => JSON.parse(localStorage.getItem('so-wishlist') || '[]'))
- const [language,setLanguage] = useState('EN')
+ const [language,setLanguage] = useState('বাংলা')
  useEffect(()=>localStorage.setItem('so-cart',JSON.stringify(cart)),[cart])
  useEffect(()=>localStorage.setItem('so-wishlist',JSON.stringify(wishlist)),[wishlist])
  const addToCart = (product, size, color = '') => setCart(old => {
