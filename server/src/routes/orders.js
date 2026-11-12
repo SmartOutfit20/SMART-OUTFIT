@@ -77,7 +77,7 @@ router.post('/',async(req,res,next)=>{
    customer:req.user.sub,items:lineItems,subtotal,deliveryCharge,discount,total:subtotal-discount+deliveryCharge,couponCode:couponToConsume?.code||'',statusHistory:[{status:'pending',note:'Order placed successfully.'}],
    paymentMethod:'cod',paymentStatus:deliveryCharge>0?'pending':'unpaid',advancePaymentAmount:deliveryCharge,advancePaymentMethod:deliveryCharge>0?advancePaymentMethod:'',advancePaymentSender:deliveryCharge>0?advancePaymentSender:'',advancePaymentTransactionId:deliveryCharge>0?advancePaymentTransactionId:'',advancePaymentSubmittedAt:deliveryCharge>0?new Date():undefined,deliveryAddress:address
   })
-  if(couponToConsume)await Coupon.updateOne({_id:couponToConsume._id},{$inc:{usageCount:1}})
+  if(couponToConsume&&deliveryCharge===0)await Coupon.updateOne({_id:couponToConsume._id},{$inc:{usageCount:1}})
   return res.status(201).json({message:deliveryCharge>0?'Order submitted. Delivery charge payment is awaiting manual verification; remaining product amount is Cash on Delivery.':'Order placed. Product amount is Cash on Delivery.',order})
  }catch(e){
   await Promise.all(reserved.map(x=>x.variant?Product.updateOne({_id:x.id,variantStocks:{$elemMatch:{size:x.size,color:x.color}}},{$inc:{stock:x.quantity,'variantStocks.$.stock':x.quantity}}).catch(()=>null):Product.updateOne({_id:x.id},{$inc:{stock:x.quantity}}).catch(()=>null)))
@@ -91,7 +91,7 @@ router.patch('/:id/advance-payment-verify',requireRole('super_admin','admin'),as
  if(order.paymentStatus==='paid')return res.status(409).json({message:'Advance payment has already been approved.'});
  if(order.paymentStatus!=='pending')return res.status(409).json({message:'This payment is not awaiting verification.'});
  order.paymentStatus=decision==='approve'?'paid':'failed';order.advancePaymentVerifiedAt=new Date();order.advancePaymentVerifiedBy=req.user.sub;order.advancePaymentNote=String(req.body.note||'').trim().slice(0,300);
- if(decision==='approve'){order.status='confirmed';order.statusHistory=order.statusHistory||[];order.statusHistory.push({status:'confirmed',note:'Delivery charge advance payment manually verified and approved.',createdAt:new Date()})}
+ if(decision==='approve'){if(order.couponCode)await Coupon.updateOne({code:order.couponCode},{$inc:{usageCount:1}});order.status='confirmed';order.statusHistory=order.statusHistory||[];order.statusHistory.push({status:'confirmed',note:'Delivery charge advance payment manually verified and approved.',createdAt:new Date()})}
  else {order.status='cancelled';order.cancellationReason='Advance delivery payment was not verified.';order.statusHistory=order.statusHistory||[];order.statusHistory.push({status:'cancelled',note:order.cancellationReason,createdAt:new Date()});for(const line of order.items){const product=await Product.findById(line.product).select('variantStocks').lean();const variant=product?.variantStocks?.find(v=>v.size===line.size&&v.color===line.color);if(variant)await Product.updateOne({_id:line.product,variantStocks:{$elemMatch:{size:line.size,color:line.color}}},{$inc:{stock:line.quantity||0,'variantStocks.$.stock':line.quantity||0}});else await Product.updateOne({_id:line.product},{$inc:{stock:line.quantity||0}})}}
  await order.save();res.json(order);
 }catch(e){next(e)}})
