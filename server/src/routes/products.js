@@ -33,6 +33,11 @@ function validateProduct(p) {
     err.status = 400
     throw err
   }
+  if (p.variantStocks.some(v => !p.sizes.includes(v.size) || !p.colors.includes(v.color))) {
+    const err = new Error('Every stock variant must use a size and colour listed in the product options.')
+    err.status = 400
+    throw err
+  }
 }
 
 router.post('/admin/import-starter', ...adminOnly, async (req, res, next) => {
