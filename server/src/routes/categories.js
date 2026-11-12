@@ -8,6 +8,10 @@ router.get('/', async (req, res, next) => {
   try { res.json(await Category.find({ isActive: true }).sort({ sortOrder: 1, name: 1 }).lean()) }
   catch (e) { next(e) }
 })
+router.get('/admin/all', ...adminOnly, async (req, res, next) => {
+  try { res.json(await Category.find().sort({ sortOrder: 1, name: 1 }).lean()) }
+  catch (e) { next(e) }
+})
 router.post('/', ...adminOnly, async (req, res, next) => {
   try {
     const name = String(req.body.name || '').trim()
