@@ -27,6 +27,12 @@ function validateProduct(p) {
     err.status = 400
     throw err
   }
+  const combinations = p.variantStocks.map(v => v.size.toLowerCase() + '|' + v.color.toLowerCase())
+  if (combinations.some((v, i) => combinations.indexOf(v) !== i)) {
+    const err = new Error('Each size and colour combination must appear only once.')
+    err.status = 400
+    throw err
+  }
 }
 
 router.post('/admin/import-starter', ...adminOnly, async (req, res, next) => {
