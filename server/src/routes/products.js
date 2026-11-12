@@ -1,5 +1,6 @@
 import { Router } from 'express'
-import { Product } from '../models/index.js'
+import { Product, Category } from '../models/index.js'
+import { starterProducts } from '../data/starterProducts.js'
 import { requireAuth, requireRole } from '../middleware/auth.js'
 
 const router = Router()
@@ -26,6 +27,34 @@ function validateProduct(p) {
     throw err
   }
 }
+
+router.post('/admin/import-starter', ...adminOnly, async (req, res, next) => {
+  try {
+    const categoryCache = new Map()
+    let created = 0, skipped = 0
+    for (const item of starterProducts) {
+      const existing = await Product.findOne({ sku: item.sku }).select('_id').lean()
+      if (existing) { skipped++; continue }
+      let categoryId
+      if (item.categoryName) {
+        if (!categoryCache.has(item.categoryName)) {
+          const categorySlug = item.categoryName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+          const category = await Category.findOneAndUpdate(
+            { slug: categorySlug },
+            { $setOnInsert: { name: item.categoryName, slug: categorySlug, isActive: true } },
+            { upsert: true, new: true, setDefaultsOnInsert: true }
+          )
+          categoryCache.set(item.categoryName, category._id)
+        }
+        categoryId = categoryCache.get(item.categoryName)
+      }
+      const { categoryName, ...product } = item
+      await Product.create({ ...product, category: categoryId })
+      created++
+    }
+    res.status(201).json({ message: 'Starter catalogue import complete', created, skipped, total: starterProducts.length })
+  } catch (e) { next(e) }
+})
 
 router.get('/', async (req, res, next) => {
   try {
