@@ -16,7 +16,7 @@ const cleanProduct = body => ({
   images: Array.isArray(body.images) ? body.images.filter(x => typeof x === 'string').slice(0, 8) : [],
   sizes: Array.isArray(body.sizes) ? body.sizes.map(String).slice(0, 20) : [],
   colors: Array.isArray(body.colors) ? body.colors.map(String).slice(0, 20) : [],
-  variantStocks: Array.isArray(body.variantStocks) ? body.variantStocks.slice(0, 100).map(v => ({ size: String(v.size || '').trim(), color: String(v.color || '').trim(), stock: v.stock === '' || v.stock == null ? NaN : Number(v.stock) })) : [],
+  variantStocks: Array.isArray(body.variantStocks) ? body.variantStocks.map(v => ({ size: String(v.size || '').trim(), color: String(v.color || '').trim(), stock: v.stock === '' || v.stock == null ? NaN : Number(v.stock) })) : [],
   stock: Array.isArray(body.variantStocks) && body.variantStocks.length ? body.variantStocks.reduce((n, v) => n + Math.max(0, Number(v.stock) || 0), 0) : Number(body.stock ?? 0),
   isPublished: Boolean(body.isPublished),
   isFeatured: Boolean(body.isFeatured),
