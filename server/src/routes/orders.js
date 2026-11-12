@@ -33,7 +33,7 @@ router.post('/',async(req,res,next)=>{
   if(!requested.length||requested.length>30)return res.status(400).json({message:'Your cart is empty or contains too many items.'})
   const advancePaymentMethod=String(req.body.advancePaymentMethod||'').toLowerCase();const advancePaymentSender=String(req.body.advancePaymentSender||'').trim();const advancePaymentTransactionId=String(req.body.advancePaymentTransactionId||'').trim();
   if(!['bkash','nagad'].includes(advancePaymentMethod))return res.status(400).json({message:'Choose bKash or Nagad to pay the delivery charge in advance.'});
-  if(!/^01[3-9]\\d{8}$/.test(advancePaymentSender)||advancePaymentTransactionId.length<6||advancePaymentTransactionId.length>80)return res.status(400).json({message:'Enter a valid sender mobile number and transaction ID.'})
+  if(!/^01[3-9]\d{8}$/.test(advancePaymentSender)||advancePaymentTransactionId.length<6||advancePaymentTransactionId.length>80)return res.status(400).json({message:'Enter a valid sender mobile number and transaction ID.'})
   const lineItems=[]
   let subtotal=0
   for(const line of requested){
@@ -97,7 +97,7 @@ router.patch('/:id/advance-payment-verify',requireRole('super_admin','admin'),as
 }catch(e){next(e)}})
 router.get('/mine',async(req,res,next)=>{try{res.json(await Order.find({customer:req.user.sub}).sort({createdAt:-1}).lean())}catch(e){next(e)}})
 router.get('/admin/all',requireRole('super_admin','admin','support'),async(req,res,next)=>{try{res.json(await Order.find().populate('customer','name email phone').populate('items.product','name sku images').sort({createdAt:-1}).limit(200).lean())}catch(e){next(e)}})
-router.patch('/:id/status',requireRole('super_admin','admin'),async(req,res,next)=>{try{
+router.patch('/:id/status',requireRole('super_admin','admin','support','editor'),async(req,res,next)=>{try{
  const allowed=['confirmed','processing','shipped','delivered','cancelled','returned']
  if(!allowed.includes(req.body.status))return res.status(400).json({message:'Invalid order status'})
  const order=await Order.findById(req.params.id)
