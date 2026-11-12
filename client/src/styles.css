@@ -902,3 +902,12 @@ html,body,#root{min-height:100%;background:#fff}
 .header .nav-category-group>a{display:flex;align-items:center;gap:5px;color:inherit;text-decoration:none;font-size:12px;font-weight:800;letter-spacing:.7px;padding:12px 5px;position:relative}
 .header .nav-category-group>a:hover,.header .nav-category-group>a.active{color:var(--purple)}
 .header .nav-category-group>a.active:after{content:"";position:absolute;left:5px;right:5px;bottom:5px;height:2px;background:var(--purple)}
+
+
+/* Navigation submenu icons and mobile dropdown visibility */
+.header .nav-category-menu a{display:flex;align-items:center;gap:10px}
+.header .nav-category-menu a>svg:first-child{flex:0 0 16px;color:var(--purple)}
+.header .nav-category-menu a>span{flex:1;min-width:0}
+.header .nav-category-menu .nav-submenu-arrow{margin-left:auto;opacity:.42}
+.header .nav-category-menu a:hover .nav-submenu-arrow{opacity:1;transform:translateX(2px)}
+@media(max-width:650px){.header .nav.nav-open .nav-category-group .nav-category-menu{display:grid;opacity:1;visibility:visible;transform:none}.header .nav.nav-open .nav-category-menu a{padding:10px 16px 10px 28px}}
