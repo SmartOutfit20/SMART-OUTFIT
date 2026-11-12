@@ -16,3 +16,34 @@
 .art-shape img{width:100%;height:100%;object-fit:cover;display:block}.detail-art>img{width:100%;height:100%;max-height:620px;object-fit:contain;mix-blend-mode:multiply}.detail-art:has(>img){background:#f5f1f8;padding:20px}
 
 .color-options{display:flex;flex-wrap:wrap;gap:8px}.color-options button{border:1px solid var(--line);background:#fff;padding:9px 13px;font-size:10px}.color-options button.selected{border-color:var(--deep);background:var(--deep);color:#fff}
+
+
+/* Responsive container and customer account workspace */
+.container{width:100%;max-width:1100px;margin-left:auto;margin-right:auto;padding-left:15px;padding-right:15px;box-sizing:border-box}
+@media(max-width:768px){.container{max-width:100%;padding-left:12px;padding-right:12px}}
+.account-wrap{width:100%;max-width:1100px;margin:0 auto;padding:42px 15px 70px}
+.account-head{display:flex;align-items:center;gap:18px;padding:24px;background:#21113c;color:#fff;border-radius:12px;margin:18px 0 24px;min-width:0}
+.account-avatar{width:76px;height:76px;flex:0 0 76px;border-radius:50%;object-fit:cover;background:#d9c7ef;border:3px solid #fff}
+.account-avatar-fallback{display:grid;place-items:center;color:#21113c;font-size:28px;font-weight:800}
+.account-id{font-size:11px;color:#d8c8e7;overflow-wrap:anywhere}
+.account-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+.account-panel{background:#fff;border:1px solid var(--line);border-radius:10px;padding:22px;min-width:0}
+.account-panel h2{font:800 18px Manrope;margin:0 0 18px}
+.account-form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.account-form label{display:flex;flex-direction:column;gap:6px;font-size:11px;font-weight:700;min-width:0}
+.account-form input,.account-form textarea{width:100%;min-width:0;border:1px solid var(--line);padding:11px;font-size:12px}
+.account-form .wide{grid-column:1/-1}
+.account-orders{display:grid;gap:12px}
+.account-order{border:1px solid var(--line);padding:14px;border-radius:8px;min-width:0}
+.account-order-top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12px}
+.account-status{display:inline-block;background:#f1eaf8;color:#68418d;border-radius:20px;padding:5px 9px;font-size:10px;font-weight:800;text-transform:capitalize}
+.account-timeline{display:flex;gap:5px;flex-wrap:wrap;margin-top:12px}
+.account-timeline span{font-size:9px;padding:6px 8px;border-radius:4px;background:#f3f1f5;color:#786d80}
+.account-timeline span.done{background:#e7f5ed;color:#24764c}
+.account-empty{color:var(--muted);font-size:12px}
+.coupon-row{display:flex;gap:8px;margin:12px 0}
+.coupon-row input{min-width:0;flex:1;padding:11px;border:1px solid var(--line);text-transform:uppercase}
+.coupon-message{font-size:11px;margin:7px 0;color:#24764c}
+.coupon-message.error{color:#a33}
+@media(max-width:768px){.account-wrap{padding:28px 12px 48px}.account-grid{grid-template-columns:1fr}.account-head{padding:17px;gap:12px}.account-avatar{width:60px;height:60px;flex-basis:60px}.account-form{grid-template-columns:1fr}.account-form .wide{grid-column:auto}}
+@media(max-width:480px){.header{padding:0 12px;gap:8px}.header-actions{gap:9px}.brand{font-size:12px}.account-panel{padding:16px}.account-head h1{font-size:20px}}
