@@ -12,7 +12,7 @@ const cleanAddress = input => ({
  upazila:String(input?.upazila||'').trim(),
  address:String(input?.address||'').trim()
 })
-router.post('/coupon/validate',requireRole('customer'),async(req,res,next)=>{try{
+router.post('/coupon/validate',async(req,res,next)=>{try{
  const code=String(req.body.code||'').trim().toUpperCase();const subtotal=Number(req.body.subtotal||0)
  if(!code||!Number.isFinite(subtotal)||subtotal<0)return res.status(400).json({message:'Enter a valid coupon code.'})
  const coupon=await Coupon.findOne({code,isActive:true})
@@ -22,7 +22,7 @@ router.post('/coupon/validate',requireRole('customer'),async(req,res,next)=>{try
  if(discount<=0)return res.status(400).json({message:'This coupon does not provide a valid discount.'})
  res.json({code:coupon.code,discount,type:coupon.type,value:coupon.value,subtotal,totalAfterDiscount:subtotal-discount})
  }catch(e){next(e)}})
-router.post('/',requireRole('customer'),async(req,res,next)=>{
+router.post('/',async(req,res,next)=>{
  const reserved=[]
  let couponToConsume=null
  try{
