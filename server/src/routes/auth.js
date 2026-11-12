@@ -1,9 +1,29 @@
 import {Router} from 'express'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import { timingSafeEqual } from 'node:crypto'
 import {User} from '../models/index.js'
 const router=Router()
 const bdPhone=/^01[3-9]\d{8}$/
+
+// One-time, environment-gated bootstrap. It is permanently unavailable after
+// the first super_admin account is created.
+router.post('/bootstrap-admin',async(req,res,next)=>{try{
+ const expected=process.env.ADMIN_BOOTSTRAP_TOKEN||''
+ const supplied=String(req.get('x-admin-bootstrap-token')||'')
+ if(!expected||!supplied)return res.status(404).json({message:'Admin bootstrap is not enabled'})
+ const a=Buffer.from(expected),b=Buffer.from(supplied)
+ if(a.length!==b.length||!timingSafeEqual(a,b))return res.status(404).json({message:'Admin bootstrap is not enabled'})
+ if(await User.exists({role:'super_admin'}))return res.status(409).json({message:'A Super Admin already exists; bootstrap is permanently closed'})
+ const email=String(process.env.SUPER_ADMIN_EMAIL||'').trim().toLowerCase()
+ const password=String(process.env.SUPER_ADMIN_PASSWORD||'')
+ const name=String(process.env.SUPER_ADMIN_NAME||'SMART OUTFIT Super Admin').trim()
+ if(!email||!password||password.length<12)return res.status(503).json({message:'Set SUPER_ADMIN_EMAIL and a SUPER_ADMIN_PASSWORD of at least 12 characters in the service environment'})
+ const user=await User.create({name,email,passwordHash:await bcrypt.hash(password,12),role:'super_admin',isActive:true})
+ const token=jwt.sign({sub:user.id,role:user.role},process.env.JWT_SECRET,{expiresIn:process.env.JWT_EXPIRES_IN||'7d'})
+ res.status(201).json({message:'Super Admin created. Remove the bootstrap environment variables now.',token,user:{id:user.id,name:user.name,email:user.email,role:user.role}})
+ }catch(e){next(e)}})
+
 router.post('/register',async(req,res,next)=>{try{
  const {name,email,phone,password}=req.body
  if(!name||!password||(!email&&!phone))return res.status(400).json({message:'Name, password and email or phone are required'})
