@@ -27,7 +27,7 @@ router.post('/',requireRole('customer'),async(req,res,next)=>{
  let couponToConsume=null
  try{
   const address=cleanAddress(req.body.deliveryAddress)
-  if(!address.name||!/^01[3-9]\\d{8}$/.test(address.phone)||!address.division||!address.district||!address.upazila||address.address.length<8)
+  if(!address.name||!/^01[3-9]\d{8}$/.test(address.phone)||!address.division||!address.district||!address.upazila||address.address.length<8)
    return res.status(400).json({message:'Complete your name, valid Bangladesh phone, division, district, upazila and full address.'})
   const requested=Array.isArray(req.body.items)?req.body.items:[]
   if(!requested.length||requested.length>30)return res.status(400).json({message:'Your cart is empty or contains too many items.'})
