@@ -50,7 +50,15 @@ router.post('/register',async(req,res,next)=>{try{
  if(exists)return res.status(409).json({message:'An account with these details already exists'})
  const user=await User.create({name,email,phone,passwordHash:await bcrypt.hash(password,12)})
  const token=jwt.sign({sub:user.id,role:user.role},process.env.JWT_SECRET,{expiresIn:process.env.JWT_EXPIRES_IN||'7d'})
- res.status(201).json({token,user:{id:user.id,name:user.name,email:user.email,phone:user.phone,role:user.role}})
+ res.status(201).json({token,user:{id:user.id,name:user.name,email:user.email,phone:user.phone,role:user.role,profileImage:user.profileImage||''}})
+ }catch(e){next(e)}})
+router.post('/admin-login',async(req,res,next)=>{try{
+ const {identity,password}=req.body
+ const user=await User.findOne({$or:[{email:String(identity||'').toLowerCase()},{phone:String(identity||'')}]})
+ const staffRoles=['super_admin','admin','support','editor','viewer']
+ if(!user||!user.isActive||!staffRoles.includes(user.role)||!(await bcrypt.compare(password||'',user.passwordHash)))return res.status(401).json({message:'Invalid admin credentials or this account has no staff access.'})
+ const token=jwt.sign({sub:user.id,role:user.role},process.env.JWT_SECRET,{expiresIn:process.env.JWT_EXPIRES_IN||'7d'})
+ res.json({token,user:{id:user.id,name:user.name,email:user.email,phone:user.phone,role:user.role,profileImage:user.profileImage||''}})
  }catch(e){next(e)}})
 router.post('/login',async(req,res,next)=>{try{
  const {identity,password}=req.body
