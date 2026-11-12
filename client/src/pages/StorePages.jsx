@@ -8,7 +8,7 @@ import api, { getProducts, getCategories } from '../services/api'
 import { useAuth } from '../context/AuthContext'
 
 function normalizeProduct(p) {
-  return { ...p, id: p._id || p.id, category: typeof p.category === 'object' ? p.category?.name || 'Collection' : p.category || 'Collection', color: p.color || '#d9c7ef', sizes: p.sizes?.length ? p.sizes : ['S','M','L','XL'], rating: p.rating || 4.8 }
+  return { ...p, id: p._id || p.id, oldPrice: p.compareAtPrice || p.oldPrice || 0, tag: p.tags?.[0] || p.tag, category: typeof p.category === 'object' ? p.category?.name || 'Collection' : p.category || 'Collection', color: p.color || '#d9c7ef', sizes: p.sizes?.length ? p.sizes : ['S','M','L','XL'], rating: p.rating || 4.8 }
 }
 export function Home(){
  const [latest,setLatest]=useState(demoProducts.slice(0,4))
