@@ -20,8 +20,7 @@ router.post('/bootstrap-admin',async(req,res,next)=>{try{
  const name=String(process.env.SUPER_ADMIN_NAME||'SMART OUTFIT Super Admin').trim()
  if(!email||!password||password.length<12)return res.status(503).json({message:'Set SUPER_ADMIN_EMAIL and a SUPER_ADMIN_PASSWORD of at least 12 characters in the service environment'})
  const user=await User.create({name,email,passwordHash:await bcrypt.hash(password,12),role:'super_admin',isActive:true})
- const token=jwt.sign({sub:user.id,role:user.role},process.env.JWT_SECRET,{expiresIn:process.env.JWT_EXPIRES_IN||'7d'})
- res.status(201).json({message:'Super Admin created. Remove the bootstrap environment variables now.',token,user:{id:user.id,name:user.name,email:user.email,role:user.role}})
+ res.status(201).json({message:'Super Admin created. Remove the bootstrap environment variables now; then sign in normally.',user:{id:user.id,name:user.name,email:user.email,role:user.role}})
  }catch(e){next(e)}})
 
 router.post('/register',async(req,res,next)=>{try{
