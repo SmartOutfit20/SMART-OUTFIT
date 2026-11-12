@@ -866,3 +866,17 @@ html,body,#root{min-height:100%;background:#fff}
 @media(prefers-reduced-motion:reduce){
   .header .nav>a,.header .nav>a:after,.header .nav-category-trigger,.header-search-toggle,.header-search-panel button{transition:none}
 }
+
+
+/* Desktop search panel: scale with viewport without changing header/container geometry */
+@media (min-width:651px){
+  .header-search-panel{
+    right:clamp(18px,5.5vw,88px);
+    width:clamp(310px,32vw,440px);
+    max-width:calc(100vw - 36px);
+  }
+  .header-search-panel input{font-size:13px}
+}
+@media (min-width:651px) and (max-width:900px){
+  .header-search-panel{right:18px;width:min(340px,calc(100vw - 36px))}
+}
