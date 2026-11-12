@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { timingSafeEqual } from 'node:crypto'
 import {User} from '../models/index.js'
+import {requireAuth} from '../middleware/auth.js'
 const router=Router()
 const bdPhone=/^01[3-9]\d{8}$/
 
@@ -23,12 +24,12 @@ router.post('/bootstrap-admin',async(req,res,next)=>{try{
  res.status(201).json({message:'Super Admin created. Remove the bootstrap environment variables now; then sign in normally.',user:{id:user.id,name:user.name,email:user.email,role:user.role}})
  }catch(e){next(e)}})
 
-router.get('/me',async(req,res,next)=>{try{
+router.get('/me',requireAuth,async(req,res,next)=>{try{
  const user=await User.findById(req.user.sub).select('-passwordHash').lean()
  if(!user)return res.status(404).json({message:'Customer account not found'})
  res.json(user)
  }catch(e){next(e)}})
-router.patch('/me',async(req,res,next)=>{try{
+router.patch('/me',requireAuth,async(req,res,next)=>{try{
  const {name,email,phone,profileImage,defaultAddress}=req.body
  const update={}
  if(name!==undefined){if(String(name).trim().length<2||String(name).trim().length>80)return res.status(400).json({message:'Name must be 2–80 characters'});update.name=String(name).trim()}
