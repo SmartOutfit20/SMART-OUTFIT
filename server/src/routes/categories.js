@@ -3,7 +3,7 @@ import { Category, Product } from '../models/index.js'
 import { requireAuth, requireRole } from '../middleware/auth.js'
 const router = Router()
 const adminOnly = [requireAuth, requireRole('super_admin', 'admin', 'editor')]
-const slugify = value => String(value || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+const slugify = value => String(value || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || ('category-' + Date.now().toString(36))
 router.get('/', async (req, res, next) => {
   try { res.json(await Category.find({ isActive: true }).sort({ sortOrder: 1, name: 1 }).lean()) }
   catch (e) { next(e) }
@@ -50,7 +50,15 @@ router.patch('/:id', ...adminOnly, async (req, res, next) => {
     }
     if (req.body.parent !== undefined) {
       const parent = req.body.parent || null
-      if (parent && (String(parent) === String(req.params.id) || !await Category.exists({ _id: parent }))) return res.status(400).json({ message: 'Choose a valid parent category.' })
+      if (parent && !await Category.exists({ _id: parent })) return res.status(400).json({ message: 'Choose a valid parent category.' })
+      let ancestor = parent
+      const seen = new Set()
+      while (ancestor) {
+        if (String(ancestor) === String(req.params.id) || seen.has(String(ancestor))) return res.status(400).json({ message: 'A category cannot be placed inside its own child category.' })
+        seen.add(String(ancestor))
+        const node = await Category.findById(ancestor).select('parent').lean()
+        ancestor = node?.parent || null
+      }
       update.parent = parent
     }
     const item = await Category.findByIdAndUpdate(req.params.id, update, { new: true, runValidators: true }).populate('parent','name')
