@@ -15,7 +15,8 @@ html,body{margin:0;min-height:100%;background:#21113c}
 @keyframes boot-pulse{from{opacity:.35;transform:scale(.75)}to{opacity:1;transform:scale(1.2)}}
 @media(prefers-reduced-motion:reduce){#app-boot-splash,#app-boot-splash *{animation:none!important;transition:none!important}}
 </style>
-<script>
+</head><body>
+<div id="app-boot-splash" role="status" aria-label="Opening SMART OUTFIT"><div class="boot-content"><img id="boot-brand-logo" alt="SMART OUTFIT"/><div id="boot-brand-fallback" class="boot-fallback">S</div><span class="boot-tagline">YOUR STYLE, OUR INSPIRATION</span><span class="boot-dots"><i></i><i></i><i></i></span></div></div><script>
 (function(){
  var splash=document.getElementById('app-boot-splash'),logo=document.getElementById('boot-brand-logo'),fallback=document.getElementById('boot-brand-fallback'),timer;
  function setLogo(value){if(!logo||!fallback)return;if(value){logo.src=value;logo.style.display='block';fallback.style.display='none'}else{logo.removeAttribute('src');logo.style.display='none';fallback.style.display='grid'}}
@@ -24,6 +25,5 @@ html,body{margin:0;min-height:100%;background:#21113c}
  window.__soHideBootSplash=function(){if(timer)clearTimeout(timer);timer=setTimeout(function(){splash&&splash.classList.add('is-hidden')},520)};
  timer=setTimeout(function(){splash&&splash.classList.add('is-hidden')},1900);
 })();
-</script></head><body>
-<div id="app-boot-splash" role="status" aria-label="Opening SMART OUTFIT"><div class="boot-content"><img id="boot-brand-logo" alt="SMART OUTFIT"/><div id="boot-brand-fallback" class="boot-fallback">S</div><span class="boot-tagline">YOUR STYLE, OUR INSPIRATION</span><span class="boot-dots"><i></i><i></i><i></i></span></div></div>
+</script>
 <div id="root"></div><script type="module" src="/src/main.jsx"></script></body></html>
