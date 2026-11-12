@@ -17,6 +17,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const clientDistPath = path.resolve(__dirname, '../../client/dist')
 
 const app = express()
+// Render terminates TLS and forwards one proxy hop; trust that hop so
+// express-rate-limit can safely identify client IPs from X-Forwarded-For.
+app.set('trust proxy', 1)
 app.disable('x-powered-by')
 app.use(helmet())
 app.use(cors({ origin: process.env.CLIENT_URL?.split(',') || 'http://localhost:5173' }))
