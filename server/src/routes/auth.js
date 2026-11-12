@@ -35,7 +35,7 @@ router.patch('/me',requireAuth,async(req,res,next)=>{try{
  if(name!==undefined){if(String(name).trim().length<2||String(name).trim().length>80)return res.status(400).json({message:'Name must be 2–80 characters'});update.name=String(name).trim()}
  if(email!==undefined)update.email=String(email).trim().toLowerCase()||undefined
  if(phone!==undefined){if(phone&&!bdPhone.test(phone))return res.status(400).json({message:'Enter a valid Bangladesh mobile number'});update.phone=phone||undefined}
- if(profileImage!==undefined){if(profileImage&&(!/^https:\/\//i.test(profileImage)||profileImage.length>1000))return res.status(400).json({message:'Profile image must be a valid HTTPS image URL'});update.profileImage=profileImage}
+ if(profileImage!==undefined){const validUrl=!profileImage||(/^https:\/\//i.test(profileImage)&&profileImage.length<=1000);const validData=!profileImage||(/^data:image\/webp;base64,[A-Za-z0-9+/=]+$/.test(profileImage)&&profileImage.length<=1200000);if(!validUrl&&!validData)return res.status(400).json({message:'Profile image must be a valid HTTPS URL or compressed WebP image under 1.2 MB'});update.profileImage=profileImage}
  if(defaultAddress!==undefined)update.defaultAddress={division:String(defaultAddress.division||'').trim(),district:String(defaultAddress.district||'').trim(),upazila:String(defaultAddress.upazila||'').trim(),address:String(defaultAddress.address||'').trim()}
  const user=await User.findByIdAndUpdate(req.user.sub,{$set:update},{new:true,runValidators:true}).select('-passwordHash')
  if(!user)return res.status(404).json({message:'Customer account not found'})
