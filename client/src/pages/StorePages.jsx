@@ -57,6 +57,7 @@ export function Wishlist(){const {wishlist}=useShop();return <div className="pag
 export function Checkout(){
  const {cart,clearCart}=useShop(),{user}=useAuth()
  const [form,setForm]=useState({name:user?.name||'',phone:user?.phone||'',email:user?.email||'',division:'',district:'',upazila:'',address:''})
+ useEffect(()=>{if(!user)return;let active=true;api.get('/auth/me').then(({data})=>{if(!active)return;const a=data.defaultAddress||{};setForm({name:data.name||'',phone:data.phone||'',email:data.email||'',division:a.division||'',district:a.district||'',upazila:a.upazila||'',address:a.address||''})}).catch(()=>{});return()=>{active=false}},[user])
  const [error,setError]=useState(''),[busy,setBusy]=useState(false),[placed,setPlaced]=useState(null),[couponCode,setCouponCode]=useState(''),[coupon,setCoupon]=useState(null),[couponMessage,setCouponMessage]=useState(''),[couponBusy,setCouponBusy]=useState(false)
  const subtotal=cart.reduce((n,x)=>n+x.price*x.qty,0),delivery=Number(import.meta.env.VITE_DELIVERY_CHARGE_BDT||100),discount=Number(coupon?.discount||0)
  async function applyCoupon(){if(!user){setCouponMessage('Please sign in first.');return}setCouponBusy(true);setCouponMessage('');try{const {data}=await api.post('/orders/coupon/validate',{code:couponCode,subtotal});setCoupon(data);setCouponMessage('Coupon applied — you save '+money(data.discount)+'.')}catch(e){setCoupon(null);setCouponMessage(e.response?.data?.message||'Coupon could not be applied.');}finally{setCouponBusy(false)}}
