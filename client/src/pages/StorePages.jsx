@@ -31,6 +31,7 @@ export function Shop(){
  const [loading,setLoading]=useState(true)
  const [error,setError]=useState('')
  const category=params.get('category')||'All'
+ useEffect(()=>{setQuery(params.get('search')||'')},[params])
  useEffect(()=>{
    let active=true
    Promise.all([getProducts({limit:48,q:query,sort}),getCategories()])
@@ -39,7 +40,12 @@ export function Shop(){
      .finally(()=>{if(active)setLoading(false)})
    return ()=>{active=false}
  },[query,sort])
- const items=useMemo(()=>remote.filter(p=>(category==='All'||p.category===category)).sort((a,b)=>sort==='price-low'?a.price-b.price:sort==='price-high'?b.price-a.price:0),[remote,category,sort])
+ const items=useMemo(()=>remote.filter(p=>{
+   const matchesCategory=category==='All'||p.category===category
+   const term=query.trim().toLowerCase()
+   const matchesSearch=!term||[p.name,p.category,p.description,...(p.tags||[])].some(value=>String(value||'').toLowerCase().includes(term))
+   return matchesCategory&&matchesSearch
+  }).sort((a,b)=>sort==='price-low'?a.price-b.price:sort==='price-high'?b.price-a.price:0),[remote,category,sort,query])
  return <div className="page-wrap"><div className="breadcrumb"><Link to="/">HOME</Link> / <Link to="/shop">SHOP</Link>{category!=='All'&&<> / {category.toUpperCase()}</>}</div><div className="page-title"><div><span className="eyebrow">THE SMART OUTFIT EDIT</span><h1>{category==='All'?'SHOP ALL':category.toUpperCase()}</h1><p>{category==='All'?'Find your next favourite piece.':`Explore our ${category.toLowerCase()} collection.`}</p></div><input className="search-input" placeholder="Search products..." value={query} onChange={e=>setQuery(e.target.value)}/></div><div className="filter-row">{cats.map(c=><button className={category===c?'filter active':'filter'} key={c} onClick={()=>setParams(c==='All'?{}:{category:c})}>{c}</button>)}<select value={sort} onChange={e=>setSort(e.target.value)}><option value="featured">Featured</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option></select></div>{error&&<p className="api-notice">{error}</p>}<p className="result-count">{loading?'LOADING PRODUCTS…':`${items.length} PRODUCTS · ${source==='api'?'LIVE CATALOGUE':'PREVIEW CATALOGUE'}`}</p><div className="product-grid shop-product-grid">{items.map(p=><ProductCard key={p.id} product={p}/>)}</div>{!loading&&!items.length&&<p>No products match your search.</p>}</div>
 }
 export function ProductDetail(){
