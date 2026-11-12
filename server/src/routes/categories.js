@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { Category } from '../models/index.js'
+import { Category, Product } from '../models/index.js'
 import { requireAuth, requireRole } from '../middleware/auth.js'
 const router = Router()
 const adminOnly = [requireAuth, requireRole('super_admin', 'admin', 'editor')]
@@ -9,25 +9,51 @@ router.get('/', async (req, res, next) => {
   catch (e) { next(e) }
 })
 router.get('/admin/all', ...adminOnly, async (req, res, next) => {
-  try { res.json(await Category.find().sort({ sortOrder: 1, name: 1 }).lean()) }
-  catch (e) { next(e) }
+  try {
+    const [categories, counts] = await Promise.all([
+      Category.find().populate('parent','name').sort({ sortOrder: 1, name: 1 }).lean(),
+      Product.aggregate([{ $group: { _id: '$category', count: { $sum: 1 } } }])
+    ])
+    const countMap = new Map(counts.filter(x => x._id).map(x => [String(x._id), x.count]))
+    res.json(categories.map(category => ({ ...category, productCount: countMap.get(String(category._id)) || 0 })))
+  } catch (e) { next(e) }
 })
 router.post('/', ...adminOnly, async (req, res, next) => {
   try {
-    const name = String(req.body.name || '').trim()
-    if (!name) return res.status(400).json({ message: 'Category name is required' })
-    const category = await Category.create({ name, slug: slugify(req.body.slug || name), parent: req.body.parent || undefined, sortOrder: Number(req.body.sortOrder || 0), isActive: req.body.isActive !== false })
+    const name = String(req.body.name || '').trim().slice(0, 60)
+    const slug = slugify(req.body.slug || name).slice(0, 80)
+    const parent = req.body.parent || undefined
+    const sortOrder = Number(req.body.sortOrder ?? 0)
+    const image = String(req.body.image || '')
+    if (name.length < 2 || !slug || !Number.isInteger(sortOrder) || sortOrder < 0) return res.status(400).json({ message: 'Enter a valid category name, slug and order.' })
+    if (image && image.length > 1200000 && !/^https:\/\//i.test(image)) return res.status(400).json({ message: 'Category image must be under 1.2 MB or use an HTTPS image URL.' })
+    if (image && !/^https:\/\//i.test(image) && !/^data:image\/webp;base64,[A-Za-z0-9+/=]+$/.test(image)) return res.status(400).json({ message: 'Category image must be a compressed WebP image or HTTPS URL.' })
+    if (parent && !await Category.exists({ _id: parent })) return res.status(400).json({ message: 'Selected parent category does not exist.' })
+    const category = await Category.create({ name, slug, parent, image, sortOrder, isActive: req.body.isActive !== false })
     res.status(201).json(category)
   } catch (e) { next(e) }
 })
 router.patch('/:id', ...adminOnly, async (req, res, next) => {
   try {
     const update = {}
-    if (req.body.name !== undefined) update.name = String(req.body.name).trim()
-    if (req.body.slug !== undefined || req.body.name !== undefined) update.slug = slugify(req.body.slug || req.body.name)
-    if (req.body.sortOrder !== undefined) update.sortOrder = Number(req.body.sortOrder)
+    if (req.body.name !== undefined) update.name = String(req.body.name).trim().slice(0, 60)
+    if (req.body.slug !== undefined || req.body.name !== undefined) update.slug = slugify(req.body.slug || req.body.name).slice(0, 80)
+    if (req.body.sortOrder !== undefined) {
+      update.sortOrder = Number(req.body.sortOrder)
+      if (!Number.isInteger(update.sortOrder) || update.sortOrder < 0) return res.status(400).json({ message: 'Sort order must be a non-negative whole number.' })
+    }
     if (req.body.isActive !== undefined) update.isActive = Boolean(req.body.isActive)
-    const item = await Category.findByIdAndUpdate(req.params.id, update, { new: true, runValidators: true })
+    if (req.body.image !== undefined) {
+      update.image = String(req.body.image || '')
+      if (update.image && update.image.length > 1200000 && !/^https:\/\//i.test(update.image)) return res.status(400).json({ message: 'Category image must be under 1.2 MB or use an HTTPS image URL.' })
+      if (update.image && !/^https:\/\//i.test(update.image) && !/^data:image\/webp;base64,[A-Za-z0-9+/=]+$/.test(update.image)) return res.status(400).json({ message: 'Category image must be a compressed WebP image or HTTPS URL.' })
+    }
+    if (req.body.parent !== undefined) {
+      const parent = req.body.parent || null
+      if (parent && (String(parent) === String(req.params.id) || !await Category.exists({ _id: parent }))) return res.status(400).json({ message: 'Choose a valid parent category.' })
+      update.parent = parent
+    }
+    const item = await Category.findByIdAndUpdate(req.params.id, update, { new: true, runValidators: true }).populate('parent','name')
     if (!item) return res.status(404).json({ message: 'Category not found' })
     res.json(item)
   } catch (e) { next(e) }
