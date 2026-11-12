@@ -9,6 +9,7 @@ export function Layout(){
  const [menuOpen,setMenuOpen]=useState(false)
  const [store,setStore]=useState({storeName:'SMART OUTFIT',tagline:'Your Style, Our Inspiration.',storeNotice:'FREE DELIVERY ON ORDERS OVER ৳3,000 • NEW SEASON, NEW YOU',announcementEnabled:true,supportEmail:'',supportPhone:'',aboutText:''})
  useEffect(()=>{api.get('/storefront').then(({data})=>setStore(s=>({...s,...data}))).catch(()=>{})},[])
+ useEffect(()=>{try{let visitorId=localStorage.getItem('so-visitor-id');if(!visitorId){visitorId=window.crypto?.randomUUID?.()||('so-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2));localStorage.setItem('so-visitor-id',visitorId)}api.post('/analytics/visit',{visitorId,path:location.pathname+location.search}).catch(()=>{})}catch{}},[location.pathname,location.search])
  return <>{store.announcementEnabled&&store.storeNotice&&<div className="announcement">{store.storeNotice}</div>}{store.maintenanceMode&&<div className="api-notice" style={{textAlign:"center",margin:0}}>Store maintenance notice: some services may be temporarily limited.</div>}
  <header className="header">
   <Link className="brand" to="/" onClick={()=>setMenuOpen(false)}><span className="brand-mark">S</span><span>{store.storeName||"SMART OUTFIT"}<small>{store.tagline}</small></span></Link>
