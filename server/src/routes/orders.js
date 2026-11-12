@@ -1,7 +1,7 @@
 import {Router} from 'express'
 import {randomBytes} from 'node:crypto'
 import {requireAuth,requireRole} from '../middleware/auth.js'
-import {Order,Product} from '../models/index.js'
+import {Order,Product,Coupon} from '../models/index.js'
 const router=Router()
 router.use(requireAuth)
 const cleanAddress = input => ({
@@ -12,8 +12,19 @@ const cleanAddress = input => ({
  upazila:String(input?.upazila||'').trim(),
  address:String(input?.address||'').trim()
 })
+router.post('/coupon/validate',requireRole('customer'),async(req,res,next)=>{try{
+ const code=String(req.body.code||'').trim().toUpperCase();const subtotal=Number(req.body.subtotal||0)
+ if(!code||!Number.isFinite(subtotal)||subtotal<0)return res.status(400).json({message:'Enter a valid coupon code.'})
+ const coupon=await Coupon.findOne({code,isActive:true})
+ if(!coupon|| (coupon.expiresAt&&coupon.expiresAt<=new Date()) || (coupon.usageLimit&&coupon.usageCount>=coupon.usageLimit))return res.status(404).json({message:'This coupon is invalid, expired or fully used.'})
+ if(subtotal<Number(coupon.minimumOrder||0))return res.status(400).json({message:'Minimum order amount for this coupon is ৳'+Number(coupon.minimumOrder||0)})
+ const discount=Math.min(subtotal,coupon.type==='fixed'?Number(coupon.value||0):Math.floor(subtotal*Number(coupon.value||0)/100))
+ if(discount<=0)return res.status(400).json({message:'This coupon does not provide a valid discount.'})
+ res.json({code:coupon.code,discount,type:coupon.type,value:coupon.value,subtotal,totalAfterDiscount:subtotal-discount})
+ }catch(e){next(e)}})
 router.post('/',requireRole('customer'),async(req,res,next)=>{
  const reserved=[]
+ let couponToConsume=null
  try{
   const address=cleanAddress(req.body.deliveryAddress)
   if(!address.name||!/^01[3-9]\\d{8}$/.test(address.phone)||!address.division||!address.district||!address.upazila||address.address.length<8)
@@ -35,12 +46,21 @@ router.post('/',requireRole('customer'),async(req,res,next)=>{
    subtotal+=unitPrice*quantity
    lineItems.push({product:product._id,name:product.name,sku:product.sku,quantity,unitPrice,size:String(line.size||''),color:String(line.color||'')})
   }
+  let discount=0
+  const couponCode=String(req.body.couponCode||'').trim().toUpperCase()
+  if(couponCode){
+   couponToConsume=await Coupon.findOne({code:couponCode,isActive:true})
+   if(!couponToConsume||(couponToConsume.expiresAt&&couponToConsume.expiresAt<=new Date())||(couponToConsume.usageLimit&&couponToConsume.usageCount>=couponToConsume.usageLimit)||subtotal<Number(couponToConsume.minimumOrder||0))throw Object.assign(new Error('Coupon is no longer valid for this order.'),{status:400})
+   discount=Math.min(subtotal,couponToConsume.type==='fixed'?Number(couponToConsume.value||0):Math.floor(subtotal*Number(couponToConsume.value||0)/100))
+   if(discount<=0)throw Object.assign(new Error('Coupon discount is invalid.'),{status:400})
+  }
   const deliveryCharge=Number(process.env.DELIVERY_CHARGE_BDT||100)
   const order=await Order.create({
    orderNumber:'SO-'+Date.now()+'-'+randomBytes(3).toString('hex').toUpperCase(),
-   customer:req.user.sub,items:lineItems,subtotal,deliveryCharge,discount:0,total:subtotal+deliveryCharge,
+   customer:req.user.sub,items:lineItems,subtotal,deliveryCharge,discount,total:subtotal-discount+deliveryCharge,couponCode:couponToConsume?.code||'',
    paymentMethod:'cod',paymentStatus:'unpaid',deliveryAddress:address
   })
+  if(couponToConsume)await Coupon.updateOne({_id:couponToConsume._id},{$inc:{usageCount:1}})
   return res.status(201).json({message:'Order placed successfully. Pay cash on delivery.',order})
  }catch(e){
   await Promise.all(reserved.map(x=>Product.updateOne({_id:x.id},{$inc:{stock:x.quantity}}).catch(()=>null)))
