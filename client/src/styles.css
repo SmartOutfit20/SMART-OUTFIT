@@ -224,3 +224,72 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .admin-category-row{gap:12px;align-items:center}
 @media(max-width:900px){.admin-content{padding:20px}}
 @media(max-width:650px){.header{position:sticky}.hero{min-height:430px;padding:46px 6%}.section{padding:42px 5%}.product-grid{gap:13px}.product-art{height:230px}.admin-content{padding:15px}.admin-top{padding:0 15px}.admin-table-wrap{overflow-x:auto}.cart-thumb{width:82px;height:100px}}
+
+
+/* SMART OUTFIT — customer/admin profile, product gallery and navigation refinement */
+.account-wrap{max-width:1280px;margin:0 auto;padding:42px 24px 64px}
+.account-intro{margin-bottom:22px}
+.account-intro h1{font-size:clamp(28px,4vw,42px);letter-spacing:-1.2px;margin:7px 0}
+.account-intro>p{color:var(--muted);margin:0}
+.account-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:22px 0 24px}
+.account-metrics>div{min-width:0;padding:20px 22px;border:1px solid #ece7f0;border-radius:12px;background:linear-gradient(145deg,#fff,#faf8fc);box-shadow:0 8px 24px #24152b08}
+.account-metrics span,.account-metrics small{display:block;color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.8px}
+.account-metrics b{display:block;font-size:25px;line-height:1.3;margin:8px 0 3px;color:var(--deep)}
+.account-metrics small{font-weight:500;letter-spacing:0}
+.account-head{border:1px solid #eee8f2;border-radius:14px;background:linear-gradient(110deg,#21152f,#39204e);color:#fff;padding:24px 26px;box-shadow:0 14px 35px #20112d20}
+.account-head .account-id{color:#e4d8ee}
+.account-head .admin-signout{background:#ffffff16;border:1px solid #ffffff42;color:#fff;padding:10px 16px;border-radius:7px}
+.account-avatar{width:78px;height:78px;flex-basis:78px;border:3px solid #ffffff55;object-fit:cover}
+.account-avatar-fallback{background:#a98ac7;color:#fff}
+.account-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:20px;align-items:start}
+.account-panel{min-width:0;padding:24px;border:1px solid #ece7f0;border-radius:13px;background:#fff;box-shadow:0 8px 28px #24152b08}
+.account-panel>h2{font-size:17px;letter-spacing:-.2px;margin:0 0 20px}
+.account-form{gap:16px}
+.account-form label{font-size:12px;font-weight:700;color:#51465c}
+.account-form input,.account-form textarea{border:1px solid #e7e1ec;border-radius:7px;padding:12px 13px;min-height:44px;background:#fdfcfe;font:inherit}
+.account-form input:focus,.account-form textarea:focus{border-color:#8b5cf6;outline:3px solid #8b5cf622}
+.account-orders{gap:14px}
+.account-order{border-radius:10px;padding:16px;background:#fdfcfe}
+.account-timeline{gap:6px}
+.account-timeline span{font-size:10px}
+.profile-photo-control{border-radius:10px;background:#faf8fc;padding:16px}
+.shop-product-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:22px}
+.shop-product-grid .product-card{min-width:0}
+.shop-product-grid .product-art{position:relative;display:block;aspect-ratio:4/5;height:auto;min-height:0;overflow:hidden;background:#f5f3f7;border-radius:8px}
+.shop-product-grid .product-art .art-shape{position:absolute;inset:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:10px;overflow:hidden}
+.shop-product-grid .product-art .art-shape img{width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain;object-position:center;padding:0;background:transparent}
+.shop-product-grid .product-info{padding:13px 2px 5px}
+.shop-product-grid .product-name{display:block;font-size:14px;line-height:1.45;min-height:2.8em}
+.shop-product-grid .quick-add{position:absolute;left:10px;right:10px;bottom:10px;width:calc(100% - 20px);height:40px;opacity:0;transform:translateY(7px);transition:opacity .2s ease,transform .2s ease}
+.shop-product-grid .product-card:hover .quick-add,.shop-product-grid .quick-add:focus-visible{opacity:1;transform:none}
+.product-art .product-tag,.product-art .wish-btn{z-index:3}
+.mobile-bottom-nav{box-sizing:border-box;height:calc(64px + env(safe-area-inset-bottom,0px));min-height:0;padding:5px 5px env(safe-area-inset-bottom,0px);align-items:stretch;transform:translate3d(0,0,0);contain:layout paint;will-change:transform}
+.mobile-bottom-nav a{min-height:0;gap:3px;line-height:1.1;padding:5px 2px;white-space:nowrap;overflow:hidden}
+.mobile-bottom-nav a svg{flex:0 0 auto}
+.mobile-bottom-nav a span{display:block;line-height:1.1;font-size:10px;transform:none;white-space:nowrap}
+body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
+.header{isolation:isolate;transform:translateZ(0)}
+@media(hover:none){.shop-product-grid .quick-add{position:static;opacity:1;transform:none;width:100%;margin-top:8px;height:38px}}
+@media(max-width:1000px){.shop-product-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}.account-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+@media(max-width:700px){.account-wrap{padding:26px 15px 40px}.account-metrics{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.account-metrics>div{padding:13px 10px;border-radius:9px}.account-metrics b{font-size:18px}.account-metrics span{font-size:8px;letter-spacing:.4px}.account-metrics small{font-size:9px}.account-head{padding:17px;border-radius:11px}.account-grid{grid-template-columns:minmax(0,1fr);gap:13px}.account-panel{padding:17px}.shop-product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 10px}.shop-product-grid .product-art{aspect-ratio:4/5}.shop-product-grid .product-info{padding:10px 1px}.shop-product-grid .product-name{font-size:12px;min-height:2.8em}.shop-product-grid .product-bottom{font-size:12px}.mobile-bottom-nav{height:calc(62px + env(safe-area-inset-bottom,0px));z-index:1100}.mobile-bottom-nav a span{font-size:9px}body{padding-bottom:calc(68px + env(safe-area-inset-bottom,0px))}}
+@media(max-width:390px){.account-metrics{gap:6px}.account-metrics>div{padding:11px 7px}.account-metrics b{font-size:16px}.shop-product-grid{gap:12px 8px}.shop-product-grid .product-name{font-size:11px}}
+/* Admin account profile */
+.admin-profile-shortcut{display:flex;align-items:center;gap:9px;text-decoration:none;color:inherit;font-size:11px;font-weight:800;padding:5px 9px;border-radius:9px}
+.admin-top-avatar,.admin-profile-avatar{display:grid;place-items:center;width:30px;height:30px;flex:0 0 30px;border-radius:50%;background:#8054a6;color:#fff;font-size:13px;font-weight:800}
+.admin-sidebar-profile{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;padding:10px;border-radius:9px;background:#ffffff10}
+.admin-sidebar-profile>span:last-child{display:flex;flex-direction:column;gap:3px;min-width:0}
+.admin-sidebar-profile b{font-size:11px;overflow:hidden;text-overflow:ellipsis}
+.admin-sidebar-profile small{font-size:9px;color:#cbb9d9}
+.admin-profile-layout{display:grid;grid-template-columns:minmax(240px,.75fr) minmax(0,1.25fr);gap:18px;align-items:start}
+.admin-profile-hero{text-align:center;padding:30px 22px;display:flex;flex-direction:column;align-items:center}
+.admin-profile-avatar-large{width:104px;height:104px;border-radius:50%;display:grid;place-items:center;overflow:hidden;background:linear-gradient(135deg,#8054a6,#342044);color:white;font-size:38px;font-weight:800;margin-bottom:17px;border:4px solid #f0e8f7;box-shadow:0 8px 24px #27133c20}
+.admin-profile-avatar-large img{width:100%;height:100%;object-fit:cover}
+.admin-profile-hero h2{margin:8px 0 4px;font-size:22px}
+.admin-profile-hero p{color:var(--muted);font-size:12px;overflow-wrap:anywhere}
+.admin-profile-hero>small{margin-top:16px;color:var(--muted);font-size:10px;line-height:1.5}
+.admin-role-pill{padding:6px 12px;border-radius:20px;background:#f1e9f8;color:#67418a;text-transform:capitalize;font-size:10px;font-weight:800}
+.admin-profile-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.admin-profile-form label{display:flex;flex-direction:column;gap:7px;font-size:11px;font-weight:800;color:var(--deep)}
+.admin-profile-form input{width:100%;min-width:0;padding:12px;border:1px solid #e7e1ec;border-radius:7px;background:#fdfcfe;font:inherit}
+.admin-profile-form button{grid-column:1/-1;justify-self:start;min-height:42px}
+@media(max-width:700px){.admin-profile-layout{grid-template-columns:minmax(0,1fr)}.admin-profile-hero{padding:22px}.admin-profile-form{grid-template-columns:minmax(0,1fr)}.admin-profile-form button{grid-column:1}.admin-profile-shortcut{padding:4px}}
