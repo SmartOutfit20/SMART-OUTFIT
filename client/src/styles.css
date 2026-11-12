@@ -1030,7 +1030,7 @@ body{padding-bottom:0!important;}
 .admin-order-print-actions{display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:wrap}.admin-order-print-actions .admin-action{white-space:nowrap}@media(max-width:640px){.admin-order-print-actions{justify-content:flex-start}.admin-order-print-actions .admin-action{width:100%;justify-content:center}}
 
 
-.pwa-install-button{position:fixed;right:22px;bottom:24px;z-index:1200;display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:12px 18px;border:0;border-radius:999px;background:#21113c;color:#fff;font:600 13px inherit;box-shadow:0 5px 22px rgba(20,12,35,.24);cursor:pointer}
+.pwa-install-button{position:fixed;right:22px;bottom:24px;z-index:1200;display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:12px 18px;border:0;border-radius:999px;background:#21113c;color:#fff;font-family:inherit;font-size:13px;font-weight:600;box-shadow:0 5px 22px rgba(20,12,35,.24);cursor:pointer}
 .pwa-install-button:hover{background:#352052}
 @media(max-width:760px){.pwa-install-button{right:14px;bottom:calc(82px + env(safe-area-inset-bottom));padding:11px 15px;font-size:12px}}
 @media(min-width:761px){.pwa-install-button{bottom:24px}}
