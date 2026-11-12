@@ -1,7 +1,7 @@
 import {Router} from 'express'
 import {randomBytes} from 'node:crypto'
 import {requireAuth,requireRole} from '../middleware/auth.js'
-import {Order,Product,Coupon} from '../models/index.js'
+import {Order,Product,Coupon,Setting} from '../models/index.js'
 const router=Router()
 router.use(requireAuth)
 const cleanAddress = input => ({
@@ -54,7 +54,8 @@ router.post('/',requireRole('customer'),async(req,res,next)=>{
    discount=Math.min(subtotal,couponToConsume.type==='fixed'?Number(couponToConsume.value||0):Math.floor(subtotal*Number(couponToConsume.value||0)/100))
    if(discount<=0)throw Object.assign(new Error('Coupon discount is invalid.'),{status:400})
   }
-  const deliveryCharge=Number(process.env.DELIVERY_CHARGE_BDT||100)
+  const deliverySetting=await Setting.findOne({key:'deliveryCharge'}).lean()
+  const deliveryCharge=Number(deliverySetting?.value??process.env.DELIVERY_CHARGE_BDT??100)
   const order=await Order.create({
    orderNumber:'SO-'+Date.now()+'-'+randomBytes(3).toString('hex').toUpperCase(),
    customer:req.user.sub,items:lineItems,subtotal,deliveryCharge,discount,total:subtotal-discount+deliveryCharge,couponCode:couponToConsume?.code||'',
