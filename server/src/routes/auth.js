@@ -23,6 +23,23 @@ router.post('/bootstrap-admin',async(req,res,next)=>{try{
  res.status(201).json({message:'Super Admin created. Remove the bootstrap environment variables now; then sign in normally.',user:{id:user.id,name:user.name,email:user.email,role:user.role}})
  }catch(e){next(e)}})
 
+router.get('/me',async(req,res,next)=>{try{
+ const user=await User.findById(req.user.sub).select('-passwordHash').lean()
+ if(!user)return res.status(404).json({message:'Customer account not found'})
+ res.json(user)
+ }catch(e){next(e)}})
+router.patch('/me',async(req,res,next)=>{try{
+ const {name,email,phone,profileImage,defaultAddress}=req.body
+ const update={}
+ if(name!==undefined){if(String(name).trim().length<2||String(name).trim().length>80)return res.status(400).json({message:'Name must be 2–80 characters'});update.name=String(name).trim()}
+ if(email!==undefined)update.email=String(email).trim().toLowerCase()||undefined
+ if(phone!==undefined){if(phone&&!bdPhone.test(phone))return res.status(400).json({message:'Enter a valid Bangladesh mobile number'});update.phone=phone||undefined}
+ if(profileImage!==undefined){if(profileImage&&(!/^https:\/\//i.test(profileImage)||profileImage.length>1000))return res.status(400).json({message:'Profile image must be a valid HTTPS image URL'});update.profileImage=profileImage}
+ if(defaultAddress!==undefined)update.defaultAddress={division:String(defaultAddress.division||'').trim(),district:String(defaultAddress.district||'').trim(),upazila:String(defaultAddress.upazila||'').trim(),address:String(defaultAddress.address||'').trim()}
+ const user=await User.findByIdAndUpdate(req.user.sub,{$set:update},{new:true,runValidators:true}).select('-passwordHash')
+ if(!user)return res.status(404).json({message:'Customer account not found'})
+ res.json(user)
+ }catch(e){next(e)}})
 router.post('/register',async(req,res,next)=>{try{
  const {name,email,phone,password}=req.body
  if(!name||!password||(!email&&!phone))return res.status(400).json({message:'Name, password and email or phone are required'})
