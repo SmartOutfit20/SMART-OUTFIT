@@ -60,3 +60,71 @@
 .order-history-details{margin-top:10px;font-size:11px;color:var(--muted)}
 .order-history-details summary{cursor:pointer;font-weight:800;color:#68418d}
 .order-history-details p{padding:7px 0;border-bottom:1px solid var(--line);line-height:1.5}
+
+/* Mobile-first app shell and persistent storefront header */
+.header{position:sticky;top:0;z-index:1000;background:rgba(255,255,255,.97);backdrop-filter:blur(14px);box-shadow:0 4px 18px rgba(32,20,48,.06)}
+.mobile-menu-toggle{display:none;border:1px solid var(--line);background:#fff;color:var(--deep);width:38px;height:38px;border-radius:8px;align-items:center;justify-content:center}
+.mobile-bottom-nav{display:none}
+@media(max-width:820px){
+ .header{height:68px;padding:0 16px;gap:10px}
+ .header .brand{font-size:13px;letter-spacing:.4px;gap:8px;min-width:0}
+ .header .brand-mark{width:32px;height:32px;font-size:18px;flex:0 0 32px}
+ .header .brand small{font-size:7px;letter-spacing:1.2px}
+ .mobile-menu-toggle{display:flex;order:2;flex:0 0 38px}
+ .header-actions{order:3;gap:10px;margin-left:auto}
+ .header-actions .icon-btn{padding:5px}
+ .header-actions .language-btn{display:none}
+ .nav{display:none;position:absolute;left:0;right:0;top:100%;padding:12px 18px 18px;background:#fff;border-top:1px solid var(--line);box-shadow:0 12px 18px rgba(32,20,48,.1);flex-direction:column;gap:0;z-index:1001}
+ .nav.nav-open{display:flex}
+ .nav a{padding:14px 4px;border-bottom:1px solid var(--line);font-size:12px}
+ .mobile-bottom-nav{position:fixed;display:flex;left:0;right:0;bottom:0;z-index:1100;justify-content:space-around;align-items:center;min-height:62px;padding:6px 4px max(6px,env(safe-area-inset-bottom));background:rgba(255,255,255,.97);backdrop-filter:blur(14px);border-top:1px solid var(--line);box-shadow:0 -5px 20px rgba(32,20,48,.08)}
+ .mobile-bottom-nav a{display:flex;min-width:0;flex:1;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#81788a;font-size:9px;font-weight:700}
+ .mobile-bottom-nav a.active{color:var(--purple)}
+ body{padding-bottom:66px}
+ main{min-height:55vh}
+ .hero{min-height:420px;padding:48px 7%;grid-template-columns:1fr 1fr}
+ .page-wrap{padding-left:16px;padding-right:16px}
+ .product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ .product-art{min-height:210px}
+ .product-info{padding:10px}
+ .product-name{font-size:12px}
+ .footer{padding-bottom:85px}
+}
+@media(max-width:520px){
+ .header{height:62px;padding:0 10px;gap:7px}
+ .header .brand{font-size:11px;gap:6px}
+ .header .brand-mark{width:29px;height:29px;flex-basis:29px;font-size:16px}
+ .header .brand small{font-size:6px;letter-spacing:.8px}
+ .mobile-menu-toggle{width:34px;height:34px;flex-basis:34px}
+ .header-actions{gap:6px}
+ .header-actions .icon-btn svg{width:17px;height:17px}
+ .header-actions .account-icon{display:none}
+ .announcement{font-size:8px;letter-spacing:.7px;padding:8px 6px}
+ .hero{display:block;min-height:390px;padding:42px 22px}
+ .hero-visual{min-height:180px;opacity:.9}
+ .hero h1{font-size:40px}
+ .benefits{grid-template-columns:1fr 1fr;gap:14px;padding:20px 14px}
+ .section{padding:38px 16px}
+ .section-heading{gap:10px;align-items:flex-end}
+ .section-heading h2{font-size:21px}
+ .product-grid{gap:10px}
+ .product-art{min-height:175px}
+ .product-tag{font-size:8px}
+ .quick-add{font-size:9px}
+ .page-title{display:flex;flex-direction:column;align-items:stretch;gap:16px}
+ .search-input{width:100%}
+ .filter-row{overflow-x:auto;flex-wrap:nowrap;padding-bottom:8px}
+ .filter-row .filter{white-space:nowrap}
+ .detail-layout,.cart-layout,.checkout-layout{grid-template-columns:1fr}
+ .detail-art{min-height:320px}
+ .summary{position:static}
+ .form-grid{grid-template-columns:1fr}
+ .form-grid .wide{grid-column:auto}
+ .checkout-form{padding:16px}
+ .cart-item{gap:10px}
+ .cart-thumb{width:76px;min-width:76px}
+ .footer{grid-template-columns:1fr 1fr;gap:22px;padding:35px 18px 90px}
+ .copyright{grid-column:1/-1}
+ .admin-shell{grid-template-columns:1fr}
+}
+@media(min-width:821px){.header{position:sticky;top:0}.mobile-bottom-nav{display:none}}
