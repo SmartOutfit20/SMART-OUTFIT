@@ -33,7 +33,6 @@ router.post('/',async(req,res,next)=>{
   if(!requested.length||requested.length>30)return res.status(400).json({message:'Your cart is empty or contains too many items.'})
   const advancePaymentMethod=String(req.body.advancePaymentMethod||'').toLowerCase();const advancePaymentSender=String(req.body.advancePaymentSender||'').trim();const advancePaymentTransactionId=String(req.body.advancePaymentTransactionId||'').trim();
   if(!['bkash','nagad'].includes(advancePaymentMethod))return res.status(400).json({message:'Choose bKash or Nagad to pay the delivery charge in advance.'});
-  if(!/^01[3-9]\d{8}$/.test(advancePaymentSender)||advancePaymentTransactionId.length<6||advancePaymentTransactionId.length>80)return res.status(400).json({message:'Enter a valid sender mobile number and transaction ID.'})
   const lineItems=[]
   let subtotal=0
   for(const line of requested){
@@ -72,10 +71,11 @@ router.post('/',async(req,res,next)=>{
   const configuredDelivery=Number(deliverySetting?.value??process.env.DELIVERY_CHARGE_BDT??100)
   const freeShippingThreshold=Number(freeThresholdSetting?.value??3000)
   const deliveryCharge=freeShippingThreshold>0&&subtotal>=freeShippingThreshold?0:configuredDelivery
+  if(deliveryCharge>0&&(!['bkash','nagad'].includes(advancePaymentMethod)||!/^01[3-9]\d{8}$/.test(advancePaymentSender)||advancePaymentTransactionId.length<6||advancePaymentTransactionId.length>80))return res.status(400).json({message:'Enter a valid bKash/Nagad sender mobile number and transaction ID for the delivery charge.'})
   const order=await Order.create({
    orderNumber:'SO-'+Date.now()+'-'+randomBytes(3).toString('hex').toUpperCase(),
    customer:req.user.sub,items:lineItems,subtotal,deliveryCharge,discount,total:subtotal-discount+deliveryCharge,couponCode:couponToConsume?.code||'',statusHistory:[{status:'pending',note:'Order placed successfully.'}],
-   paymentMethod:'cod',paymentStatus:deliveryCharge>0?'pending':'unpaid',advancePaymentAmount:deliveryCharge,advancePaymentMethod,advancePaymentSender,advancePaymentTransactionId,advancePaymentSubmittedAt:new Date(),deliveryAddress:address
+   paymentMethod:'cod',paymentStatus:deliveryCharge>0?'pending':'unpaid',advancePaymentAmount:deliveryCharge,advancePaymentMethod:deliveryCharge>0?advancePaymentMethod:'',advancePaymentSender:deliveryCharge>0?advancePaymentSender:'',advancePaymentTransactionId:deliveryCharge>0?advancePaymentTransactionId:'',advancePaymentSubmittedAt:deliveryCharge>0?new Date():undefined,deliveryAddress:address
   })
   if(couponToConsume)await Coupon.updateOne({_id:couponToConsume._id},{$inc:{usageCount:1}})
   return res.status(201).json({message:deliveryCharge>0?'Order submitted. Delivery charge payment is awaiting manual verification; remaining product amount is Cash on Delivery.':'Order placed. Product amount is Cash on Delivery.',order})
@@ -102,6 +102,7 @@ router.patch('/:id/status',requireRole('super_admin','admin','support','editor')
  if(!allowed.includes(req.body.status))return res.status(400).json({message:'Invalid order status'})
  const order=await Order.findById(req.params.id)
  if(!order)return res.status(404).json({message:'Order not found'})
+ if(order.paymentStatus==='pending'&&req.body.status!=='cancelled')return res.status(409).json({message:'Verify the advance delivery payment before confirming or processing this order.'})
  if(order.status==='cancelled'&&req.body.status!=='cancelled')return res.status(409).json({message:'Cancelled orders cannot be reopened; create a new order instead.'})
  if(req.body.status==='cancelled'&&order.status!=='cancelled'){
   const reason=String(req.body.cancellationReason||'').trim()
