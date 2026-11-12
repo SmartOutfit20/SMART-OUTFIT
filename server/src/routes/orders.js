@@ -31,8 +31,9 @@ router.post('/',async(req,res,next)=>{
    return res.status(400).json({message:'Complete your name, valid Bangladesh phone, division, district, upazila and full address.'})
   const requested=Array.isArray(req.body.items)?req.body.items:[]
   if(!requested.length||requested.length>30)return res.status(400).json({message:'Your cart is empty or contains too many items.'})
-  const paymentMethod=req.body.paymentMethod||'cod'
-  if(paymentMethod!=='cod')return res.status(400).json({message:'Online payment is not active yet. Please choose Cash on Delivery.'})
+  const advancePaymentMethod=String(req.body.advancePaymentMethod||'').toLowerCase();const advancePaymentSender=String(req.body.advancePaymentSender||'').trim();const advancePaymentTransactionId=String(req.body.advancePaymentTransactionId||'').trim();
+  if(!['bkash','nagad'].includes(advancePaymentMethod))return res.status(400).json({message:'Choose bKash or Nagad to pay the delivery charge in advance.'});
+  if(!/^01[3-9]\\d{8}$/.test(advancePaymentSender)||advancePaymentTransactionId.length<6||advancePaymentTransactionId.length>80)return res.status(400).json({message:'Enter a valid sender mobile number and transaction ID.'})
   const lineItems=[]
   let subtotal=0
   for(const line of requested){
@@ -74,15 +75,26 @@ router.post('/',async(req,res,next)=>{
   const order=await Order.create({
    orderNumber:'SO-'+Date.now()+'-'+randomBytes(3).toString('hex').toUpperCase(),
    customer:req.user.sub,items:lineItems,subtotal,deliveryCharge,discount,total:subtotal-discount+deliveryCharge,couponCode:couponToConsume?.code||'',statusHistory:[{status:'pending',note:'Order placed successfully.'}],
-   paymentMethod:'cod',paymentStatus:'unpaid',deliveryAddress:address
+   paymentMethod:'cod',paymentStatus:deliveryCharge>0?'pending':'unpaid',advancePaymentAmount:deliveryCharge,advancePaymentMethod,advancePaymentSender,advancePaymentTransactionId,advancePaymentSubmittedAt:new Date(),deliveryAddress:address
   })
   if(couponToConsume)await Coupon.updateOne({_id:couponToConsume._id},{$inc:{usageCount:1}})
-  return res.status(201).json({message:'Order placed successfully. Pay cash on delivery.',order})
+  return res.status(201).json({message:deliveryCharge>0?'Order submitted. Delivery charge payment is awaiting manual verification; remaining product amount is Cash on Delivery.':'Order placed. Product amount is Cash on Delivery.',order})
  }catch(e){
   await Promise.all(reserved.map(x=>x.variant?Product.updateOne({_id:x.id,variantStocks:{$elemMatch:{size:x.size,color:x.color}}},{$inc:{stock:x.quantity,'variantStocks.$.stock':x.quantity}}).catch(()=>null):Product.updateOne({_id:x.id},{$inc:{stock:x.quantity}}).catch(()=>null)))
   next(e)
  }
 })
+router.patch('/:id/advance-payment-verify',requireRole('super_admin','admin'),async(req,res,next)=>{try{
+ const decision=String(req.body.decision||'');if(!['approve','reject'].includes(decision))return res.status(400).json({message:'Choose approve or reject.'});
+ const order=await Order.findById(req.params.id);if(!order)return res.status(404).json({message:'Order not found.'});
+ if(!order.advancePaymentTransactionId||!order.advancePaymentAmount)return res.status(409).json({message:'This order has no advance delivery payment to verify.'});
+ if(order.paymentStatus==='paid')return res.status(409).json({message:'Advance payment has already been approved.'});
+ if(order.paymentStatus!=='pending')return res.status(409).json({message:'This payment is not awaiting verification.'});
+ order.paymentStatus=decision==='approve'?'paid':'failed';order.advancePaymentVerifiedAt=new Date();order.advancePaymentVerifiedBy=req.user.sub;order.advancePaymentNote=String(req.body.note||'').trim().slice(0,300);
+ if(decision==='approve'){order.status='confirmed';order.statusHistory=order.statusHistory||[];order.statusHistory.push({status:'confirmed',note:'Delivery charge advance payment manually verified and approved.',createdAt:new Date()})}
+ else {order.status='cancelled';order.cancellationReason='Advance delivery payment was not verified.';order.statusHistory=order.statusHistory||[];order.statusHistory.push({status:'cancelled',note:order.cancellationReason,createdAt:new Date()});for(const line of order.items){const product=await Product.findById(line.product).select('variantStocks').lean();const variant=product?.variantStocks?.find(v=>v.size===line.size&&v.color===line.color);if(variant)await Product.updateOne({_id:line.product,variantStocks:{$elemMatch:{size:line.size,color:line.color}}},{$inc:{stock:line.quantity||0,'variantStocks.$.stock':line.quantity||0}});else await Product.updateOne({_id:line.product},{$inc:{stock:line.quantity||0}})}}
+ await order.save();res.json(order);
+}catch(e){next(e)}})
 router.get('/mine',async(req,res,next)=>{try{res.json(await Order.find({customer:req.user.sub}).sort({createdAt:-1}).lean())}catch(e){next(e)}})
 router.get('/admin/all',requireRole('super_admin','admin','support'),async(req,res,next)=>{try{res.json(await Order.find().populate('customer','name email phone').populate('items.product','name sku images').sort({createdAt:-1}).limit(200).lean())}catch(e){next(e)}})
 router.patch('/:id/status',requireRole('super_admin','admin'),async(req,res,next)=>{try{
