@@ -32,7 +32,11 @@ export async function deleteProduct(id) {
   const { data } = await api.delete(`/products/${id}`)
   return data
 }
-export async function placeOrder(payload) {\n  const { data } = await api.post('/orders', payload)\n  return data\n}\nexport async function createCategory(payload) {
+export async function placeOrder(payload) {
+  const { data } = await api.post('/orders', payload)
+  return data
+}
+export async function createCategory(payload) {
   const { data } = await api.post('/categories', payload)
   return data
 }
