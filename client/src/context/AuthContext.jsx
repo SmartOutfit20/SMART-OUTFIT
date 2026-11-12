@@ -1,0 +1,27 @@
+import { createContext, useContext, useMemo, useState } from 'react'
+import api from '../services/api'
+const AuthContext = createContext(null)
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('so-user') || 'null') } catch { return null }
+  })
+  const [busy, setBusy] = useState(false)
+  async function login(identity, password) {
+    setBusy(true)
+    try {
+      const { data } = await api.post('/auth/login', { identity, password })
+      localStorage.setItem('so-token', data.token)
+      localStorage.setItem('so-user', JSON.stringify(data.user))
+      setUser(data.user)
+      return data.user
+    } finally { setBusy(false) }
+  }
+  function logout() {
+    localStorage.removeItem('so-token')
+    localStorage.removeItem('so-user')
+    setUser(null)
+  }
+  const value = useMemo(() => ({ user, busy, login, logout }), [user, busy])
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+}
+export const useAuth = () => useContext(AuthContext)
