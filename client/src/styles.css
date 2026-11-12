@@ -984,3 +984,6 @@ html,body,#root{min-height:100%;background:#fff}
   .footer-complete .copyright{align-items:flex-start;flex-direction:column;gap:11px;padding-top:16px}
   .footer-complete .copyright-meta{justify-content:flex-start;gap:8px}
 }
+
+.footer-complete .copyright-origin{position:relative}
+.footer-complete .copyright-origin:after{left:4px;top:50%;transform:translateY(-50%)}
