@@ -4,12 +4,17 @@ import cors from 'cors'
 import helmet from 'helmet'
 import morgan from 'morgan'
 import rateLimit from 'express-rate-limit'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { connectDB } from './config/db.js'
 import health from './routes/health.js'
 import products from './routes/products.js'
 import categories from './routes/categories.js'
 import auth from './routes/auth.js'
 import orders from './routes/orders.js'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const clientDistPath = path.resolve(__dirname, '../../client/dist')
 
 const app = express()
 app.disable('x-powered-by')
@@ -23,6 +28,14 @@ app.use('/api/health', health)
 app.use('/api/products', products)
 app.use('/api/categories', categories)
 app.use('/api/orders', orders)
+
+// Serve the Vite production build from the same Render web service.
+app.use(express.static(clientDistPath))
+app.get(/.*/, (req, res, next) => {
+  if (req.path.startsWith('/api/')) return next()
+  res.sendFile(path.join(clientDistPath, 'index.html'))
+})
+
 app.use((req, res) => res.status(404).json({ message: 'Route not found' }))
 app.use((err, req, res, next) => {
   console.error(err)
@@ -33,6 +46,6 @@ const port = process.env.PORT || 5000
 if (process.env.NODE_ENV === 'production' && !process.env.JWT_SECRET) {
   throw new Error('JWT_SECRET must be configured in production')
 }
-connectDB().then(() => app.listen(port, () => console.log(`SMART OUTFIT API listening on ${port}`))).catch(err => {
+connectDB().then(() => app.listen(port, () => console.log(`SMART OUTFIT API and storefront listening on ${port}`))).catch(err => {
   console.error('Startup failed:', err); process.exit(1)
 })
