@@ -897,3 +897,8 @@ html,body,#root{min-height:100%;background:#fff}
 .admin-navigation-order button{min-width:34px;padding:7px}
 .admin-navigation-footer{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:20px;padding-top:16px;border-top:1px solid #eee}
 @media(max-width:760px){.admin-navigation-row{align-items:stretch;flex-direction:column;gap:10px}.admin-navigation-controls{max-width:none;width:100%;flex-wrap:wrap}.admin-navigation-controls input,.admin-navigation-controls select{flex:1 1 180px}.admin-navigation-footer{align-items:stretch;flex-direction:column}.admin-navigation-footer .admin-action{justify-content:center}}
+
+
+.header .nav-category-group>a{display:flex;align-items:center;gap:5px;color:inherit;text-decoration:none;font-size:12px;font-weight:800;letter-spacing:.7px;padding:12px 5px;position:relative}
+.header .nav-category-group>a:hover,.header .nav-category-group>a.active{color:var(--purple)}
+.header .nav-category-group>a.active:after{content:"";position:absolute;left:5px;right:5px;bottom:5px;height:2px;background:var(--purple)}
