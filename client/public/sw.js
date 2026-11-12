@@ -1,5 +1,5 @@
-const CACHE_NAME='smart-outfit-shell-v4';
-const APP_SHELL=['/','/manifest.webmanifest','/icons/app-icon.svg'];
+const CACHE_NAME='smart-outfit-shell-v5';
+const APP_SHELL=['/'];
 
 self.addEventListener('install',event=>{
  event.waitUntil(
