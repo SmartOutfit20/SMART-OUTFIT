@@ -122,7 +122,7 @@ app.get('/', async (req, res, next) => {
     const image = /^https:\/\//i.test(String(settings.seoOgImage || '')) ? settings.seoOgImage : ''
     const htmlPath = path.join(clientDistPath, 'index.html')
     const html = setHtmlMeta(await readFile(htmlPath, 'utf8'), title, description, origin + '/', image, settings.seoIndexingEnabled !== false, plainText(settings.homepageSeoKeywords || '', 300))
-    res.set({ 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=300, s-maxage=300' }).send(html)
+    res.set({ 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate', 'Pragma': 'no-cache', 'Expires': '0' }).send(html)
   } catch (e) { next(e) }
 })
 
@@ -168,7 +168,7 @@ app.get('/product/:id', async (req, res, next) => {
     const titleEnd = html.indexOf('</title>', titleStart)
     if (titleStart >= 0 && titleEnd >= 0) html = html.slice(0, titleStart) + `<title>${escapeHtml(title)}</title>` + html.slice(titleEnd + 8)
     html = html.replace('</head>', `${tags}\n</head>`)
-    res.set({ 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=300, s-maxage=300' })
+    res.set({ 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate', 'Pragma': 'no-cache', 'Expires': '0' })
     res.send(html)
   } catch (e) { next(e) }
 })
