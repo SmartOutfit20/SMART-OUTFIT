@@ -15,25 +15,7 @@
 <title>SMART OUTFIT | Your Style, Our Inspiration</title>
 </head>
 <body>
-<div id="boot-splash" role="status" aria-live="polite">
- <div class="boot-content"><span class="boot-mark">S</span><strong>SMART OUTFIT</strong><small>YOUR STYLE, OUR INSPIRATION</small><span class="boot-loader"><i></i></span><em>লোড হচ্ছে...</em></div>
-</div>
 <div id="root"></div>
-<style>
-#boot-splash{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:#fff;color:#21113c;opacity:1;visibility:visible;transition:opacity .32s ease,visibility .32s ease}
-#boot-splash.boot-splash-hidden{opacity:0;visibility:hidden;pointer-events:none}
-.boot-content{display:flex;align-items:center;flex-direction:column;gap:12px;font-family:Manrope,system-ui,sans-serif}
-.boot-mark{width:58px;height:58px;display:grid;place-items:center;background:#21113c;color:#fff;font-size:30px;font-weight:800;animation:boot-pulse 1.25s ease-in-out infinite}
-.boot-content strong{font-size:17px;letter-spacing:2px}
-.boot-content small{font:700 8px system-ui,sans-serif;letter-spacing:2px;color:#93899b}
-.boot-loader{width:112px;height:3px;margin-top:10px;overflow:hidden;background:#eee8f3;border-radius:10px}
-.boot-loader i{display:block;width:42%;height:100%;background:#16845a;border-radius:10px;animation:boot-progress 1.15s ease-in-out infinite}
-.boot-content em{font:500 11px system-ui,sans-serif;color:#77717e;font-style:normal}
-@keyframes boot-progress{0%{transform:translateX(-110%)}100%{transform:translateX(260%)}}
-@keyframes boot-pulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 #16845a22}50%{transform:scale(1.045);box-shadow:0 0 0 9px #16845a00}}
-@media(prefers-reduced-motion:reduce){#boot-splash,.boot-mark,.boot-loader i{transition:none!important;animation:none!important}}
-</style>
-<script>window.__soHideBootSplash=function(){var el=document.getElementById('boot-splash');if(!el||el.dataset.hiding)return;el.dataset.hiding='1';el.classList.add('boot-splash-hidden');window.setTimeout(function(){el.remove()},380)}</script>
 <script type="module" src="/src/main.jsx"></script>
 </body>
 </html>
