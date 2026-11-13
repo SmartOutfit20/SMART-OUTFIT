@@ -82,7 +82,7 @@ function setHtmlMeta(html, title, description, canonical, image, indexing = true
   const end = html.indexOf('</title>', start)
   if (start >= 0 && end >= 0) html = html.slice(0, start) + '<title>' + safeTitle + '</title>' + html.slice(end + 8)
   html = html.replace(/<meta\s+name=["']description["'][^>]*>/i, '')
-  html = html.replace(/<link\\s+rel=["']canonical["'][^>]*>/i, '')
+  html = html.replace(/<link\s+rel=["']canonical["'][^>]*>/i, '')
   return html.replace('</head>', tags + '\n</head>')
 }
 
