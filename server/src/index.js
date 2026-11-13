@@ -125,7 +125,8 @@ app.get('/', async (req, res, next) => {
     res.set({ 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=300, s-maxage=300' }).send(html)
   } catch (e) { next(e) }
 })
-\n// Social crawlers do not execute the React app, so return product-specific
+
+// Social crawlers do not execute the React app, so return product-specific
 // Open Graph tags in the initial HTML for shared product URLs.
 app.get('/product/:id', async (req, res, next) => {
   try {
