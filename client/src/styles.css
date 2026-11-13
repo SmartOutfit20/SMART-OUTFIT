@@ -1564,3 +1564,9 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
  .shop-product-grid .product-card:hover{transform:none}
  .filter:hover,.btn:hover,.quick-add:hover{transform:none}
 }
+
+@media(max-width:820px){
+ .header .nav.nav-open .nav-category-menu{display:grid}
+ .header .nav.nav-open .nav-category-group:hover .nav-category-menu,
+ .header .nav.nav-open .nav-category-group:focus-within .nav-category-menu{display:grid}
+}
