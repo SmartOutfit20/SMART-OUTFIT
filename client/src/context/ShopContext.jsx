@@ -3,15 +3,17 @@ import { useAuth } from './AuthContext'
 import api from '../services/api'
 
 const ShopContext = createContext(null)
+function readStoredArray(key){try{const value=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(value)?value:[]}catch{return []}}
+function writeStoredArray(key,value){try{localStorage.setItem(key,JSON.stringify(value))}catch{}}
 export function ShopProvider({children}) {
  const {user}=useAuth()
  const userId=String(user?.id||user?._id||'')
  const previousUserId=useRef('')
- const [cart,setCart] = useState(() => JSON.parse(localStorage.getItem('so-cart') || '[]'))
- const [wishlist,setWishlist] = useState(() => JSON.parse(localStorage.getItem('so-wishlist') || '[]'))
+ const [cart,setCart] = useState(() => readStoredArray('so-cart'))
+ const [wishlist,setWishlist] = useState(() => readStoredArray('so-wishlist'))
  const [language,setLanguage] = useState('EN')
- useEffect(()=>localStorage.setItem('so-cart',JSON.stringify(cart)),[cart])
- useEffect(()=>localStorage.setItem('so-wishlist',JSON.stringify(wishlist)),[wishlist])
+ useEffect(()=>writeStoredArray('so-cart',cart),[cart])
+ useEffect(()=>writeStoredArray('so-wishlist',wishlist),[wishlist])
  useEffect(()=>{
    if(!userId){
      if(previousUserId.current)setWishlist([])
