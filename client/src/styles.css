@@ -2703,3 +2703,158 @@ html,body,#root{max-width:100%;overflow-x:clip}
   .detail-copy .color-options button{font-size:11px!important;padding:6px 7px!important}
   .detail-copy .detail-perks span{font-size:10px}
 }
+
+
+/* SMART OUTFIT — readable Bangla type, spacious product detail and restrained glass motion */
+:root{
+  --so-glass:rgba(255,255,255,.76);
+  --so-glass-border:rgba(35,42,37,.09);
+  --so-glass-shadow:0 12px 34px rgba(24,35,28,.07);
+  --so-green:#16845a;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Hind Siliguri','DM Sans',sans-serif;font-size:16px;-webkit-font-smoothing:antialiased}
+:lang(bn),[lang="bn"]{font-family:'Hind Siliguri',sans-serif}
+.nav,.eyebrow,.product-category,.brand,.brand small,.section-heading>a,.product-tag,.rating,.admin-label,.admin-brand,.admin-top,.admin-table th,.btn,.quick-add,.stock-out{
+  font-family:'Manrope','DM Sans','Hind Siliguri',sans-serif;
+}
+p{line-height:1.8}
+button,input,select,textarea{font-family:inherit}
+.section{padding-top:clamp(52px,6vw,82px);padding-bottom:clamp(52px,6vw,82px)}
+.section-heading h2,.section h2{line-height:1.25}
+.section-heading p,.hero p,.promo p{font-size:15px;line-height:1.8}
+.product-grid{align-items:start;gap:clamp(12px,1.8vw,22px)}
+.product-card{
+  min-width:0;border-radius:12px;overflow:hidden;
+  background:rgba(255,255,255,.94);
+  border:1px solid rgba(25,35,29,.07);
+  box-shadow:0 5px 18px rgba(24,35,28,.045);
+  transition:transform .28s ease,box-shadow .28s ease,border-color .28s ease;
+}
+.product-card:hover{transform:translateY(-5px);box-shadow:0 14px 30px rgba(24,35,28,.10);border-color:rgba(22,132,90,.22)}
+.product-art{aspect-ratio:1/1;height:auto!important;border-radius:11px 11px 0 0}
+.product-art .art-shape{width:100%;height:100%;display:block;clip-path:none;background:transparent}
+.product-art .art-shape img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .55s cubic-bezier(.2,.7,.2,1)}
+.product-card:hover .art-shape img{transform:scale(1.045)}
+.product-info{padding:15px 14px 14px}
+.product-category{font-size:11px;letter-spacing:.6px}
+.product-name{font-family:'Hind Siliguri','Manrope',sans-serif;font-size:16px;line-height:1.45;min-height:2.8em}
+.product-bottom{font-size:15px;gap:8px;flex-wrap:wrap}
+.product-bottom del{font-size:12px}
+.quick-add,.stock-out{font-size:13px;letter-spacing:0;border-radius:7px}
+.quick-add{background:var(--so-green);transform:translateY(0);opacity:1;transition:filter .2s ease,transform .2s ease}
+.quick-add:hover{filter:brightness(.92);transform:translateY(-1px)}
+.product-card-actions{padding-top:10px}
+.product-tag{font-size:10px;border-radius:5px}
+.discount-tag{background:#d96a32;color:#fff}
+.header,.announcement,.footer,.hero,.promo,.category-tile,.product-card,.admin-stat,.admin-panel,.summary,.checkout-form,.auth-card,.detail-copy,.detail-gallery .detail-art,.filter,.filter-row select,.search-input,.info-contact-card,.info-value-grid article,.info-callout,.info-policy,.info-faq-list details{
+  -webkit-backdrop-filter:blur(14px);
+  backdrop-filter:blur(14px);
+}
+.header{background:rgba(255,255,255,.88);border-bottom:1px solid rgba(30,40,34,.08)}
+.announcement{background:var(--so-green);font-size:12px;letter-spacing:.5px}
+.footer{background:linear-gradient(135deg,rgba(22,132,90,.97),rgba(13,100,68,.98));}
+.footer p,.footer a{font-size:14px;line-height:1.8}
+.footer>div>b{font-size:12px}
+.btn,.filter,.icon-btn,.wish-btn,.size-options button,.color-options button{transition:background .2s ease,color .2s ease,border-color .2s ease,box-shadow .2s ease,transform .2s ease}
+.btn:hover,.filter:hover{transform:translateY(-1px)}
+.detail-layout{
+  grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);
+  align-items:start;gap:clamp(24px,4vw,58px);
+  padding:20px 0 58px;
+}
+.detail-gallery,.detail-copy{min-width:0;width:100%;max-width:100%}
+.detail-gallery .detail-art{
+  width:100%;aspect-ratio:1/1;height:auto;min-height:0;
+  overflow:hidden;border-radius:16px;background:#f2f4f2;
+  border:1px solid rgba(25,35,29,.07);
+}
+.detail-gallery .detail-art>img{display:block;width:100%;height:100%;object-fit:cover}
+.detail-copy{
+  padding:26px 24px 28px;
+  border:1px solid var(--so-glass-border);border-radius:16px;
+  background:var(--so-glass);box-shadow:var(--so-glass-shadow);
+}
+.detail-copy h1{font-family:'Hind Siliguri','Manrope',sans-serif;font-size:clamp(27px,2.5vw,36px);line-height:1.35;letter-spacing:0;overflow-wrap:anywhere;margin:8px 0 14px}
+.detail-copy p{font-size:16px;line-height:1.9;margin:18px 0;color:#5f625f;overflow-wrap:anywhere}
+.detail-price{font-size:23px}
+.option-label{font-family:'Hind Siliguri',sans-serif;font-size:15px;letter-spacing:0;margin:23px 0 12px}
+.option-label span{font-size:14px}
+.size-options,.color-options{display:flex;flex-wrap:wrap;gap:9px;max-width:100%}
+.size-options button,.color-options button{min-width:46px;min-height:44px;padding:8px 12px;border:1px solid #dce3de;border-radius:8px;background:rgba(255,255,255,.9);font-size:14px;color:#28342d}
+.size-options button.selected,.color-options button.selected{background:#16845a!important;color:#fff!important;border:2px solid #116b49!important;box-shadow:0 0 0 3px rgba(22,132,90,.13)}
+.size-options button:disabled,.color-options button:disabled{opacity:.38;text-decoration:line-through;cursor:not-allowed}
+.qty-control{min-height:44px;border-radius:8px}
+.detail-perks{font-size:13px;line-height:1.6;flex-wrap:wrap}
+.detail-copy .detail-action-buttons{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;margin-top:18px}
+.detail-copy .detail-action-buttons .btn{width:100%;min-width:0;margin:0;min-height:50px;font-size:14px;border-radius:8px}
+.page-wrap:has(.detail-layout){max-width:1440px;margin-inline:auto;padding-left:clamp(16px,5vw,76px);padding-right:clamp(16px,5vw,76px)}
+.page-wrap:has(.detail-layout) .breadcrumb{font-size:13px;margin:12px 0 20px}
+.page-wrap:has(.detail-layout) .eyebrow{font-size:12px}
+.summary,.checkout-form,.auth-card,.admin-stat,.admin-panel,.info-contact-card,.info-value-grid article,.info-callout,.info-policy,.info-faq-list details{
+  border:1px solid var(--so-glass-border);border-radius:13px;
+  background:rgba(255,255,255,.78);box-shadow:var(--so-glass-shadow);
+}
+.summary{padding:25px}
+.auth-card{padding:clamp(24px,4vw,40px)}
+.auth-card p,.auth-card small{font-size:14px}
+.auth-card label,.checkout-form label{font-size:14px}
+.auth-card input,.checkout-form input,.checkout-form select,.checkout-form textarea{font-size:15px;min-height:46px;border-radius:7px}
+.filter{font-size:13px;border-radius:8px}
+.filter-row select,.search-input{font-size:14px;border-radius:8px}
+.page-title h1,.page-wrap>h1{line-height:1.3}
+.admin-stat small,.admin-stat span{font-size:12px}
+.admin-panel p{font-size:14px}
+@keyframes so-rise-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.product-card,.category-tile,.benefits>div,.detail-copy{animation:so-rise-in .55s ease both}
+@media(hover:hover){
+  .category-tile{transition:transform .3s ease,box-shadow .3s ease}
+  .category-tile:hover{transform:translateY(-4px);box-shadow:0 14px 28px rgba(20,30,24,.12)}
+  .wish-btn:hover{transform:scale(1.08)}
+}
+@media(max-width:900px){
+  .detail-layout{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+  .detail-copy{padding:20px}
+  .detail-copy h1{font-size:27px}
+}
+@media(max-width:650px){
+  body{font-size:16px}
+  .section{padding:42px 5%}
+  .section-heading h2,.section h2{font-size:24px}
+  .section-heading p{font-size:14px}
+  .product-grid{gap:12px}
+  .product-info{padding:11px 10px 12px}
+  .product-name{font-size:14px;min-height:2.8em}
+  .product-bottom{font-size:13px}
+  .product-category{font-size:10px}
+  .quick-add,.stock-out{font-size:12px;min-height:40px}
+  .page-wrap:has(.detail-layout){padding:18px 16px 36px!important;overflow-x:clip}
+  .page-wrap:has(.detail-layout) .breadcrumb{margin:4px 0 15px;font-size:12px}
+  .detail-layout{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:18px!important;padding:8px 0 28px!important;width:100%;max-width:100%;margin:0}
+  .detail-gallery,.detail-copy,.detail-gallery>*{grid-column:1/-1!important;width:100%!important;min-width:0!important;max-width:100%!important}
+  .detail-gallery .detail-art{width:100%!important;max-width:100%!important;aspect-ratio:1/1!important;height:auto!important;min-height:0!important;border-radius:12px}
+  .detail-gallery .detail-art>img{width:100%!important;height:100%!important;max-width:none!important;object-fit:cover!important}
+  .detail-copy{padding:20px 16px 22px!important;margin:0!important;border-radius:12px;overflow:hidden;overflow-wrap:anywhere}
+  .detail-copy h1{font-size:25px!important;line-height:1.42!important;margin:7px 0 12px;letter-spacing:0}
+  .detail-copy p{font-size:15px!important;line-height:1.85!important;margin:14px 0!important}
+  .detail-price{font-size:21px!important}
+  .option-label{font-size:14px!important;margin:20px 0 10px!important}
+  .size-options,.color-options{display:flex!important;flex-wrap:wrap!important;gap:8px!important;width:100%!important;max-width:100%!important}
+  .size-options button,.color-options button{min-width:42px;min-height:42px;font-size:13px!important;padding:8px 10px!important}
+  .detail-copy .detail-action-buttons{grid-template-columns:1fr!important;gap:10px!important;width:100%!important}
+  .detail-copy .detail-action-buttons .btn{width:100%!important;min-height:48px;font-size:14px!important}
+  .detail-perks{gap:10px 16px!important;font-size:12px!important}
+  .detail-copy>*{max-width:100%;min-width:0}
+  .footer{padding:38px 6% 18px}
+  .footer p,.footer a{font-size:13px}
+}
+@media(max-width:380px){
+  .page-wrap:has(.detail-layout){padding-left:12px!important;padding-right:12px!important}
+  .detail-copy{padding:17px 13px 19px!important}
+  .detail-copy h1{font-size:23px!important}
+  .detail-copy p{font-size:14px!important}
+  .detail-copy .detail-action-buttons .btn{font-size:13px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
