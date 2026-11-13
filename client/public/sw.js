@@ -1,4 +1,4 @@
-const CACHE_NAME='smart-outfit-shell-v6';
+const CACHE_NAME='smart-outfit-shell-v7';
 const APP_SHELL=['/'];
 
 self.addEventListener('install',event=>{
