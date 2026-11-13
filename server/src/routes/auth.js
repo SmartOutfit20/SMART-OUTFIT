@@ -51,7 +51,7 @@ router.delete('/wishlist/:productId',requireAuth,async(req,res,next)=>{try{
  }catch(e){next(e)}})
 
 router.get('/me',requireAuth,async(req,res,next)=>{try{
- const user=await User.findById(req.user.sub).select('-passwordHash').lean()
+ const user=await User.findById(req.user.sub).select('-passwordHash -passwordResetTokenHash').lean()
  if(!user)return res.status(404).json({message:'Customer account not found'})
  res.json(user)
  }catch(e){next(e)}})
@@ -63,7 +63,7 @@ router.patch('/me',requireAuth,async(req,res,next)=>{try{
  if(phone!==undefined){if(phone&&!bdPhone.test(phone))return res.status(400).json({message:'Enter a valid Bangladesh mobile number'});update.phone=phone||undefined}
  if(profileImage!==undefined){const validUrl=!profileImage||(/^https:\/\//i.test(profileImage)&&profileImage.length<=1000);const validData=!profileImage||(/^data:image\/webp;base64,[A-Za-z0-9+/=]+$/.test(profileImage)&&profileImage.length<=1200000);if(!validUrl&&!validData)return res.status(400).json({message:'Profile image must be a valid HTTPS URL or compressed WebP image under 1.2 MB'});update.profileImage=profileImage}
  if(defaultAddress!==undefined)update.defaultAddress={division:String(defaultAddress.division||'').trim(),district:String(defaultAddress.district||'').trim(),upazila:String(defaultAddress.upazila||'').trim(),address:String(defaultAddress.address||'').trim()}
- const user=await User.findByIdAndUpdate(req.user.sub,{$set:update},{new:true,runValidators:true}).select('-passwordHash')
+ const user=await User.findByIdAndUpdate(req.user.sub,{$set:update},{new:true,runValidators:true}).select('-passwordHash -passwordResetTokenHash')
  if(!user)return res.status(404).json({message:'Customer account not found'})
  res.json(user)
  }catch(e){next(e)}})
