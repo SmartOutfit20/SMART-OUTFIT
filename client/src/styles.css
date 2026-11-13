@@ -3120,3 +3120,78 @@ button,input,select,textarea{font-family:inherit}
 }
 @media(max-width:390px){.customer-account-menu{gap:7px!important}.customer-account-menu a{padding:9px 8px!important}.customer-menu-icon{width:32px;height:32px;flex-basis:32px}.customer-menu-copy b{font-size:11px}}
 @media(prefers-reduced-motion:reduce){.customer-account-menu a{transition:none!important}}
+
+
+/* Customer authentication — premium emerald and ivory */
+.auth-premium{min-height:calc(100vh - 150px);display:grid;place-items:center;padding:48px 18px!important;background:radial-gradient(ellipse at 15% 15%,#e8f3eb 0,transparent 42%),linear-gradient(135deg,#f8faf7,#f1f5f1)}
+.auth-card-premium{width:min(100%,510px)!important;margin:0 auto;border:1px solid #e0e9e1!important;border-radius:22px!important;padding:clamp(26px,5vw,48px)!important;background:rgba(255,255,255,.94)!important;box-shadow:0 24px 70px rgba(30,58,39,.11)!important}
+.auth-register-card{width:min(100%,560px)!important}
+.auth-brand-mark{font:800 28px 'Manrope',sans-serif;letter-spacing:-2px;color:#26372b;margin-bottom:18px}
+.auth-brand-mark span{color:#16845a}
+.auth-card-premium>.eyebrow{font:700 10px 'Manrope',sans-serif;letter-spacing:1.4px;color:#16845a}
+.auth-card-premium h1{font:700 clamp(25px,4vw,32px)/1.35 'Hind Siliguri',sans-serif;letter-spacing:0;color:#26352b;margin:9px 0 7px}
+.auth-card-premium>p{font:400 14px/1.8 'Hind Siliguri',sans-serif;color:#758077;margin:0 0 22px}
+.auth-card-premium form{display:grid;gap:15px}
+.auth-card-premium label{display:grid;gap:7px;font:600 13px 'Hind Siliguri',sans-serif;color:#455348}
+.auth-card-premium input{width:100%;min-height:49px;padding:12px 14px;border:1px solid #dfe7e0;border-radius:10px;background:#fbfcfa;font:400 14px 'Manrope','Hind Siliguri',sans-serif;color:#28352c;transition:border-color .2s,box-shadow .2s}
+.auth-card-premium input:focus{outline:0;border-color:#16845a;background:#fff;box-shadow:0 0 0 4px #16845a16}
+.auth-card-premium .auth-primary-button{min-height:51px;margin-top:5px;border:0;border-radius:10px;background:#16845a!important;color:#fff!important;font:700 13px 'Manrope','Hind Siliguri',sans-serif;letter-spacing:.5px;box-shadow:0 8px 18px #16845a26}
+.auth-card-premium .auth-primary-button:hover{background:#116b49!important;transform:translateY(-1px)}
+.auth-inline-link{display:flex;justify-content:flex-end;margin-top:-6px}
+.auth-inline-link a,.auth-card-premium .auth-switch a{color:#16845a;font-weight:700}
+.auth-divider{display:flex;align-items:center;gap:14px;margin:22px 0 17px;color:#9aa49c;font:500 11px 'Hind Siliguri',sans-serif}
+.auth-divider:before,.auth-divider:after{content:"";height:1px;flex:1;background:#e8ede8}
+.google-signin-wrap{display:grid;justify-items:center;min-height:42px}
+.google-signin-wrap>div{max-width:100%;overflow:hidden}
+.auth-config-note{font:400 11px/1.7 'Hind Siliguri',sans-serif;color:#9a6b32;text-align:center}
+.auth-card-premium .auth-switch{margin:22px 0 0;text-align:center;font:400 13px 'Hind Siliguri',sans-serif;color:#788279}
+.auth-card-premium .auth-field-hint{margin-top:-10px;color:#879188;font:400 11px 'Hind Siliguri',sans-serif}
+.auth-card-premium .api-notice,.auth-card-premium .coupon-message{padding:12px 14px;border-radius:10px;font:400 12px/1.7 'Hind Siliguri',sans-serif}
+
+/* My Orders — clear order cards and tracking details */
+.orders-page .page-title{align-items:flex-end;gap:18px;margin:20px 0 24px}
+.orders-page .page-title h1{font:800 clamp(27px,4vw,38px) 'Manrope','Hind Siliguri',sans-serif;letter-spacing:-.8px;color:#26352b}
+.orders-page .page-title p{font:400 14px/1.7 'Hind Siliguri',sans-serif;color:#778178}
+.orders-page .orders-toolbar{display:flex;justify-content:space-between;align-items:center;padding:13px 17px;border:1px solid #e3ebe4;border-radius:11px;background:#f7faf7;color:#68766b;font:700 11px 'Manrope',sans-serif;letter-spacing:.5px}
+.orders-page .orders-toolbar a{display:inline-flex;align-items:center;gap:7px;color:#16845a;font:600 12px 'Hind Siliguri',sans-serif}
+.orders-page .orders-list{display:grid;gap:17px;margin-top:17px}
+.orders-page .order-track-card{padding:clamp(17px,3vw,25px);border:1px solid #e2eae3;border-radius:16px;background:#fff;box-shadow:0 10px 28px rgba(29,47,34,.055);transition:box-shadow .2s,border-color .2s}
+.orders-page .order-track-card:hover{border-color:#c6ddcc;box-shadow:0 15px 32px rgba(29,47,34,.08)}
+.orders-page .order-track-heading{align-items:flex-start;padding-bottom:16px;border-bottom:1px solid #edf1ed}
+.orders-page .order-track-heading h2{font:800 17px 'Manrope',sans-serif;color:#26352b;margin:5px 0}
+.orders-page .order-track-heading small{font:400 11px 'Manrope',sans-serif;color:#89938a}
+.orders-page .order-track-heading .eyebrow{font:700 9px 'Manrope',sans-serif;letter-spacing:1px;color:#16845a}
+.orders-page .account-status{display:inline-flex;align-items:center;padding:7px 12px;border:1px solid #dce9df;border-radius:30px;background:#f0f7f1;color:#16845a;font:700 11px 'Hind Siliguri',sans-serif;text-transform:none}
+.orders-page .status-cancelled{border-color:#f0d6d2;background:#fff4f2;color:#b44d40}
+.orders-page .status-returned{border-color:#eadfc8;background:#fbf6e9;color:#9a742d}
+.orders-page .order-track-summary{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:15px 0;color:#7a857b;font:400 12px 'Hind Siliguri',sans-serif}
+.orders-page .order-track-summary b{font:800 18px 'Manrope',sans-serif;color:#26372b;margin-left:auto}
+.orders-page .order-line-items{display:grid;gap:0;border:1px solid #edf1ed;border-radius:11px;background:#fafcfa;padding:0 14px;margin:0 0 18px}
+.orders-page .order-line-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #edf1ed}
+.orders-page .order-line-item:last-child{border-bottom:0}
+.orders-page .order-line-item>div{display:grid;gap:3px;min-width:0}
+.orders-page .order-line-item b{font:600 13px 'Hind Siliguri',sans-serif;color:#3b493e;overflow-wrap:anywhere}
+.orders-page .order-line-item small{font:400 11px 'Hind Siliguri',sans-serif;color:#89938a}
+.orders-page .order-line-item strong{white-space:nowrap;font:700 12px 'Manrope',sans-serif;color:#3d5142}
+.orders-page .order-progress{margin:5px 0 17px}
+.orders-page .courier-track{display:flex;flex-wrap:wrap;gap:8px 18px;padding:13px 15px;border-radius:10px;background:#eef6ef;color:#637268;font:400 12px 'Hind Siliguri',sans-serif}
+.orders-page .courier-track b{width:100%;color:#16845a;font-weight:700}
+.orders-page .order-history-details{margin-top:14px;padding:12px 14px;border:1px solid #edf1ed;border-radius:10px}
+.orders-page .order-history-details summary{cursor:pointer;color:#16845a;font:600 12px 'Hind Siliguri',sans-serif}
+.orders-page .order-history-details p{font:400 12px/1.8 'Hind Siliguri',sans-serif;color:#738076}
+.account-password-panel .account-password-form{display:grid;gap:12px}
+.account-password-panel .account-password-form label{display:grid;gap:6px;font:600 12px 'Hind Siliguri',sans-serif;color:#4b594e}
+.account-password-panel .account-password-form input{width:100%;min-height:44px;padding:10px 12px;border:1px solid #dfe7e0;border-radius:9px;background:#fbfcfa;font:400 13px 'Manrope','Hind Siliguri',sans-serif}
+.account-password-panel .account-password-form input:focus{outline:0;border-color:#16845a;box-shadow:0 0 0 3px #16845a16}
+@media(max-width:700px){
+ .auth-premium{min-height:calc(100vh - 110px);padding:24px 13px!important}
+ .auth-card-premium{border-radius:16px!important;padding:25px 19px!important}
+ .orders-page .page-title{align-items:flex-start;flex-direction:column}
+ .orders-page .page-title>.btn{width:100%;justify-content:center}
+ .orders-page .orders-toolbar{gap:10px;font-size:10px}
+ .orders-page .order-track-summary{gap:9px}
+ .orders-page .order-track-summary b{font-size:16px}
+ .orders-page .order-line-items{padding:0 10px}
+ .orders-page .order-line-item b{font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){.auth-card-premium *,.orders-page .order-track-card{transition:none!important}}
