@@ -3577,3 +3577,33 @@ button,input,select,textarea{font-family:inherit}
 @keyframes adminRefreshFade{from{opacity:0}to{opacity:1}}
 @media(max-width:600px){.admin-refresh-unique{width:36px;min-width:36px;height:36px;padding:0;margin-left:auto}.admin-refresh-unique span{display:none}.admin-top-title{min-width:0}.admin-top-title small{display:none}}
 @media(prefers-reduced-motion:reduce){.admin-refresh-unique,.admin-refresh-screen{transition:none;animation:none}.admin-refresh-spinner{animation:none}}
+
+
+/* Minimal animated Bangla admin page refresh message */
+.admin-auth-check.admin-refresh-message{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  background:#f7faf7;
+  color:#16845a;
+}
+.admin-auth-check.admin-refresh-message>span{
+  display:inline-block;
+  font-size:clamp(18px,3vw,23px);
+  line-height:1.5;
+  font-weight:750;
+  letter-spacing:.01em;
+  background:linear-gradient(100deg,#116b49 15%,#35a879 38%,#a0d9b6 50%,#16845a 65%,#116b49 85%);
+  background-size:220% auto;
+  background-clip:text;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:adminRefreshTextShimmer 1.35s ease-in-out infinite,adminRefreshTextFloat 1.8s ease-in-out infinite;
+}
+@keyframes adminRefreshTextShimmer{to{background-position:220% center}}
+@keyframes adminRefreshTextFloat{0%,100%{transform:translateY(0);opacity:.82}50%{transform:translateY(-3px);opacity:1}}
+@media(prefers-reduced-motion:reduce){
+  .admin-auth-check.admin-refresh-message>span{animation:none;background:none;color:#16845a;-webkit-text-fill-color:#16845a}
+}
