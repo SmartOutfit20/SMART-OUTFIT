@@ -1727,3 +1727,62 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   .detail-gallery .detail-art{aspect-ratio:4/5;min-height:0;height:auto}
   .detail-copy{padding:22px 0}
 }
+
+
+/* SMART OUTFIT unified brand colour system — primary matches product cart button */
+:root{
+  --so-primary:#21113c;
+  --so-primary-hover:#382052;
+  --so-accent:#6e42a4;
+  --so-accent-soft:#f3eef8;
+  --so-text:#211b2a;
+  --so-muted:#77717e;
+  --so-border:#e9e5ed;
+  --so-surface:#ffffff;
+  --so-surface-soft:#f7f5f9;
+  --deep:var(--so-primary);
+  --purple:var(--so-accent);
+  --ink:var(--so-text);
+  --muted:var(--so-muted);
+  --line:var(--so-border);
+  --soft:var(--so-surface-soft);
+}
+body{color:var(--so-text);background:var(--so-surface)}
+a:hover{color:var(--so-accent)}
+:where(button,input,select,textarea):focus-visible{outline:2px solid var(--so-accent);outline-offset:2px}
+.btn-dark,.quick-add,.detail-action-buttons .detail-buy-btn{
+  background:var(--so-primary)!important;color:#fff!important;border-color:var(--so-primary)!important;
+}
+.btn-dark:hover,.quick-add:hover,.detail-action-buttons .detail-buy-btn:hover{
+  background:var(--so-primary-hover)!important;border-color:var(--so-primary-hover)!important;
+}
+.quick-add{background:#21113ceF!important}
+.btn-light,.btn-outline,.detail-action-buttons .detail-add-btn{
+  color:var(--so-primary);border:1px solid var(--so-primary);background:#fff;
+}
+.btn-light:hover,.btn-outline:hover,.detail-action-buttons .detail-add-btn:hover{
+  background:var(--so-accent-soft);color:var(--so-primary);
+}
+.eyebrow,.nav a:hover,.nav a.active,.icon-btn sup,.benefits svg{color:var(--so-accent)}
+.filter.active,.size-options button.selected{background:var(--so-primary);border-color:var(--so-primary);color:#fff}
+.size-options button.selected{box-shadow:0 0 0 3px #6e42a426}
+.color-options button.selected{border-color:var(--so-accent);background:var(--so-accent-soft)}
+.product-card,.account-panel,.summary,.checkout-form,.order-success,.admin-card,.admin-panel{
+  border-color:var(--so-border);
+}
+.section-tint,.empty-state,.account-panel{background:var(--so-surface-soft)}
+input,select,textarea{accent-color:var(--so-accent)}
+.admin-sidebar{background:var(--so-primary)}
+.admin-sidebar>a.active,.admin-sidebar>a:hover{background:var(--so-accent);color:#fff}
+.admin-action,.admin-primary,.admin-save,.admin-submit{
+  background:var(--so-primary);border-color:var(--so-primary);color:#fff;
+}
+.admin-action:hover,.admin-primary:hover,.admin-save:hover,.admin-submit:hover{
+  background:var(--so-primary-hover);border-color:var(--so-primary-hover);
+}
+.product-tag{color:var(--so-primary)}
+.wish-btn.active{color:var(--so-accent)}
+.stock-out{background:#eeebf1;color:#77717e;border:1px solid #e1dce6}
+@media(prefers-reduced-motion:no-preference){
+  .btn,.quick-add,.filter,.size-options button,.color-options button{transition:background-color .18s ease,color .18s ease,border-color .18s ease,box-shadow .18s ease}
+}
