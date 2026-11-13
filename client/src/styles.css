@@ -3749,3 +3749,9 @@ button,input,select,textarea{font-family:inherit}
  .shop-page-classic .shop-product-grid .quick-add{transition:none}
 }
 
+
+/* Uploaded store logo watermark: subtle, centered, and non-interactive across storefront pages. */
+.store-watermark{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;pointer-events:none;overflow:hidden;}
+.store-watermark img{display:block;width:min(68vw,620px);max-height:42vh;object-fit:contain;opacity:.055;mix-blend-mode:multiply;filter:grayscale(1);}
+@media(max-width:650px){.store-watermark img{width:88vw;max-height:34vh;opacity:.05;}}
+@media(prefers-reduced-motion:reduce){.store-watermark img{transition:none;}}
