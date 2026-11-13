@@ -100,17 +100,17 @@ router.post('/change-password',requireAuth,async(req,res,next)=>{try{
 router.post('/forgot-password',async(req,res,next)=>{try{
  const identity=String(req.body.identity||'').trim().toLowerCase()
  if(!identity)return res.status(400).json({message:'Enter your account email address'})
+ const host=process.env.SMTP_HOST,port=Number(process.env.SMTP_PORT||587),emailUser=process.env.SMTP_USER,emailPass=process.env.SMTP_PASS,from=process.env.SMTP_FROM||emailUser
+ if(!host||!emailUser||!emailPass||!from)return res.status(503).json({message:'Password reset email is not configured yet. Please contact customer support.'})
+ const base=String(process.env.CLIENT_URL||'').split(',')[0].trim().replace(/\/$/,'')
+ if(!base)return res.status(503).json({message:'Password reset link is not configured. Please contact support.'})
  const user=await User.findOne({email:identity})
  const generic={message:'If an account exists for that email, a password reset link will be sent.'}
  if(!user)return res.json(generic)
- const host=process.env.SMTP_HOST,port=Number(process.env.SMTP_PORT||587),emailUser=process.env.SMTP_USER,emailPass=process.env.SMTP_PASS,from=process.env.SMTP_FROM||emailUser
- if(!host||!emailUser||!emailPass||!from)return res.status(503).json({message:'Password reset email is not configured yet. Please contact customer support.'})
  const rawToken=randomBytes(32).toString('hex')
  user.passwordResetTokenHash=createHash('sha256').update(rawToken).digest('hex')
  user.passwordResetExpires=new Date(Date.now()+30*60*1000)
  await user.save()
- const base=String(process.env.CLIENT_URL||'').split(',')[0].trim().replace(/\/$/,'')
- if(!base)return res.status(503).json({message:'Password reset link is not configured. Please contact support.'})
  const link=base+'/reset-password?token='+rawToken
  const transporter=nodemailer.createTransport({host,port,secure:port===465,auth:{user:emailUser,pass:emailPass}})
  await transporter.sendMail({from:from,to:user.email,subject:'Reset your SMART OUTFIT password',text:'Use this link within 30 minutes to reset your password: '+link,html:'<p>We received a request to reset your SMART OUTFIT password.</p><p><a href="'+link+'">Reset password</a></p><p>This link expires in 30 minutes. If you did not request this, ignore this email.</p>'})
@@ -136,7 +136,7 @@ router.post('/google',async(req,res,next)=>{try{
  const verify=await fetch('https://oauth2.googleapis.com/tokeninfo?id_token='+encodeURIComponent(credential))
  if(!verify.ok)return res.status(401).json({message:'Google sign-in could not be verified'})
  const claims=await verify.json()
- if(claims.aud!==clientId||!['accounts.google.com','https://accounts.google.com'].includes(claims.iss)||Number(claims.exp)*1000<=Date.now()||claims.email_verified!=='true'||!claims.email)return res.status(401).json({message:'Google sign-in could not be verified'})
+ if(claims.aud!==clientId||!['accounts.google.com','https://accounts.google.com'].includes(claims.iss)||Number(claims.exp)*1000<=Date.now()||!(claims.email_verified===true||claims.email_verified==='true')||!claims.email)return res.status(401).json({message:'Google sign-in could not be verified'})
  const email=String(claims.email).toLowerCase()
  let user=await User.findOne({email})
  if(!user){user=await User.create({name:String(claims.name||email.split('@')[0]).slice(0,80),email,profileImage:String(claims.picture||'').startsWith('https://')?claims.picture:'',passwordHash:await bcrypt.hash(randomBytes(32).toString('hex'),12)})}
