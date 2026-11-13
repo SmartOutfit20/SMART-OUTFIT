@@ -2901,3 +2901,182 @@ button,input,select,textarea{font-family:inherit}
     grid-template-columns:repeat(2,minmax(0,1fr))!important;
   }
 }
+
+
+/* SMART OUTFIT — refreshed customer account dashboard */
+.account-dashboard{
+  max-width:1240px!important;
+  padding:clamp(28px,4vw,54px) clamp(16px,3vw,36px) 76px!important;
+  color:#263129;
+  font-family:'Hind Siliguri','DM Sans',sans-serif;
+}
+.account-dashboard .account-welcome{
+  display:flex;align-items:flex-end;justify-content:space-between;gap:20px;
+  margin-bottom:24px;
+}
+.account-dashboard .account-welcome .eyebrow{color:#16845a;font-size:12px;letter-spacing:.5px}
+.account-dashboard .account-welcome h1{
+  margin:8px 0 5px;font:700 clamp(28px,3.5vw,40px)/1.25 'Hind Siliguri',sans-serif;
+  letter-spacing:0;color:#202720;
+}
+.account-dashboard .account-welcome p{margin:0;color:#737d74;font-size:15px;line-height:1.7}
+.account-logout{
+  flex:0 0 auto;border:1px solid #dce6df;background:#fff;color:#3b5144;
+  border-radius:9px;padding:11px 17px;font:600 13px 'Manrope','Hind Siliguri',sans-serif;
+  transition:.2s ease;
+}
+.account-logout:hover{border-color:#16845a;color:#16845a;background:#f3f8f4}
+.customer-account-menu{
+  display:flex;align-items:center;gap:7px;padding:7px;margin:0 0 20px;
+  border:1px solid #e5ebe6;border-radius:12px;background:#fff;
+  box-shadow:0 5px 20px rgba(30,48,36,.04);width:max-content;max-width:100%;
+}
+.customer-account-menu a{
+  display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:8px;
+  color:#667168;font:600 13px 'Hind Siliguri',sans-serif;transition:.2s ease;
+}
+.customer-account-menu a:hover,.customer-account-menu a[href="/account"]{
+  background:#eaf4ed;color:#16845a;
+}
+.account-hero-card{
+  display:flex;align-items:center;justify-content:space-between;gap:22px;
+  padding:clamp(20px,3vw,32px);margin:0 0 18px;border-radius:17px;
+  color:#fff;background:linear-gradient(115deg,#202a23 0%,#2c4636 58%,#16845a 130%);
+  box-shadow:0 16px 36px rgba(22,62,39,.13);position:relative;overflow:hidden;
+}
+.account-hero-card:after{
+  content:"";position:absolute;width:260px;height:260px;border:1px solid #ffffff18;
+  border-radius:50%;right:7%;top:-155px;box-shadow:0 0 0 28px #ffffff08,0 0 0 58px #ffffff06;
+  pointer-events:none;
+}
+.account-hero-identity{display:flex;align-items:center;gap:18px;min-width:0;position:relative;z-index:1}
+.account-hero-identity>div:last-child{min-width:0}
+.account-hero-card .account-avatar{width:82px;height:82px;flex:0 0 82px;border:3px solid #ffffff75;background:#b8d5c0}
+.account-hero-card .account-avatar-fallback{background:#d8eadc;color:#16845a;font-size:30px}
+.account-hero-kicker{display:block;color:#cce7d3;font-size:13px;margin-bottom:2px}
+.account-hero-identity h2{font:700 clamp(21px,2.6vw,29px)/1.35 'Hind Siliguri',sans-serif;margin:0 0 3px;color:#fff;overflow-wrap:anywhere}
+.account-hero-identity p{margin:0 0 6px;color:#e2eee5;font-size:13px;overflow-wrap:anywhere}
+.account-hero-identity small{font:500 10px 'Manrope','DM Sans',sans-serif;letter-spacing:.5px;color:#c4d9ca}
+.account-hero-status{display:flex;align-items:center;gap:8px;white-space:nowrap;position:relative;z-index:1;padding:9px 13px;border:1px solid #ffffff40;border-radius:30px;background:#ffffff12;font:600 11px 'Manrope',sans-serif}
+.account-online-dot{width:8px;height:8px;border-radius:50%;background:#a5e6b7;box-shadow:0 0 0 4px #a5e6b71c}
+.account-metrics-modern{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:0 0 22px}
+.account-metrics-modern>div{
+  padding:18px 21px;border:1px solid #e5ebe6;border-radius:13px;
+  background:linear-gradient(145deg,#fff,#f8faf7);box-shadow:0 7px 22px rgba(29,47,34,.045);
+}
+.account-metrics-modern span{font:600 13px 'Hind Siliguri',sans-serif;letter-spacing:0;color:#68746a}
+.account-metrics-modern b{font:800 clamp(22px,2.4vw,28px)/1.3 'Manrope','Hind Siliguri',sans-serif;color:#26372b;margin:7px 0 3px;overflow-wrap:anywhere}
+.account-metrics-modern b.account-active-value{font:700 22px 'Hind Siliguri',sans-serif;color:#16845a}
+.account-metrics-modern small{font:400 12px 'Hind Siliguri',sans-serif;color:#8a938b}
+.account-dashboard-grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,.75fr);gap:20px;align-items:start}
+.account-dashboard .account-panel{
+  padding:clamp(20px,2.5vw,30px);border:1px solid #e4eae5;border-radius:15px;
+  background:rgba(255,255,255,.92);box-shadow:0 9px 28px rgba(29,47,34,.055);
+}
+.account-section-heading{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:22px}
+.account-section-heading .eyebrow{font:700 10px 'Manrope',sans-serif;letter-spacing:1.1px;color:#16845a}
+.account-section-heading h2{font:700 22px 'Hind Siliguri',sans-serif;color:#253329;margin:4px 0}
+.account-section-heading p{font-size:13px;color:#7a847b;margin:0}
+.account-section-heading>svg{color:#16845a;background:#edf6ef;padding:10px;width:42px;height:42px;border-radius:12px;box-sizing:content-box}
+.account-dashboard .account-form{gap:15px}
+.account-dashboard .account-form label{font:600 13px 'Hind Siliguri',sans-serif;color:#47544a;gap:7px}
+.account-dashboard .account-form input,.account-dashboard .account-form textarea{
+  width:100%;min-width:0;border:1px solid #dfe7e0;border-radius:9px;background:#fbfcfa;
+  padding:12px 14px;min-height:46px;color:#28352c;font:400 14px 'Hind Siliguri',sans-serif;
+  transition:border-color .2s,box-shadow .2s,background .2s;
+}
+.account-dashboard .account-form input:focus,.account-dashboard .account-form textarea:focus{
+  outline:0;border-color:#16845a;background:#fff;box-shadow:0 0 0 3px #16845a18;
+}
+.account-dashboard .profile-photo-control{
+  border:1px dashed #cbdccf;border-radius:12px;background:#f7faf7;padding:16px;
+}
+.account-dashboard .profile-photo-control>b{font-size:14px;color:#334438}
+.account-dashboard .profile-photo-control>small{font:400 12px 'Hind Siliguri',sans-serif;color:#7a857b}
+.account-dashboard .profile-photo-button{
+  border-radius:8px;background:#16845a;color:#fff;padding:11px 16px;
+  font:600 13px 'Hind Siliguri',sans-serif;cursor:pointer;
+}
+.account-dashboard .profile-photo-button:hover{background:#116b49}
+.account-dashboard .profile-photo-row .account-avatar{width:64px;height:64px;flex-basis:64px;border:2px solid #dce9df}
+.account-form-divider{display:flex;align-items:center;gap:12px;padding:15px 0 3px;border-top:1px solid #edf0ed;color:#16845a}
+.account-form-divider>div{display:flex;flex-direction:column;gap:2px}
+.account-form-divider b{font:700 16px 'Hind Siliguri',sans-serif;color:#344338}
+.account-form-divider small{font:400 12px 'Hind Siliguri',sans-serif;color:#7c877e}
+.account-dashboard .account-save-button{
+  margin-top:5px;min-height:49px;border-radius:9px;background:#16845a!important;
+  color:#fff!important;font:600 15px 'Hind Siliguri',sans-serif;letter-spacing:0;
+  box-shadow:0 7px 16px #16845a25;
+}
+.account-dashboard .account-save-button:hover{background:#116b49!important;transform:translateY(-1px)}
+.account-side-column{display:grid;gap:18px;min-width:0}
+.account-dashboard .account-shortcuts-panel{padding:22px}
+.account-shortcuts-panel .account-section-heading{margin-bottom:12px}
+.account-shortcuts-panel .account-section-heading h2{font-size:20px}
+.account-shortcut{
+  display:flex;align-items:center;gap:12px;padding:14px 0;border-top:1px solid #edf0ed;
+  color:#344238;min-width:0;transition:color .2s;
+}
+.account-shortcut>span:nth-child(2){display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+.account-shortcut b{font:700 14px 'Hind Siliguri',sans-serif}
+.account-shortcut small{font:400 11px 'Hind Siliguri',sans-serif;color:#828c83}
+.account-shortcut>svg{color:#9aa49b;flex:0 0 auto}
+.account-shortcut:hover{color:#16845a}
+.account-shortcut:hover>svg{color:#16845a;transform:translateX(3px)}
+.account-shortcut-icon{width:42px;height:42px;display:grid;place-items:center;flex:0 0 42px;border-radius:11px;background:#edf6ef;color:#16845a}
+.account-help-card{
+  padding:22px;border:1px solid #dce9df;border-radius:14px;
+  background:linear-gradient(145deg,#f4faf5,#eaf4ed);
+}
+.account-help-icon{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:#fff;color:#16845a;margin-bottom:12px}
+.account-help-card>b{font:700 16px 'Hind Siliguri',sans-serif;color:#344438}
+.account-help-card p{font:400 13px/1.8 'Hind Siliguri',sans-serif;color:#718075;margin:7px 0 13px}
+.account-help-card>a{display:inline-flex;align-items:center;gap:7px;color:#16845a;font:600 12px 'Hind Siliguri',sans-serif}
+.account-dashboard .api-notice,.account-dashboard .coupon-message{border-radius:9px;padding:11px 14px;font-size:13px}
+@media(max-width:900px){
+ .account-dashboard-grid{grid-template-columns:minmax(0,1fr) minmax(245px,.72fr);gap:14px}
+ .account-dashboard .account-panel{padding:20px}
+ .account-metrics-modern>div{padding:16px}
+}
+@media(max-width:700px){
+ .account-dashboard{padding:25px 15px 55px!important}
+ .account-dashboard .account-welcome{align-items:flex-start;gap:12px;margin-bottom:17px}
+ .account-dashboard .account-welcome h1{font-size:29px}
+ .account-dashboard .account-welcome p{font-size:13px}
+ .account-logout{padding:9px 11px;font-size:11px}
+ .customer-account-menu{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:5px}
+ .customer-account-menu a{justify-content:center;gap:6px;padding:10px 5px;font-size:12px;white-space:nowrap}
+ .customer-account-menu a svg{width:15px;height:15px}
+ .account-hero-card{align-items:flex-start;flex-direction:column;gap:14px;padding:20px;border-radius:13px}
+ .account-hero-identity{gap:12px}
+ .account-hero-card .account-avatar{width:64px;height:64px;flex-basis:64px}
+ .account-hero-identity h2{font-size:22px}
+ .account-hero-status{align-self:flex-start;font-size:10px;padding:7px 11px}
+ .account-metrics-modern{gap:8px;margin-bottom:15px}
+ .account-metrics-modern>div{padding:12px 10px;border-radius:10px}
+ .account-metrics-modern span{font-size:11px}
+ .account-metrics-modern b{font-size:18px}
+ .account-metrics-modern b.account-active-value{font-size:16px}
+ .account-metrics-modern small{font-size:10px;line-height:1.5}
+ .account-dashboard-grid{grid-template-columns:minmax(0,1fr);gap:14px}
+ .account-dashboard .account-panel{padding:18px}
+ .account-section-heading{margin-bottom:17px}
+ .account-section-heading h2{font-size:20px}
+ .account-dashboard .account-form{grid-template-columns:minmax(0,1fr);gap:13px}
+ .account-dashboard .account-form .wide{grid-column:1}
+ .account-dashboard .account-form label{font-size:13px}
+ .account-dashboard .account-form input,.account-dashboard .account-form textarea{font-size:16px}
+ .account-side-column{gap:13px}
+}
+@media(max-width:390px){
+ .account-dashboard{padding-left:12px!important;padding-right:12px!important}
+ .account-dashboard .account-welcome h1{font-size:26px}
+ .account-dashboard .account-welcome p{font-size:12px}
+ .account-dashboard .account-metrics-modern>div{padding:11px 7px}
+ .account-dashboard .account-metrics-modern span{font-size:10px}
+ .account-dashboard .account-metrics-modern b{font-size:16px}
+ .customer-account-menu a{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){
+ .account-dashboard *{scroll-behavior:auto!important;transition:none!important}
+}
