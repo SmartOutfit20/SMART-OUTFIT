@@ -9,6 +9,7 @@ export function Layout(){
  const {cart,wishlist}=useShop()
  const location=useLocation()
  const navigate=useNavigate()
+ useEffect(()=>{window.__soHideBootSplash?.()},[])
  function goHome(event){event.preventDefault();setMenuOpen(false);setSearchOpen(false);if(location.pathname!=='/'||location.search){navigate('/')}else{window.scrollTo({top:0,behavior:'smooth'})}}
  const [searchOpen,setSearchOpen]=useState(false)
  const [routeTransition,setRouteTransition]=useState(false)
