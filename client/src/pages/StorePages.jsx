@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useParams, useSearchParams, useNavigate, useLocation } from 'react-router-dom'
-import { ArrowRight, Minus, Plus, ShieldCheck, Truck, RotateCcw, UserRound, Heart, Facebook, Instagram, Youtube, Music2, Mail, Phone, MapPin, Clock, PackageCheck, RefreshCw, HelpCircle } from 'lucide-react'
+import { ArrowRight, Filter, SlidersHorizontal, X, Search, Minus, Plus, ShieldCheck, Truck, RotateCcw, UserRound, Heart, Facebook, Instagram, Youtube, Music2, Mail, Phone, MapPin, Clock, PackageCheck, RefreshCw, HelpCircle } from 'lucide-react'
 import ProductCard from '../components/ProductCard'
 import { products as demoProducts, categories as demoCategories, money } from '../data/products'
 import { useShop } from '../context/ShopContext'
@@ -29,30 +29,67 @@ export function Home(){
 }
 export function Shop(){
  const [params,setParams]=useSearchParams()
- const [query,setQuery]=useState('')
+ const [query,setQuery]=useState(params.get('search')||'')
  const [sort,setSort]=useState('featured')
  const [remote,setRemote]=useState([])
  const [cats,setCats]=useState(demoCategories)
  const [source,setSource]=useState('sample')
  const [loading,setLoading]=useState(true)
+ const [loadingMore,setLoadingMore]=useState(false)
  const [error,setError]=useState('')
+ const [page,setPage]=useState(1)
+ const [pages,setPages]=useState(1)
+ const [total,setTotal]=useState(0)
+ const [filterOpen,setFilterOpen]=useState(false)
+ const [sizeFilter,setSizeFilter]=useState('')
+ const [colorFilter,setColorFilter]=useState('')
+ const [stockOnly,setStockOnly]=useState(false)
+ const [maxPrice,setMaxPrice]=useState(20000)
  const category=params.get('category')||'All'
  useEffect(()=>{setQuery(params.get('search')||'')},[params])
  useEffect(()=>{
    let active=true
-   Promise.all([getProducts({limit:48,q:query,sort}),getCategories()])
-     .then(([p,c])=>{if(!active)return;setRemote(p.items.map(normalizeProduct));if(c.length)setCats(['All',...c.map(x=>x.name)]);setSource('api');setError('')})
-     .catch(()=>{if(active){setRemote(demoProducts);setSource('sample');setError('API unavailable — showing the local preview catalogue.')}})
+   setLoading(true);setPage(1)
+   getProducts({limit:48,page:1,q:query,sort:sort==='featured'?'newest':sort})
+     .then(p=>{if(!active)return;setRemote((p.items||[]).map(normalizeProduct));setPage(Number(p.page)||1);setPages(Number(p.pages)||1);setTotal(Number(p.total)||0);setSource('api');setError('')})
+     .catch(()=>{if(active){setRemote(demoProducts);setPage(1);setPages(1);setTotal(demoProducts.length);setSource('sample');setError('লাইভ ক্যাটালগ পাওয়া যাচ্ছে না—এখন প্রিভিউ পণ্য দেখানো হচ্ছে।')}})
      .finally(()=>{if(active)setLoading(false)})
    return ()=>{active=false}
  },[query,sort])
+ useEffect(()=>{let active=true;getCategories().then(c=>{if(active&&c.length)setCats(['All',...c.map(x=>x.name)])}).catch(()=>{});return()=>{active=false}},[])
+ const categoryCounts=useMemo(()=>cats.map(c=>({name:c,count:c==='All'?total:remote.filter(p=>p.category===c).length})),[cats,remote,total])
  const items=useMemo(()=>remote.filter(p=>{
    const matchesCategory=category==='All'||p.category===category
    const term=query.trim().toLowerCase()
    const matchesSearch=!term||[p.name,p.category,p.description,...(p.tags||[])].some(value=>String(value||'').toLowerCase().includes(term))
-   return matchesCategory&&matchesSearch
-  }).sort((a,b)=>sort==='price-low'?a.price-b.price:sort==='price-high'?b.price-a.price:0),[remote,category,sort,query])
- return <div className="page-wrap"><div className="breadcrumb"><Link to="/">HOME</Link> / <Link to="/shop">SHOP</Link>{category!=='All'&&<> / {category.toUpperCase()}</>}</div><div className="page-title"><div><span className="eyebrow">THE SMART OUTFIT EDIT</span><h1>{category==='All'?'SHOP ALL':category.toUpperCase()}</h1><p>{category==='All'?'Find your next favourite piece.':`Explore our ${category.toLowerCase()} collection.`}</p></div><input className="search-input" placeholder="পণ্য খুঁজুন..." value={query} onChange={e=>setQuery(e.target.value)}/></div><div className="filter-row">{cats.map(c=><button className={category===c?'filter active':'filter'} key={c} onClick={()=>setParams(c==='All'?{}:{category:c})}>{c}</button>)}<select value={sort} onChange={e=>setSort(e.target.value)}><option value="featured">Featured</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option></select></div>{error&&<p className="api-notice">{error}</p>}<p className="result-count">{loading?'LOADING PRODUCTS…':`${items.length} PRODUCTS · ${source==='api'?'LIVE CATALOGUE':'PREVIEW CATALOGUE'}`}</p><div className="product-grid shop-product-grid">{items.map(p=><ProductCard key={p.id} product={p}/>)}</div>{!loading&&!items.length&&<p>আপনার খোঁজের সঙ্গে মেলে এমন কোনো পণ্য পাওয়া যায়নি।</p>}</div>
+   const matchesSize=!sizeFilter||(p.sizes||[]).some(s=>String(s).toLowerCase()===sizeFilter.toLowerCase())
+   const matchesColor=!colorFilter||(p.colors||[]).some(s=>String(s).toLowerCase()===colorFilter.toLowerCase())
+   const matchesStock=!stockOnly||(p.variantStocks?.length?p.variantStocks.some(v=>Number(v.stock)>0):Number(p.stock||0)>0)
+   return matchesCategory&&matchesSearch&&matchesSize&&matchesColor&&matchesStock&&Number(p.price||0)<=maxPrice
+  }),[remote,category,query,sizeFilter,colorFilter,stockOnly,maxPrice])
+ const sizes=useMemo(()=>[...new Set(remote.flatMap(p=>p.sizes||[]))],[remote])
+ const colors=useMemo(()=>[...new Set(remote.flatMap(p=>p.colors||[]))],[remote])
+ const clearFilters=()=>{setSizeFilter('');setColorFilter('');setStockOnly(false);setMaxPrice(20000);setParams(prev=>{const next=new URLSearchParams(prev);next.delete('category');return next})}
+ const chooseCategory=name=>setParams(prev=>{const next=new URLSearchParams(prev);if(name==='All')next.delete('category');else next.set('category',name);return next})
+ async function loadMore(){if(loadingMore||page>=pages)return;setLoadingMore(true);try{const p=await getProducts({limit:48,page:page+1,q:query,sort:sort==='featured'?'newest':sort});setRemote(old=>[...old,...(p.items||[]).map(normalizeProduct)]);setPage(Number(p.page)||page+1);setPages(Number(p.pages)||pages);setTotal(Number(p.total)||total)}catch{setError('আরও পণ্য লোড করা যায়নি। আবার চেষ্টা করুন।')}finally{setLoadingMore(false)}}
+ return <div className="page-wrap shop-page">
+  <div className="shop-hero"><div className="shop-hero-copy"><span className="eyebrow">SMART OUTFIT COLLECTION</span><h1>Find Your<br/><em>Everyday Style.</em></h1><p>নতুন পছন্দ, প্রতিদিনের স্টাইল—আপনার জন্য বেছে নেওয়া কালেকশন।</p><div className="shop-hero-meta"><span>NEW SEASON</span><i/> <span>MADE FOR YOUR STYLE</span></div></div><div className="shop-hero-art" aria-hidden="true"><span>SO.</span><small>STYLE<br/>YOUR WAY</small></div><div className="shop-hero-count"><b>{total||remote.length}+</b><span>STYLE PICKS</span></div></div>
+  <div className="breadcrumb"><Link to="/">HOME</Link> / <span>SHOP ALL</span>{category!=='All'&&<> / {category.toUpperCase()}</>}</div>
+  <section className="shop-category-section"><div className="shop-section-heading"><div><span className="eyebrow">FIND YOUR FIT</span><h2>Shop by Category</h2><p>আপনার পছন্দের কালেকশনটি বেছে নিন।</p></div><span className="shop-section-index">01 / COLLECTIONS</span></div><div className="shop-category-list">{categoryCounts.map((c,i)=><button type="button" key={c.name} onClick={()=>chooseCategory(c.name)} className={category===c.name?'shop-category-chip active':'shop-category-chip'}><span className="shop-category-number">0{i+1}</span><b>{c.name==='All'?'All Products':c.name}</b><small>{c.count||0} items</small><ArrowRight size={15}/></button>)}</div></section>
+  <section className="shop-catalog-section"><div className="shop-section-heading shop-catalog-heading"><div><span className="eyebrow">THE COMPLETE EDIT</span><h2>{category==='All'?'Explore All Products':category}</h2><p>পছন্দ করুন, ফিল্টার করুন, আপনার স্টাইল খুঁজে নিন।</p></div><span className="shop-section-index">02 / THE CATALOGUE</span></div>
+   <div className="shop-toolbar"><div className="shop-search-wrap"><Search size={17}/><input aria-label="Search products" placeholder="পণ্যের নাম লিখে খুঁজুন..." value={query} onChange={e=>setQuery(e.target.value)}/>{query&&<button type="button" aria-label="Clear search" onClick={()=>setQuery('')}><X size={15}/></button>}</div><div className="shop-toolbar-actions"><button type="button" className="shop-mobile-filter-toggle" onClick={()=>setFilterOpen(v=>!v)}><SlidersHorizontal size={16}/>{filterOpen?'ফিল্টার বন্ধ':'ফিল্টার'}<Filter size={14}/></button><label className="shop-sort-label"><span>Sort by</span><select value={sort} onChange={e=>setSort(e.target.value)}><option value="featured">Recommended</option><option value="newest">Latest</option><option value="price-low">Price: Low to High</option><option value="price-high">Price: High to Low</option></select></label></div></div>
+   <div className="shop-results-line"><p>{loading?'পণ্য লোড হচ্ছে...':<><b>{items.length}</b> টি পণ্য দেখানো হচ্ছে <span>({total} টি মোট পণ্য)</span></>}</p><span>{source==='api'?'LIVE COLLECTION':'PREVIEW COLLECTION'}</span></div>
+   <div className="shop-content-layout"><aside className={filterOpen?'shop-filter-panel open':'shop-filter-panel'}><div className="shop-filter-head"><div><SlidersHorizontal size={17}/><b>Filter Products</b></div><button type="button" onClick={clearFilters}>Reset</button><button type="button" className="shop-filter-close" onClick={()=>setFilterOpen(false)} aria-label="Close filters"><X size={18}/></button></div>
+    <div className="shop-filter-group"><h3>Categories</h3>{categoryCounts.map(c=><button type="button" key={c.name} onClick={()=>chooseCategory(c.name)} className={category===c.name?'shop-filter-category selected':'shop-filter-category'}><span>{c.name==='All'?'All Products':c.name}</span><small>{c.count}</small></button>)}</div>
+    <div className="shop-filter-group"><div className="shop-filter-title"><h3>Price Range</h3><b>৳{maxPrice.toLocaleString('en-BD')}</b></div><input className="shop-price-range" type="range" min="0" max="20000" step="100" value={maxPrice} onChange={e=>setMaxPrice(Number(e.target.value))}/><div className="shop-price-bounds"><span>৳0</span><span>৳20,000+</span></div></div>
+    {sizes.length>0&&<div className="shop-filter-group"><h3>Size</h3><div className="shop-size-options">{sizes.map(s=><button type="button" key={s} className={sizeFilter===s?'selected':''} onClick={()=>setSizeFilter(sizeFilter===s?'':s)}>{s}</button>)}</div></div>}
+    {colors.length>0&&<div className="shop-filter-group"><h3>Color</h3><div className="shop-color-options">{colors.map(color=><button type="button" key={color} title={color} aria-label={'Filter by '+color} className={colorFilter===color?'selected':''} onClick={()=>setColorFilter(colorFilter===color?'':color)}><i style={{background:color}}/></button>)}</div></div>}
+    <div className="shop-filter-group shop-stock-filter"><label><input type="checkbox" checked={stockOnly} onChange={e=>setStockOnly(e.target.checked)}/> শুধু স্টকে থাকা পণ্য</label></div>
+    <button type="button" className="shop-reset-button" onClick={()=>{clearFilters();setFilterOpen(false)}}>Clear All Filters <X size={14}/></button>
+   </aside><div className="shop-product-area"><div className="product-grid shop-product-grid">{items.map(p=><ProductCard key={p.id} product={p}/>)}</div>{!loading&&!items.length&&<div className="shop-empty-state"><span>SO.</span><h3>কোনো পণ্য পাওয়া যায়নি</h3><p>অন্য ক্যাটাগরি বা ফিল্টার দিয়ে আবার চেষ্টা করুন।</p><button type="button" onClick={clearFilters}>সব ফিল্টার মুছুন</button></div>}{page<pages&&<div className="shop-load-more-wrap"><button type="button" className="shop-load-more" onClick={loadMore} disabled={loadingMore}>{loadingMore?'লোড হচ্ছে...':'আরও পণ্য দেখুন'} <ArrowRight size={16}/></button><small>{Math.min(page*48,total)} / {total} PRODUCTS</small></div>}</div></div>
+  </section>
+  {error&&<p className="api-notice">{error}</p>}
+ </div>
 }
 export function ProductDetail(){
  const {id}=useParams(),{addToCart}=useShop(),navigate=useNavigate()
