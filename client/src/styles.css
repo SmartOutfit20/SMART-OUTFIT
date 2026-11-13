@@ -3619,3 +3619,9 @@ button,input,select,textarea{font-family:inherit}
 .admin-refresh-glass>span{display:inline-block;padding:0;margin:0;background:transparent;border:0;box-shadow:none;color:#16845a;font-size:clamp(18px,3vw,23px);line-height:1.5;font-weight:750;letter-spacing:.01em;text-align:center;animation:adminRefreshTextShimmer 1.35s ease-in-out infinite,adminRefreshTextFloat 1.8s ease-in-out infinite}
 .admin-auth-check.admin-refresh-message{background:transparent}
 @media(prefers-reduced-motion:reduce){.admin-refresh-glass>span{animation:none}}
+
+
+/* Smooth SPA route changes without remounting the storefront shell */
+.site-main.route-transition{animation:so-route-enter .36s cubic-bezier(.2,.7,.25,1) both}
+@keyframes so-route-enter{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.site-main.route-transition{animation:none!important}}
