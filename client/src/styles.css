@@ -3562,3 +3562,18 @@ button,input,select,textarea{font-family:inherit}
     max-width: 100%;
   }
 }
+
+
+/* Branded admin refresh control and reload transition */
+.admin-refresh-unique{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:36px;padding:0 12px;margin-left:auto;border:1px solid #dce9df;border-radius:9px;background:#f1f8f2;color:#176b49;font-size:12px;font-weight:750;cursor:pointer;transition:background .2s ease,border-color .2s ease,transform .2s ease}
+.admin-refresh-unique:hover{background:#e4f2e7;border-color:#b9d8c2;transform:translateY(-1px)}
+.admin-refresh-unique:active{transform:scale(.97)}
+.admin-refresh-screen{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:radial-gradient(circle at 50% 42%,#245c43 0,#153b2b 45%,#10291f 100%);color:#fff;animation:adminRefreshFade .22s ease-out}
+.admin-refresh-mark{display:grid;place-items:center;width:66px;height:66px;border:1px solid #ffffff55;border-radius:20px;background:#ffffff15;font-size:21px;font-weight:900;letter-spacing:-1px;box-shadow:0 12px 35px #071b1270}
+.admin-refresh-spinner{display:grid;place-items:center;width:42px;height:42px;margin-top:5px;color:#bce7c9;animation:adminRefreshSpin .85s linear infinite}
+.admin-refresh-screen>b{font-size:14px;letter-spacing:2px}
+.admin-refresh-screen>span{color:#c5ddcc;font-size:12px}
+@keyframes adminRefreshSpin{to{transform:rotate(360deg)}}
+@keyframes adminRefreshFade{from{opacity:0}to{opacity:1}}
+@media(max-width:600px){.admin-refresh-unique{width:36px;min-width:36px;height:36px;padding:0;margin-left:auto}.admin-refresh-unique span{display:none}.admin-top-title{min-width:0}.admin-top-title small{display:none}}
+@media(prefers-reduced-motion:reduce){.admin-refresh-unique,.admin-refresh-screen{transition:none;animation:none}.admin-refresh-spinner{animation:none}}
