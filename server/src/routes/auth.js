@@ -2,8 +2,9 @@ import {Router} from 'express'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { timingSafeEqual } from 'node:crypto'
-import {User} from '../models/index.js'
+import {User,Product} from '../models/index.js'
 import {requireAuth} from '../middleware/auth.js'
+import {isMongoId} from '../config/ids.js'
 const router=Router()
 const bdPhone=/^01[3-9]\d{8}$/
 
@@ -22,6 +23,30 @@ router.post('/bootstrap-admin',async(req,res,next)=>{try{
  if(!email||!password||password.length<12)return res.status(503).json({message:'Set SUPER_ADMIN_EMAIL and a SUPER_ADMIN_PASSWORD of at least 12 characters in the service environment'})
  const user=await User.create({name,email,passwordHash:await bcrypt.hash(password,12),role:'super_admin',isActive:true})
  res.status(201).json({message:'Super Admin created. Remove the bootstrap environment variables now; then sign in normally.',user:{id:user.id,name:user.name,email:user.email,role:user.role}})
+ }catch(e){next(e)}})
+
+router.get('/wishlist',requireAuth,async(req,res,next)=>{try{
+ const user=await User.findById(req.user.sub).select('wishlist').lean()
+ if(!user)return res.status(404).json({message:'Account not found'})
+ const items=await Product.find({_id:{$in:user.wishlist||[]},isPublished:true}).populate('category','name slug').lean()
+ res.json({ids:items.map(item=>String(item._id)),items})
+ }catch(e){next(e)}})
+router.put('/wishlist/:productId',requireAuth,async(req,res,next)=>{try{
+ const productId=String(req.params.productId||'')
+ if(!isMongoId(productId))return res.status(400).json({message:'Invalid product ID'})
+ if(!await Product.exists({_id:productId,isPublished:true}))return res.status(404).json({message:'Product is not available'})
+ const current=await User.findById(req.user.sub).select('wishlist')
+ if(!current)return res.status(404).json({message:'Account not found'})
+ if((current.wishlist||[]).length>=200&&!current.wishlist.some(id=>String(id)===productId))return res.status(400).json({message:'Wishlist limit reached (200 products).'})
+ const user=await User.findByIdAndUpdate(req.user.sub,{$addToSet:{wishlist:productId}},{new:true}).select('wishlist')
+ res.json({ids:(user?.wishlist||[]).map(String)})
+ }catch(e){next(e)}})
+router.delete('/wishlist/:productId',requireAuth,async(req,res,next)=>{try{
+ const productId=String(req.params.productId||'')
+ if(!isMongoId(productId))return res.status(400).json({message:'Invalid product ID'})
+ const user=await User.findByIdAndUpdate(req.user.sub,{$pull:{wishlist:productId}},{new:true}).select('wishlist')
+ if(!user)return res.status(404).json({message:'Account not found'})
+ res.json({ids:(user.wishlist||[]).map(String)})
  }catch(e){next(e)}})
 
 router.get('/me',requireAuth,async(req,res,next)=>{try{

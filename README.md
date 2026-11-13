@@ -4,11 +4,11 @@
 A Bangladesh-focused MERN fashion commerce starter with a React/Vite storefront, Express API, MongoDB models, and a responsive admin workspace.
 
 ## Current implementation
-- Responsive storefront foundation with home, shop, product detail, cart, login and admin routes.
-- Product catalogue seed data for UI development; cart persists in browser storage.
-- Shared purple/black/white design system, BDT formatting, English/Bangla language toggle.
-- Express API health endpoint, MongoDB connection setup, core Mongoose schemas, security middleware and product/order/auth route foundations.
-- Admin overview shell and management navigation.
+- Responsive storefront with home, API-backed shop/category catalogue, product details, cart, checkout, customer registration/login, account profile/address and order history.
+- Customer carts persist in browser storage; signed-in wishlists now sync to MongoDB, while guest wishlists remain local to the browser.
+- Shared purple/black/white design system, BDT pricing, Bangladesh phone/address validation and an English-first interface with a basic language toggle.
+- Express/Mongoose APIs for products, categories, customers, orders, coupons, settings, inventory, support tickets, delivery metadata, reporting and staff roles.
+- Admin product/category CRUD, stock adjustments, order status and manual advance-payment verification, coupon management, customer access controls and store settings.
 
 ## Not yet live / requires configuration
 - Database-backed account registration/login, checkout/order persistence and admin permissions.
@@ -77,3 +77,9 @@ The starter deliberately does not create a default administrator or expose a pub
 - Added an explicit authentication rate-limit policy covering customer login, registration, staff/admin login and the one-time Super Admin bootstrap endpoint.
 - Added Node's built-in test runner and regression tests for the protected authentication entry points and skip conditions.
 - Run checks with `npm test` from the repository root. These tests cover the rate-limit route policy only; they do not replace integration, database or end-to-end tests.
+
+
+## Customer wishlist increment (2026-11-13)
+- Added a MongoDB-backed wishlist on customer accounts, with authenticated list/add/remove endpoints.
+- Signed-in storefront sessions load and update the account wishlist; guest wishlists remain browser-local. Wishlist state is cleared on logout/account switching to avoid leaking one customer's saved products to another account on a shared device.
+- The API caps each account wishlist at 200 products and rejects invalid or unpublished product IDs.
