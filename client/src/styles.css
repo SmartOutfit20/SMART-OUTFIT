@@ -3199,3 +3199,10 @@ button,input,select,textarea{font-family:inherit}
 .customer-account-menu a[href="/account"]:not(.is-active){background:rgba(255,255,255,.94)!important;color:#435047!important}
 .customer-account-menu a[href="/account"]:not(.is-active) .customer-menu-icon{background:#f0f5f0!important;color:#16845a!important}
 .google-signin-wrap iframe{max-width:100%!important}
+
+.orders-page .order-extra-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:0 0 18px}
+.orders-page .order-extra-grid section{display:grid;gap:6px;align-content:start;padding:14px;border:1px solid #e9efe9;border-radius:10px;background:#fbfcfb;min-width:0}
+.orders-page .order-extra-grid section>b{font:700 12px 'Hind Siliguri',sans-serif;color:#16845a}
+.orders-page .order-extra-grid section>span{font:500 12px 'Hind Siliguri',sans-serif;color:#4e5b51;overflow-wrap:anywhere}
+.orders-page .order-extra-grid section>small{font:400 11px/1.7 'Hind Siliguri',sans-serif;color:#89938a;overflow-wrap:anywhere}
+@media(max-width:600px){.orders-page .order-extra-grid{grid-template-columns:minmax(0,1fr)}}
