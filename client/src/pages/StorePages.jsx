@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useParams, useSearchParams, useNavigate, useLocation } from 'react-router-dom'
-import { ArrowRight, Minus, Plus, ShieldCheck, Truck, RotateCcw, UserRound, Heart, Facebook, Instagram, Youtube, Music2, Mail, Phone, MapPin, Clock, PackageCheck, RefreshCw, HelpCircle } from 'lucide-react'
+import { ArrowRight, SlidersHorizontal, Minus, Plus, ShieldCheck, Truck, RotateCcw, UserRound, Heart, Facebook, Instagram, Youtube, Music2, Mail, Phone, MapPin, Clock, PackageCheck, RefreshCw, HelpCircle } from 'lucide-react'
 import ProductCard from '../components/ProductCard'
 import { products as demoProducts, categories as demoCategories, money } from '../data/products'
 import { useShop } from '../context/ShopContext'
