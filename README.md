@@ -71,3 +71,9 @@ JWT secret is mandatory in production. Passwords are hashed with bcrypt. Authent
 
 ### Admin access note
 The starter deliberately does not create a default administrator or expose a public admin bootstrap route. Create the first administrator through a controlled database provisioning process before using admin CRUD. The API role guard currently allows `super_admin`, `admin`, and `editor` for product/category editing; production permission granularity still needs review.
+
+
+## Security increment (2026-11-13)
+- Added an explicit authentication rate-limit policy covering customer login, registration, staff/admin login and the one-time Super Admin bootstrap endpoint.
+- Added Node's built-in test runner and regression tests for the protected authentication entry points and skip conditions.
+- Run checks with `npm test` from the repository root. These tests cover the rate-limit route policy only; they do not replace integration, database or end-to-end tests.

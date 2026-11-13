@@ -18,6 +18,7 @@ import coupons from './routes/coupons.js'
 import admin from './routes/admin.js'
 import storefront from './routes/storefront.js'
 import analytics from './routes/analytics.js'
+import { shouldSkipAuthRateLimit } from './config/rateLimits.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const clientDistPath = path.resolve(__dirname, '../../client/dist')
@@ -31,7 +32,7 @@ app.use(helmet())
 app.use(cors({ origin: process.env.CLIENT_URL?.split(',') || 'http://localhost:5173' }))
 app.use(express.json({ limit: '8mb' }))
 app.use(morgan('dev'))
-app.use('/api/auth', rateLimit({ windowMs: 15 * 60 * 1000, limit: 30, standardHeaders: true, legacyHeaders: false, skip: req => !(req.method === 'POST' && ['/login', '/register', '/bootstrap-admin'].includes(req.path)) }))
+app.use('/api/auth', rateLimit({ windowMs: 15 * 60 * 1000, limit: 30, standardHeaders: true, legacyHeaders: false, skip: shouldSkipAuthRateLimit }))
 app.use('/api/auth', auth)
 app.use('/api/health', health)
 app.use('/api/products', products)
