@@ -2858,3 +2858,46 @@ button,input,select,textarea{font-family:inherit}
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
+
+
+/* Desktop product detail: keep copy comfortably inset inside its grid column */
+@media(min-width:901px){
+  .page-wrap:has(.detail-layout){
+    padding-left:clamp(28px,4vw,64px)!important;
+    padding-right:clamp(28px,4vw,64px)!important;
+  }
+  .detail-layout{
+    grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)!important;
+    gap:clamp(28px,3.2vw,48px)!important;
+    align-items:start!important;
+  }
+  .detail-gallery,.detail-copy{
+    min-width:0!important;
+    width:100%!important;
+    max-width:100%!important;
+  }
+  .detail-copy{
+    padding:clamp(28px,2.5vw,40px)!important;
+    overflow:hidden;
+    overflow-wrap:anywhere;
+  }
+  .detail-copy>*{
+    min-width:0!important;
+    max-width:100%!important;
+  }
+  .detail-copy h1,.detail-copy p,.detail-copy .option-label,
+  .detail-copy .detail-price,.detail-copy .detail-perks{
+    max-width:100%;
+    overflow-wrap:anywhere;
+  }
+  .detail-copy .size-options,.detail-copy .color-options{
+    min-width:0;
+    max-width:100%;
+    flex-wrap:wrap;
+  }
+  .detail-copy .detail-action-buttons{
+    min-width:0;
+    max-width:100%;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
