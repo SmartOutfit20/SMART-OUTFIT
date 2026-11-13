@@ -3195,3 +3195,7 @@ button,input,select,textarea{font-family:inherit}
  .orders-page .order-line-item b{font-size:12px}
 }
 @media(prefers-reduced-motion:reduce){.auth-card-premium *,.orders-page .order-track-card{transition:none!important}}
+
+.customer-account-menu a[href="/account"]:not(.is-active){background:rgba(255,255,255,.94)!important;color:#435047!important}
+.customer-account-menu a[href="/account"]:not(.is-active) .customer-menu-icon{background:#f0f5f0!important;color:#16845a!important}
+.google-signin-wrap iframe{max-width:100%!important}
