@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { Product, Category, ActivityLog } from '../models/index.js'
 import { starterProducts } from '../data/starterProducts.js'
 import { requireAuth, requireRole } from '../middleware/auth.js'
+import sharp from 'sharp'
 
 const router = Router()
 const adminOnly = [requireAuth, requireRole('super_admin', 'admin', 'editor')]
@@ -211,15 +212,47 @@ router.get('/:id/share-image', async (req, res, next) => {
     const product = await Product.findOne({ _id: req.params.id, isPublished: true }).select('images').lean()
     const image = product?.images?.[0]
     if (!image || typeof image !== 'string') return res.status(404).end()
-    const dataMatch = image.match(/^data:(image\/(?:jpeg|png|webp|gif));base64,([A-Za-z0-9+/=]+)$/i)
+
+    let source
+    const dataMatch = image.match(/^data:image\/(?:jpeg|jpg|png|webp|gif);base64,([A-Za-z0-9+/=]+)$/i)
     if (dataMatch) {
-      res.set({ 'Content-Type': dataMatch[1], 'Cache-Control': 'public, max-age=3600', 'X-Content-Type-Options': 'nosniff' })
-      return res.send(Buffer.from(dataMatch[2], 'base64'))
+      source = Buffer.from(dataMatch[1], 'base64')
+    } else if (/^https?:\/\//i.test(image) || image.startsWith('/')) {
+      const sourceUrl = image.startsWith('/') ? `${req.protocol}://${req.get('host')}${image}` : image
+      const response = await fetch(sourceUrl, { signal: AbortSignal.timeout(10000), headers: { 'User-Agent': 'SMART-OUTFIT-ImagePreview/1.0' } })
+      if (!response.ok) return res.status(404).end()
+      const contentType = response.headers.get('content-type') || ''
+      if (!contentType.toLowerCase().startsWith('image/')) return res.status(415).end()
+      const declaredLength = Number(response.headers.get('content-length') || 0)
+      if (declaredLength > 12 * 1024 * 1024) return res.status(413).end()
+      const bytes = Buffer.from(await response.arrayBuffer())
+      if (!bytes.length || bytes.length > 12 * 1024 * 1024) return res.status(413).end()
+      source = bytes
+    } else {
+      return res.status(404).end()
     }
-    if (/^https?:\/\//i.test(image)) return res.redirect(302, image)
-    if (image.startsWith('/')) return res.redirect(302, image)
-    return res.status(404).end()
-  } catch (e) { next(e) }
+
+    // WhatsApp is less tolerant of modern image formats and oversized originals.
+    // Normalize every product preview to a compact, crawler-friendly JPEG.
+    const jpeg = await sharp(source, { failOn: 'none', limitInputPixels: 40000000 })
+      .rotate()
+      .resize(1200, 630, { fit: 'contain', background: '#ffffff', withoutEnlargement: true })
+      .flatten({ background: '#ffffff' })
+      .jpeg({ quality: 82, mozjpeg: true })
+      .toBuffer()
+
+    res.set({
+      'Content-Type': 'image/jpeg',
+      'Content-Length': String(jpeg.length),
+      'Cache-Control': 'public, max-age=86400, s-maxage=86400',
+      'X-Content-Type-Options': 'nosniff',
+      'Content-Disposition': 'inline; filename="product-preview.jpg"'
+    })
+    res.send(jpeg)
+  } catch (e) {
+    if (e.name === 'TimeoutError' || e.name === 'AbortError') return res.status(504).end()
+    next(e)
+  }
 })
 
 router.get('/:id', async (req, res, next) => {
