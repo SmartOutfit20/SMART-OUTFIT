@@ -205,6 +205,23 @@ router.delete('/:id', ...adminOnly, async (req, res, next) => {
   } catch (e) { next(e) }
 })
 
+router.get('/:id/share-image', async (req, res, next) => {
+  try {
+    if (!/^[a-f0-9]{24}$/i.test(req.params.id)) return res.status(404).end()
+    const product = await Product.findOne({ _id: req.params.id, isPublished: true }).select('images').lean()
+    const image = product?.images?.[0]
+    if (!image || typeof image !== 'string') return res.status(404).end()
+    const dataMatch = image.match(/^data:(image\/(?:jpeg|png|webp|gif));base64,([A-Za-z0-9+/=]+)$/i)
+    if (dataMatch) {
+      res.set({ 'Content-Type': dataMatch[1], 'Cache-Control': 'public, max-age=3600', 'X-Content-Type-Options': 'nosniff' })
+      return res.send(Buffer.from(dataMatch[2], 'base64'))
+    }
+    if (/^https?:\/\//i.test(image)) return res.redirect(302, image)
+    if (image.startsWith('/')) return res.redirect(302, image)
+    return res.status(404).end()
+  } catch (e) { next(e) }
+})
+
 router.get('/:id', async (req, res, next) => {
   try {
     const item = await Product.findOne({ _id: req.params.id, isPublished: true }).populate('category', 'name slug')
