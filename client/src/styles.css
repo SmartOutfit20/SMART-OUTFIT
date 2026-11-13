@@ -1786,3 +1786,89 @@ input,select,textarea{accent-color:var(--so-accent)}
 @media(prefers-reduced-motion:no-preference){
   .btn,.quick-add,.filter,.size-options button,.color-options button{transition:background-color .18s ease,color .18s ease,border-color .18s ease,box-shadow .18s ease}
 }
+
+
+/* SMART OUTFIT — monochrome storefront + reference-matched admin violet */
+:root{
+  --so-primary:#111111;
+  --so-primary-hover:#303030;
+  --so-accent:#111111;
+  --so-accent-soft:#f1f1f1;
+  --so-text:#171717;
+  --so-muted:#777777;
+  --so-border:#e5e5e5;
+  --so-surface:#ffffff;
+  --so-surface-soft:#f7f7f7;
+  --deep:var(--so-primary);
+  --purple:#6d3bd1;
+  --ink:var(--so-text);
+  --muted:var(--so-muted);
+  --line:var(--so-border);
+  --soft:var(--so-surface-soft);
+}
+html,body{background:#fff;color:#171717}
+body{color:var(--so-text);background:var(--so-surface)}
+a:hover{color:#555}
+:where(button,input,select,textarea):focus-visible{outline:2px solid #777;outline-offset:2px}
+.btn-dark,.quick-add,.detail-action-buttons .detail-buy-btn,
+.product-card-actions .quick-add,.product-card-actions .buy-now{
+  background:#111!important;color:#fff!important;border-color:#111!important;
+  box-shadow:none!important;
+}
+.btn-dark:hover,.quick-add:hover,.detail-action-buttons .detail-buy-btn:hover,
+.product-card-actions .quick-add:hover,.product-card-actions .buy-now:hover{
+  background:#333!important;border-color:#333!important;
+}
+.quick-add{background:#111!important}
+.btn-light,.btn-outline,.detail-action-buttons .detail-add-btn{
+  color:#111;border:1px solid #111;background:#fff;
+}
+.btn-light:hover,.btn-outline:hover,.detail-action-buttons .detail-add-btn:hover{
+  background:#f1f1f1;color:#111;
+}
+.eyebrow,.nav a:hover,.nav a.active{color:#111}
+.filter.active,.size-options button.selected{background:#111;border-color:#111;color:#fff}
+.size-options button.selected{box-shadow:0 0 0 3px #11111118}
+.color-options button.selected{border-color:#111;background:#f3f3f3;box-shadow:0 0 0 2px #11111112}
+.product-card,.detail-copy,.detail-gallery .detail-art,.account-panel,.summary,.checkout-form,.order-success{
+  border-color:#e7e7e7;box-shadow:0 4px 18px #00000008;
+}
+.section-tint,.empty-state,.account-panel{background:#f7f7f7}
+input,select,textarea{accent-color:#111}
+.product-card .product-category,.detail-copy .eyebrow,.detail-copy .option-label{color:#777}
+.product-card .product-name,.detail-copy h1{color:#171717}
+.product-card .product-bottom,.detail-price{color:#111!important}
+.product-card .product-tag,.product-card .product-tag.discount-tag{
+  background:#111!important;color:#fff!important;
+}
+.product-card .wish-btn{border-color:#e5e5e5;color:#111}
+.product-card .wish-btn.active{color:#111}
+.product-card-actions .stock-out,.stock-out{background:#ededed!important;color:#777!important;border-color:#e2e2e2!important}
+.detail-action-buttons .detail-add-btn{background:#fff!important;color:#111!important;border-color:#111!important}
+.detail-action-buttons .detail-add-btn:hover{background:#f2f2f2!important}
+.detail-gallery .detail-art,.detail-gallery .detail-art:has(>img){background:#f5f5f5}
+.size-options button{border-color:#d8d8d8;color:#111}
+.size-options button:hover:not(:disabled){border-color:#111;color:#111}
+.color-options button{border-color:#e1e1e1;color:#222}
+.color-options button.selected{border:2px solid #111}
+.detail-gallery .detail-thumbnails button:hover{border-color:#111}
+.cart-item,.order-track-card,.account-panel,.summary,.checkout-form{border-color:#e6e6e6}
+.footer-complete{background:#101010;color:#fff}
+.footer-complete a:hover{color:#d0d0d0}
+.admin-sidebar{background:#101010}
+.admin-sidebar>a.active,.admin-sidebar>a:hover{background:#6d3bd1;color:#fff}
+.admin-sidebar .admin-nav-group-title{color:#aaa}
+.admin-action,.admin-primary,.admin-save,.admin-submit{
+  background:#6d3bd1;border-color:#6d3bd1;color:#fff;
+}
+.admin-action:hover,.admin-primary:hover,.admin-save:hover,.admin-submit:hover{
+  background:#5729b5;border-color:#5729b5;
+}
+.admin-content{color:#171717}
+.admin-panel,.admin-stat,.admin-card,.admin-settings-section{border-color:#e7e7e7}
+.admin-content .admin-section-title,.admin-content h1,.admin-content h2,.admin-content h3{color:#171717}
+.admin-content a{color:#5c32b4}
+.admin-content .admin-table th{background:#f5f5f5;color:#333}
+@media(prefers-reduced-motion:no-preference){
+  .btn,.quick-add,.filter,.size-options button,.color-options button{transition:background-color .18s ease,color .18s ease,border-color .18s ease,box-shadow .18s ease}
+}
