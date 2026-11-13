@@ -82,7 +82,9 @@ app.get('/product/:id', async (req, res, next) => {
       `<meta property="product:price:amount" content="${Number(product.price || 0)}">`,
       '<meta property="product:price:currency" content="BDT">'
     ].join('\n')
-    html = html.replace(/<title>[^<]*<\\/title>/i, `<title>${escapeHtml(title)}</title>`)
+    const titleStart = html.indexOf('<title>')
+    const titleEnd = html.indexOf('</title>', titleStart)
+    if (titleStart >= 0 && titleEnd >= 0) html = html.slice(0, titleStart) + `<title>${escapeHtml(title)}</title>` + html.slice(titleEnd + 8)
     html = html.replace('</head>', `${tags}\n</head>`)
     res.set({ 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=300, s-maxage=300' })
     res.send(html)
