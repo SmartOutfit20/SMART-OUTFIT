@@ -3080,3 +3080,43 @@ button,input,select,textarea{font-family:inherit}
 @media(prefers-reduced-motion:reduce){
  .account-dashboard *{scroll-behavior:auto!important;transition:none!important}
 }
+
+
+/* Expanded premium customer account navigation */
+.customer-account-menu{
+  display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px!important;
+  width:100%!important;max-width:none!important;padding:0!important;margin:0 0 24px!important;
+  border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;
+}
+.customer-account-menu a{
+  display:flex!important;align-items:center!important;gap:11px!important;min-width:0;min-height:76px;
+  padding:13px 14px!important;border:1px solid #e3eae4;border-radius:13px!important;
+  background:rgba(255,255,255,.94);color:#435047!important;
+  box-shadow:0 6px 20px rgba(29,47,34,.045);text-decoration:none;
+  transition:transform .2s ease,border-color .2s ease,background .2s ease,box-shadow .2s ease;
+}
+.customer-account-menu a:hover,.customer-account-menu a.is-active{
+  border-color:#b9d9c3;background:#edf6ef!important;color:#16845a!important;
+  box-shadow:0 8px 22px rgba(22,132,90,.09);transform:translateY(-2px);
+}
+.customer-menu-icon{display:grid;place-items:center;flex:0 0 40px;width:40px;height:40px;border-radius:11px;background:#f0f5f0;color:#16845a}
+.customer-account-menu a.is-active .customer-menu-icon{background:#16845a;color:#fff}
+.customer-menu-copy{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+.customer-menu-copy b{font:700 13px 'Hind Siliguri',sans-serif;white-space:normal;line-height:1.4}
+.customer-menu-copy small{font:400 10px 'Hind Siliguri',sans-serif;color:#879188;line-height:1.4}
+.customer-menu-arrow{flex:0 0 auto;color:#a0aaa2}
+.customer-account-menu a.is-active .customer-menu-arrow{color:#16845a}
+.account-subpage{max-width:1240px!important;padding-top:34px!important}
+.account-subpage>.customer-account-menu{margin-bottom:26px!important}
+@media(max-width:1000px){.customer-account-menu{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:700px){
+ .customer-account-menu{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;margin-bottom:17px!important}
+ .customer-account-menu a{min-height:68px;padding:10px!important;gap:9px!important;border-radius:11px!important}
+ .customer-menu-icon{width:35px;height:35px;flex-basis:35px;border-radius:9px}
+ .customer-menu-copy b{font-size:12px}
+ .customer-menu-copy small{font-size:9px}
+ .customer-menu-arrow{width:14px}
+ .account-subpage{padding:22px 15px 50px!important}
+}
+@media(max-width:390px){.customer-account-menu{gap:7px!important}.customer-account-menu a{padding:9px 8px!important}.customer-menu-icon{width:32px;height:32px;flex-basis:32px}.customer-menu-copy b{font-size:11px}}
+@media(prefers-reduced-motion:reduce){.customer-account-menu a{transition:none!important}}
