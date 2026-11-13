@@ -77,13 +77,13 @@ function setHtmlMeta(html, title, description, canonical, image, indexing = true
     '<meta name="twitter:title" content="' + safeTitle + '">',
     '<meta name="twitter:description" content="' + safeDescription + '">',
     image ? '<meta name="twitter:image" content="' + escapeHtml(image) + '">' : ''
-  ].filter(Boolean).join('\\n')
+  ].filter(Boolean).join('\n')
   const start = html.indexOf('<title>')
   const end = html.indexOf('</title>', start)
   if (start >= 0 && end >= 0) html = html.slice(0, start) + '<title>' + safeTitle + '</title>' + html.slice(end + 8)
-  html = html.replace(/<meta\\s+name=["']description["'][^>]*>/i, '')
+  html = html.replace(/<meta\s+name=["']description["'][^>]*>/i, '')
   html = html.replace(/<link\\s+rel=["']canonical["'][^>]*>/i, '')
-  return html.replace('</head>', tags + '\\n</head>')
+  return html.replace('</head>', tags + '\n</head>')
 }
 
 // Public technical SEO endpoints. Sitemap is generated from the live catalogue.
@@ -92,9 +92,9 @@ app.get('/robots.txt', async (req, res, next) => {
     const settings = await seoSettings()
     const origin = req.protocol + '://' + req.get('host')
     const rules = settings.seoIndexingEnabled === false
-      ? 'User-agent: *\\nDisallow: /\\n'
-      : 'User-agent: *\\nAllow: /\\nDisallow: /admin\\nDisallow: /api\\n'
-    res.type('text/plain').set('Cache-Control', 'public, max-age=300').send(rules + 'Sitemap: ' + origin + '/sitemap.xml\\n')
+      ? 'User-agent: *\nDisallow: /\n'
+      : 'User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api\n'
+    res.type('text/plain').set('Cache-Control', 'public, max-age=300').send(rules + 'Sitemap: ' + origin + '/sitemap.xml\n')
   } catch (e) { next(e) }
 })
 app.get('/sitemap.xml', async (req, res, next) => {
@@ -119,7 +119,7 @@ app.get('/', async (req, res, next) => {
     const origin = req.protocol + '://' + req.get('host')
     const title = plainText(settings.homepageSeoTitle || settings.seoDefaultTitle || 'SMART OUTFIT | Your Style, Our Inspiration', 70)
     const description = plainText(settings.homepageSeoDescription || settings.seoDefaultDescription || 'Shop the latest fashion and clothing collections at SMART OUTFIT.', 180)
-    const image = /^https:\\/\\//i.test(String(settings.seoOgImage || '')) ? settings.seoOgImage : ''
+    const image = /^https:\/\//i.test(String(settings.seoOgImage || '')) ? settings.seoOgImage : ''
     const htmlPath = path.join(clientDistPath, 'index.html')
     const html = setHtmlMeta(await readFile(htmlPath, 'utf8'), title, description, origin + '/', image, settings.seoIndexingEnabled !== false, plainText(settings.homepageSeoKeywords || '', 300))
     res.set({ 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=300, s-maxage=300' }).send(html)
@@ -131,19 +131,21 @@ app.get('/product/:id', async (req, res, next) => {
   try {
     if (!/^[a-f0-9]{24}$/i.test(req.params.id)) return res.status(404).send('Product not found')
     const product = await Product.findOne({ _id: req.params.id, isPublished: true }).select('name description price images').lean()
+    const seo = await seoSettings()
     if (!product) return res.status(404).send('Product not found')
 
     const origin = `${req.protocol}://${req.get('host')}`
     const productUrl = `${origin}/product/${product._id}`
     const title = plainText(product.name, 180) + ' | SMART OUTFIT'
     const description = plainText(product.description, 280) || `Shop ${plainText(product.name, 120)} at SMART OUTFIT.`
-    const imageUrl = product.images?.[0] ? `${origin}/api/products/${product._id}/share-image` : `${origin}/api/storefront/app-icon`
+    const imageUrl = product.images?.[0] ? `${origin}/api/products/${product._id}/share-image` : (seo.seoOgImage || `${origin}/api/storefront/app-icon`)
     const htmlPath = path.join(clientDistPath, 'index.html')
     let html = await readFile(htmlPath, 'utf8')
     const tags = [
       `<meta name="description" content="${escapeHtml(description)}">`,
       `<link rel="canonical" href="${escapeHtml(productUrl)}">`,
       '<meta property="og:type" content="product">',
+      `<meta name="robots" content="${seo.seoIndexingEnabled === false ? 'noindex,nofollow' : 'index,follow'}">`,
       `<meta property="og:site_name" content="SMART OUTFIT">`,
       `<meta property="og:url" content="${escapeHtml(productUrl)}">`,
       `<meta property="og:title" content="${escapeHtml(title)}">`,
