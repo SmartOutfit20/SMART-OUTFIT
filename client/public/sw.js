@@ -1,56 +1,28 @@
-const CACHE_NAME='smart-outfit-shell-v6';
-const APP_SHELL=['/'];
+const CACHE_NAME='smart-outfit-shell-v7';
 
+// Keep navigation documents network-first without serving stale HTML from a
+// previous deployment. Render may take longer than a few seconds to wake up.
 self.addEventListener('install',event=>{
- event.waitUntil(
-  caches.open(CACHE_NAME)
-   .then(cache=>cache.addAll(APP_SHELL))
-   .then(()=>self.skipWaiting())
- );
+ event.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener('activate',event=>{
  event.waitUntil(
   caches.keys()
-   .then(keys=>Promise.all(keys.filter(key=>key.startsWith('smart-outfit-shell-')&&key!==CACHE_NAME).map(key=>caches.delete(key))))
+   .then(keys=>Promise.all(keys.filter(key=>key.startsWith('smart-outfit-shell-')).map(key=>caches.delete(key))))
    .then(()=>self.clients.claim())
  );
 });
 
 self.addEventListener('fetch',event=>{
  const request=event.request,url=new URL(request.url);
- if(request.method!=='GET'||url.origin!==self.location.origin)return;
+ if(request.method!=='GET'||url.origin!==self.location.origin||request.mode!=='navigate')return;
 
- // Always ask the server for the latest document first. Use the cached shell only offline.
- if(request.mode==='navigate'){
-  event.respondWith((async()=>{
-   const controller=new AbortController();
-   let timeoutId;
-   try{
-    const network=fetch(request,{cache:'no-store',signal:controller.signal});
-    const timeout=new Promise((_,reject)=>{timeoutId=setTimeout(()=>{controller.abort();reject(new Error('Navigation request timed out'))},4500)});
-    const response=await Promise.race([network,timeout]);
-    if(response.ok){const copy=response.clone();caches.open(CACHE_NAME).then(cache=>cache.put('/',copy)).catch(()=>{})}
-    return response;
-   }catch(error){
-    const cached=await caches.match('/');
-    if(cached)return cached;
-    return new Response('<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SMART OUTFIT</title><body style="font:16px system-ui;padding:32px;color:#173d2d"><h2>SMART OUTFIT is taking longer to connect</h2><p>Please check your connection and try again.</p><button onclick="location.reload()">Reload website</button></body></html>',{status:503,headers:{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'}});
-   }finally{if(timeoutId)clearTimeout(timeoutId)}
-  })());
-  return;
- }
-
- // Vite assets are fingerprinted; network-first prevents an older cached bundle
- // from appearing after a deployment, while retaining an offline fallback.
- if(url.pathname.startsWith('/assets/')||url.pathname.startsWith('/icons/')||url.pathname==='/manifest.webmanifest'){
-  event.respondWith(
-   fetch(request,{cache:'no-store'})
-    .then(response=>{
-     if(response.ok){const copy=response.clone();caches.open(CACHE_NAME).then(cache=>cache.put(request,copy))}
-     return response;
-    })
-    .catch(()=>caches.match(request))
-  );
- }
+ event.respondWith(
+  fetch(request,{cache:'no-store'})
+   .catch(()=>new Response(
+    '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SMART OUTFIT</title><body style="font:16px system-ui;padding:32px;color:#173d2d"><h2>আপনার ইন্টারনেট সংযোগ পাওয়া যাচ্ছে না</h2><p>সংযোগ ঠিক হলে আবার চেষ্টা করুন।</p><button onclick="location.reload()">আবার চেষ্টা করুন</button></body></html>',
+    {status:503,headers:{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'}}
+   ))
+ );
 });
