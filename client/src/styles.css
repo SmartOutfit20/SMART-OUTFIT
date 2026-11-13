@@ -3748,11 +3748,3 @@ button,input,select,textarea{font-family:inherit}
  .shop-category-filters{scroll-behavior:auto}
  .shop-page-classic .shop-product-grid .quick-add{transition:none}
 }
-
-
-/* Watermark sits in its own background layer; page content and controls always paint above it. */
-.storefront-shell{position:relative;isolation:isolate;min-height:100vh;}
-.store-watermark{position:fixed;inset:0;z-index:0;display:flex;align-items:center;justify-content:center;pointer-events:none!important;user-select:none;overflow:hidden;}
-.store-watermark img{display:block;width:min(68vw,620px);max-height:42vh;object-fit:contain;opacity:.055;mix-blend-mode:multiply;filter:grayscale(1);pointer-events:none!important;user-select:none;animation:none!important;transition:none!important;}
-.storefront-shell>:not(.store-watermark){position:relative;z-index:1;}
-@media(max-width:650px){.store-watermark img{width:88vw;max-height:34vh;opacity:.05;}}
