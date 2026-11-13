@@ -93,7 +93,7 @@ router.post('/change-password',requireAuth,async(req,res,next)=>{try{
  const user=await User.findById(req.user.sub)
  if(!user)return res.status(404).json({message:'Account not found'})
  if(!user.passwordHash||!(await bcrypt.compare(String(currentPassword||''),user.passwordHash)))return res.status(400).json({message:'Current password is incorrect'})
- user.passwordHash=await bcrypt.hash(newPassword,12);await user.save()
+ user.passwordHash=await bcrypt.hash(newPassword,12);user.passwordResetTokenHash=undefined;user.passwordResetExpires=undefined;await user.save()
  res.json({message:'Password updated successfully'})
  }catch(e){next(e)}})
 
