@@ -7688,3 +7688,66 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     min-width: 26px;
   }
 }
+
+
+/* SMART OUTFIT: mobile search gets its own full-width row without squeezing header icons. */
+@media (max-width: 900px) {
+  .header .header-actions.search-expanded {
+    display: contents;
+  }
+  .header .header-actions.search-expanded .header-search-panel {
+    order: 4;
+    flex: 0 0 100%;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    height: 42px;
+    min-height: 42px;
+    margin: 0;
+    padding: 0 12px;
+    box-sizing: border-box;
+  }
+  .header .header-actions.search-expanded .icon-btn {
+    order: 3;
+    flex: 0 0 32px;
+    width: 32px;
+    min-width: 32px;
+  }
+}
+@media (max-width: 650px) {
+  .header {
+    min-height: 112px;
+    height: auto;
+    row-gap: 7px;
+    padding: 7px 12px 9px;
+  }
+  .header .mobile-menu-toggle { order: 1; }
+  .header .brand { order: 2; }
+  .header .header-actions.search-expanded .icon-btn {
+    flex-basis: 29px;
+    width: 29px;
+    min-width: 29px;
+  }
+  .header .header-actions.search-expanded .header-search-panel {
+    height: 40px;
+    min-height: 40px;
+    border-radius: 6px;
+    padding: 0 11px;
+  }
+  .header .header-actions.search-expanded .header-search-panel input {
+    min-width: 0;
+    width: 100%;
+    font-size: 13px;
+  }
+}
+@media (max-width: 370px) {
+  .header {
+    padding-left: 9px;
+    padding-right: 9px;
+    row-gap: 6px;
+  }
+  .header .header-actions.search-expanded .header-search-panel {
+    height: 39px;
+    min-height: 39px;
+  }
+}
