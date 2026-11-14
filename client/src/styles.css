@@ -6395,3 +6395,19 @@ body{font-size:16px;line-height:1.6}
   box-shadow:none!important;
   padding:0!important;
 }
+
+
+/* Place the size-selection prompt alongside the product price. */
+.product-detail-refined .detail-price-row .detail-size-prompt-price{
+  display:inline-flex!important;align-items:center!important;
+  color:#16845a!important;font-size:13px!important;font-weight:700!important;
+  line-height:1.4!important;margin-left:4px!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-option-block:first-child>.option-label{
+  display:none!important;
+}
+@media(max-width:650px){
+  .product-detail-refined .detail-price-row .detail-size-prompt-price{
+    font-size:12px!important;margin-left:2px!important;
+  }
+}
