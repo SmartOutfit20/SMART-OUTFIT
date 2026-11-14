@@ -4847,3 +4847,63 @@ button,input,select,textarea{font-family:inherit}
  .order-track-heading-clean{align-items:flex-start;flex-direction:column}
  .order-clean-product>strong{white-space:normal;text-align:right}
 }
+
+
+/* Order history: compact serial badge and reliable small-screen layout */
+.orders-page-clean .order-track-card-clean{
+  border-color:#e2ebe4;background:#fff;box-shadow:0 10px 30px rgba(30,65,42,.055);
+  transition:border-color .18s ease,box-shadow .18s ease;
+}
+.orders-page-clean .order-track-card-clean:hover{border-color:#c7dfcd;box-shadow:0 14px 34px rgba(30,65,42,.085)}
+.orders-page-clean .order-number-chip{
+  display:inline-flex;align-items:center;min-height:34px;padding:5px 12px;
+  border:1px solid #cfe4d4;border-radius:9px;background:#edf7f0;
+  color:#16845a;font:800 17px/1.2 Manrope,sans-serif;letter-spacing:.35px;
+}
+.orders-page-clean .order-track-title .eyebrow{color:#16845a}
+.orders-page-clean .account-status{max-width:100%;white-space:normal;text-align:center}
+.orders-page-clean .order-track-overview{border-color:#e8efe9}
+.orders-page-clean .order-clean-info-grid>section{border-color:#e5ece6}
+.orders-page-clean .order-clean-progress{border-color:#e1ebe3;background:#f7faf7}
+.orders-page-clean .order-clean-progress .order-progress .done span{color:#16845a}
+.orders-page-clean .order-history-details summary{color:#16845a}
+.admin-order-number{display:inline-flex;max-width:100%;padding:4px 8px;border:1px solid #d2e6d7;border-radius:7px;background:#eff8f1;color:#16845a;font:800 12px Manrope,sans-serif;letter-spacing:.2px;overflow-wrap:anywhere}
+@media(max-width:760px){
+  .orders-page-clean{width:100%;padding-left:14px;padding-right:14px}
+  .orders-page-heading{align-items:stretch}
+  .orders-page-heading>div{min-width:0}
+  .orders-page-heading p{max-width:100%;overflow-wrap:anywhere}
+  .order-track-card-clean{padding:16px}
+  .order-track-heading-clean{gap:12px}
+  .order-track-title{min-width:0}
+  .order-track-title h2{margin:7px 0}
+  .order-track-overview{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .order-track-overview>div{min-width:0}
+  .order-track-overview b{overflow-wrap:anywhere}
+  .order-clean-product{align-items:center;min-width:0}
+  .order-clean-product-copy{overflow:hidden}
+  .order-clean-product-copy b,.order-clean-product-copy small{overflow-wrap:anywhere;word-break:break-word}
+  .order-clean-product>strong{max-width:34%;white-space:normal;text-align:right;overflow-wrap:anywhere}
+  .order-clean-info-grid{grid-template-columns:minmax(0,1fr)}
+  .order-clean-info-grid>section{min-width:0}
+  .order-clean-info-grid section>div{gap:8px}
+  .order-clean-info-grid section>div b{white-space:normal;text-align:right;overflow-wrap:anywhere}
+  .order-clean-progress{overflow:hidden}
+  .order-clean-progress .order-progress{min-width:0}
+  .order-clean-progress .order-progress>div{min-width:0}
+  .order-clean-progress .order-progress span{overflow-wrap:anywhere}
+}
+@media(max-width:420px){
+  .orders-page-clean{padding-left:11px;padding-right:11px}
+  .order-track-card-clean{padding:13px;border-radius:12px}
+  .order-number-chip{font-size:15px!important;min-height:31px!important}
+  .order-track-overview{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .order-track-overview>div:last-child{grid-column:1/-1;padding-top:8px;border-top:1px solid #edf1ed}
+  .order-clean-product{display:grid;grid-template-columns:46px minmax(0,1fr);gap:8px}
+  .order-clean-product-image{width:46px;height:50px;flex-basis:46px}
+  .order-clean-product>strong{grid-column:2;max-width:none;text-align:left;font-size:12px}
+  .order-clean-progress .order-progress span{font-size:8px}
+}
+@media(prefers-reduced-motion:reduce){
+  .orders-page-clean .order-track-card-clean{transition:none}
+}
