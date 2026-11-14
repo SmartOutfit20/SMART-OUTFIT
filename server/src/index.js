@@ -130,13 +130,19 @@ app.get('/', async (req, res, next) => {
 // Open Graph tags in the initial HTML for shared product URLs.
 app.get('/product/:id', async (req, res, next) => {
   try {
-    if (!/^[a-f0-9]{24}$/i.test(req.params.id)) return res.status(404).send('Product not found')
-    const product = await Product.findOne({ _id: req.params.id, isPublished: true }).select('name description price images').lean()
+    const identifier = String(req.params.id || '')
+    const productFilter = /^[a-f0-9]{24}$/i.test(identifier)
+      ? { _id: identifier, isPublished: true }
+      : { $or: [{ slug: identifier }, { legacySlugs: identifier }], isPublished: true }
+    const product = await Product.findOne(productFilter).select('name slug description price images').lean()
+    if (!product) {
+      // Let the React router resolve collection/category slugs such as /product/men-s.
+      return res.sendFile(path.join(clientDistPath, 'index.html'))
+    }
     const seo = await seoSettings()
-    if (!product) return res.status(404).send('Product not found')
 
     const origin = `${req.protocol}://${req.get('host')}`
-    const productUrl = `${origin}/product/${product._id}`
+    const productUrl = `${origin}/product/${product.slug || product._id}`
     const title = plainText(product.name, 180) + ' | SMART OUTFIT'
     const description = plainText(product.description, 280) || `Shop ${plainText(product.name, 120)} at SMART OUTFIT.`
     const imageUrl = product.images?.[0] ? `${origin}/api/products/${product._id}/share-image` : (seo.seoOgImage || `${origin}/api/storefront/app-icon`)
