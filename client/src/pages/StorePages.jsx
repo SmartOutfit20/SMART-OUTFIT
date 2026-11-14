@@ -17,6 +17,7 @@ export function Home(){
  const [activeBanner,setActiveBanner]=useState(0)
  useEffect(()=>{getProducts({limit:4}).then(r=>{if(r.items?.length)setLatest(r.items.map(normalizeProduct))}).catch(()=>{});api.get('/storefront').then(({data})=>{const items=Array.isArray(data.homepageBanners)?data.homepageBanners.filter(x=>x&&x.enabled!==false).sort((x,y)=>(x.sortOrder||0)-(y.sortOrder||0)):[];setBanners(items)}).catch(()=>{})},[])
  useEffect(()=>{if(activeBanner>=banners.length)setActiveBanner(0)},[banners.length,activeBanner])
+ useEffect(()=>{if(banners.length<2)return;const timer=window.setInterval(()=>setActiveBanner(current=>(current+1)%banners.length),4500);return()=>window.clearInterval(timer)},[banners.length])
  const featured=latest
  const banner=banners.length?banners[activeBanner]:null
  const bannerLink=banner?.buttonLink||'/shop'
