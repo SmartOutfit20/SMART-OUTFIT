@@ -9021,3 +9021,10 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     padding: 25px 35px 35px !important;
   }
 }
+
+/* SMART OUTFIT — tablet-only section spacing */
+@media (min-width: 651px) and (max-width: 900px) {
+  .section {
+    padding: 55px 35px;
+  }
+}
