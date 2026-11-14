@@ -7616,3 +7616,75 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     box-shadow: none !important;
   }
 }
+
+
+/* SMART OUTFIT: keep the search field permanently visible in the header. */
+@media (min-width: 901px) {
+  .header .header-actions.search-expanded {
+    flex: 0 1 470px;
+    min-width: 0;
+    gap: 9px;
+  }
+}
+@media (max-width: 900px) {
+  .header {
+    height: auto;
+    min-height: 114px;
+    flex-wrap: wrap;
+    row-gap: 5px;
+    padding-top: 9px;
+    padding-bottom: 9px;
+  }
+  .header .header-actions.search-expanded {
+    order: 4;
+    flex: 1 1 100%;
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    gap: 8px;
+  }
+  .header .header-actions.search-expanded .header-search-panel {
+    position: relative;
+    inset: auto;
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    padding: 0 12px;
+    box-shadow: none;
+  }
+}
+@media (max-width: 650px) {
+  .header {
+    min-height: 108px;
+    row-gap: 3px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
+  .header .header-actions.search-expanded {
+    gap: 5px;
+  }
+  .header .header-actions.search-expanded .header-search-panel {
+    height: 40px;
+    min-height: 40px;
+    padding: 0 9px;
+    gap: 7px;
+  }
+  .header .header-actions.search-expanded .header-search-panel input {
+    height: 36px;
+    font-size: 12px;
+  }
+  .header .header-actions.search-expanded .icon-btn {
+    flex-basis: 29px;
+    width: 29px;
+    min-width: 29px;
+  }
+}
+@media (max-width: 370px) {
+  .header .header-actions.search-expanded { gap: 2px; }
+  .header .header-actions.search-expanded .icon-btn {
+    flex-basis: 26px;
+    width: 26px;
+    min-width: 26px;
+  }
+}
