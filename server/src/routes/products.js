@@ -139,6 +139,7 @@ router.post('/admin/import-starter', ...adminOnly, async (req, res, next) => {
 
 router.get('/', async (req, res, next) => {
   try {
+    await ensureShortProductSlugs()
     const { q, category, page = 1, limit = 12, sort = 'newest' } = req.query
     const filter = { isPublished: true }
     if (q) filter.name = { $regex: String(q).slice(0, 80), $options: 'i' }
@@ -154,7 +155,7 @@ router.get('/', async (req, res, next) => {
 })
 
 router.get('/admin/all', ...adminOnly, async (req, res, next) => {
-  try { res.json(await Product.find().populate('category', 'name').sort({ createdAt: -1 }).lean()) }
+  try { await ensureShortProductSlugs(); res.json(await Product.find().populate('category', 'name').sort({ createdAt: -1 }).lean()) }
   catch (e) { next(e) }
 })
 
@@ -284,6 +285,7 @@ router.get('/:id/share-image', async (req, res, next) => {
 
 router.get('/:id', async (req, res, next) => {
   try {
+    await ensureShortProductSlugs()
     const identifier = String(req.params.id || '')
     const filter = /^[a-f0-9]{24}$/i.test(identifier)
       ? { _id: identifier, isPublished: true }
