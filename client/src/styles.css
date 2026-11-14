@@ -7458,3 +7458,11 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     max-width: 35%;
   }
 }
+
+/* SMART OUTFIT: keep the header search panel inside the shared 1220px content edges. */
+@media (min-width: 651px) {
+  .header-search-panel {
+    right: max(20px, calc((100vw - 1220px) / 2));
+    max-width: min(440px, calc(100vw - 40px));
+  }
+}
