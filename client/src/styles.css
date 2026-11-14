@@ -6385,3 +6385,13 @@ body{font-size:16px;line-height:1.6}
   border-radius:0!important;
   box-shadow:none!important;
 }
+
+
+/* Remove the purchase-card box entirely; preserve its inner controls and layout. */
+.product-detail-refined section.detail-purchase-card.detail-purchase-card-v2{
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  padding:0!important;
+}
