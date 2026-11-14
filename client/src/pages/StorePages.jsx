@@ -135,7 +135,7 @@ export function ProductDetail(){
    <div className="detail-copy">
     <div className="detail-topline"><span className="eyebrow">{p.category}</span>{p.sku&&<span className="detail-sku">SKU: {p.sku}</span>}</div>
     <h1>{p.name}</h1>
-    <div className="detail-price-row"><div className="detail-price">{money(p.price)} {p.oldPrice>0&&<del>{money(p.oldPrice)}</del>}</div>{discountPercent>0&&<span className="detail-discount-pill">-{discountPercent}%</span>}</div>
+    <div className="detail-price-row"><div className="detail-price">{money(p.price)} {p.oldPrice>0&&<del>{money(p.oldPrice)}</del>}</div>{discountPercent>0&&<span className="detail-discount-pill">-{discountPercent}%</span>}<span className="detail-size-prompt-price">সাইজ নির্বাচন করুন</span></div>
     {savings>0&&<p className="detail-savings">আপনি সাশ্রয় করছেন <b>{money(savings)}</b></p>}
     {p.description&&<p className="detail-description">{p.description}</p>}
     <div className={selectedStock>0?'detail-stock-line':'detail-stock-line is-out'}><i/>{stockLabel}{selectedStock>0&&selectedStock<=5&&<span> · দ্রুত অর্ডার করুন</span>}</div>
