@@ -5102,29 +5102,54 @@ button,input,select,textarea{font-family:inherit}
 }
 
 
-/* Desktop storefront content uses one centered 950px fixed-width canvas.
-   At 1650px viewport this leaves 350px on each side. Header and footer remain
-   visually unchanged; admin workspace keeps its dedicated layout. */
-.site-main > :not(.admin-shell){
+/* Global storefront content gutters — match the footer's left/right inset.
+   Header and footer remain untouched; only the content area is normalized. */
+.site-main > *{
   box-sizing:border-box!important;
-  width:min(950px,calc(100% - 32px))!important;
-  max-width:950px!important;
+  width:100%!important;
+  max-width:none!important;
   min-width:0!important;
-  margin-left:auto!important;
-  margin-right:auto!important;
-  padding-left:0!important;
-  padding-right:0!important;
+  margin-left:0!important;
+  margin-right:0!important;
+  padding-left:max(5vw,24px)!important;
+  padding-right:max(5vw,24px)!important;
 }
-.site-main > .page-wrap:has(.detail-layout),
+.site-main > .page-wrap,
+.site-main > .account-wrap,
+.site-main > .orders-page,
+.site-main > .info-page,
+.site-main > .auth-wrap{
+  max-width:none!important;
+}
+.site-main > .page-wrap:has(.detail-layout){
+  width:100%!important;
+  max-width:none!important;
+  padding-left:max(5vw,24px)!important;
+  padding-right:max(5vw,24px)!important;
+}
 .site-main > .page-wrap:has(.detail-layout) .detail-layout{
   width:100%!important;
-  max-width:100%!important;
+  max-width:none!important;
   margin-left:0!important;
   margin-right:0!important;
 }
 @media(max-width:760px){
-  .site-main > :not(.admin-shell){
-    width:calc(100% - 32px)!important;
-    max-width:950px!important;
+  .site-main > *{
+    padding-left:max(6vw,18px)!important;
+    padding-right:max(6vw,18px)!important;
+  }
+  .site-main > .page-wrap:has(.detail-layout){
+    padding-left:max(6vw,18px)!important;
+    padding-right:max(6vw,18px)!important;
+  }
+}
+@media(max-width:420px){
+  .site-main > *{
+    padding-left:18px!important;
+    padding-right:18px!important;
+  }
+  .site-main > .page-wrap:has(.detail-layout){
+    padding-left:18px!important;
+    padding-right:18px!important;
   }
 }
