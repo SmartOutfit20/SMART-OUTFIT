@@ -7428,3 +7428,33 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     order: 3;
   }
 }
+
+
+/* SMART OUTFIT: keep mobile menu and logo close; reserve free space before actions. */
+@media (max-width: 650px) {
+  .header {
+    justify-content: flex-start;
+    gap: 8px;
+  }
+  .header .mobile-menu-toggle {
+    flex: 0 0 34px;
+    width: 34px;
+    margin: 0;
+  }
+  .header .brand {
+    flex: 0 1 auto;
+    max-width: 38%;
+    margin: 0;
+  }
+  .header .header-actions {
+    margin-left: auto;
+  }
+}
+@media (max-width: 370px) {
+  .header {
+    gap: 6px;
+  }
+  .header .brand {
+    max-width: 35%;
+  }
+}
