@@ -3800,3 +3800,25 @@ button,input,select,textarea{font-family:inherit}
     margin-top:0;
   }
 }
+
+
+/* Shop mobile card spacing and softer CTA corners */
+@media(max-width:700px){
+  .shop-page-classic .shop-product-grid .product-info{
+    padding:10px 9px 11px!important;
+  }
+  .shop-page-classic .shop-product-grid .product-card-actions{
+    padding:0!important;
+    margin-top:8px!important;
+  }
+  .shop-page-classic .shop-product-grid .product-card-actions .quick-add,
+  .shop-page-classic .shop-product-grid .quick-add,
+  .shop-page-classic .shop-product-grid .stock-out{
+    width:100%;
+    min-height:42px;
+    height:42px;
+    padding:0 10px;
+    border-radius:10px!important;
+    box-sizing:border-box;
+  }
+}
