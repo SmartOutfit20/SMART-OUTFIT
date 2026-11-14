@@ -18,7 +18,7 @@ export function Home(){
  const [previousBanner,setPreviousBanner]=useState(null)
  const [bannerDirection,setBannerDirection]=useState(1)
  const bannerTouchStartX=useRef(null)
- const changeBanner=useCallback((next,direction=1)=>{setPreviousBanner(banners[activeBanner]||null);setBannerDirection(direction);setActiveBanner(next)},[banners,activeBanner])
+ const changeBanner=useCallback((next,direction=1)=>{if(next===activeBanner)return;setPreviousBanner(banners[activeBanner]||null);setBannerDirection(direction);setActiveBanner(next)},[banners,activeBanner])
  useEffect(()=>{getProducts({limit:4}).then(r=>{if(r.items?.length)setLatest(r.items.map(normalizeProduct))}).catch(()=>{});api.get('/storefront').then(({data})=>{const items=Array.isArray(data.homepageBanners)?data.homepageBanners.filter(x=>x&&x.enabled!==false&&typeof x.image==='string'&&x.image.trim()).sort((x,y)=>(x.sortOrder||0)-(y.sortOrder||0)):[];setBanners(items)}).catch(()=>{})},[])
  useEffect(()=>{if(activeBanner>=banners.length)setActiveBanner(0)},[banners.length,activeBanner])
  useEffect(()=>{if(!previousBanner)return;const timer=window.setTimeout(()=>setPreviousBanner(null),850);return()=>window.clearTimeout(timer)},[previousBanner,activeBanner])
