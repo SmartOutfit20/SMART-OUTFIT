@@ -45,7 +45,7 @@ export function AdminProducts(){
   <div className="admin-product-section-heading"><span className="admin-product-section-icon"><Package size={17}/></span><div><span className="eyebrow">01 / PRODUCT DETAILS</span><h4>Basic information</h4><p>Give your product a clear name and organise it in your catalogue.</p></div></div>
   <div className="admin-product-section-grid">
    <label className="admin-field-wide">Product name *<input required maxLength="120" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} placeholder="e.g. Premium Cotton T-Shirt"/></label>
-   <label>SKU / Product code<input maxLength="60" value={form.sku} onChange={e=>setForm({...form,sku:e.target.value})} placeholder="SO-TS-001"/></label>
+   <label>SKU / Product code<input value={form.sku} readOnly aria-readonly="true" placeholder="Save product to auto-assign SKU"/><small>{editing?`Serial product code · ${form.sku||"not assigned"}`:"Automatically assigned in sequence when you save (SO-0001, SO-0002…). You do not need to type it."}</small></label>
    <label>Category<select value={form.category} onChange={e=>setForm({...form,category:e.target.value})}><option value="">Uncategorised</option>{categories.map(c=><option value={c._id} key={c._id}>{c.name}</option>)}</select></label>
    <label className="admin-field-wide">Description<textarea required rows="4" maxLength="4000" value={form.description} onChange={e=>setForm({...form,description:e.target.value})} placeholder="Describe the fabric, fit, care instructions and product details."/></label>
    <label className="admin-field-wide">Search tags<input value={form.tags} onChange={e=>setForm({...form,tags:e.target.value})} placeholder="cotton, casual, summer"/></label>
