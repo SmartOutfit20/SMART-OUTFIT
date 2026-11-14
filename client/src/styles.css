@@ -5475,3 +5475,115 @@ body{font-size:16px;line-height:1.6}
  .product-detail-refined .detail-purchase-card{padding:14px 11px}
  .product-detail-refined .detail-purchase-card .color-options{grid-template-columns:minmax(0,1fr)}
 }
+
+
+/* New premium product purchase card — scoped to the product details page. */
+.product-detail-refined .detail-purchase-card-v2{
+  margin-top:22px;padding:0;overflow:hidden;border:1px solid #d9e7dc;border-radius:20px;
+  background:#fff;box-shadow:0 16px 42px rgba(20,55,35,.10);
+}
+.product-detail-refined .detail-purchase-card-v2:before{height:5px;background:linear-gradient(90deg,#116b48 0%,#36a675 55%,#b8dfc7 100%)}
+.product-detail-refined .detail-purchase-card-v2 .purchase-card-heading{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:21px 23px 18px;background:linear-gradient(120deg,#f1f8f3 0%,#fff 72%);
+  border-bottom:1px solid #e6eee8;
+}
+.product-detail-refined .detail-purchase-card-v2 .purchase-card-heading span{
+  display:block;margin-bottom:5px;color:#16845a;font:800 10px Manrope,sans-serif;letter-spacing:1.8px
+}
+.product-detail-refined .detail-purchase-card-v2 .purchase-card-heading h2{
+  margin:0;color:#20382b;font-family:'Hind Siliguri',sans-serif;font-size:21px;font-weight:800;line-height:1.4
+}
+.product-detail-refined .detail-purchase-card-v2 .purchase-card-heading small{
+  flex:0 0 auto;padding:7px 10px;border:1px solid #dce9df;border-radius:20px;
+  background:#fff;color:#648071;font:700 10px Manrope,sans-serif;letter-spacing:1px
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-options-panel{padding:21px 23px 4px;gap:0}
+.product-detail-refined .detail-purchase-card-v2 .detail-option-block{
+  padding:0 0 19px;margin:0 0 19px;border-bottom:1px solid #edf1ee
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-option-block:last-child{margin:0;padding:0;border:0}
+.product-detail-refined .detail-purchase-card-v2 .detail-option-title{color:#20382b;font-size:18px;font-weight:800}
+.product-detail-refined .detail-purchase-card-v2 .detail-option-hint{color:#7a8c80;font-size:13px}
+.product-detail-refined .detail-purchase-card-v2 .size-options{gap:9px;margin-top:4px}
+.product-detail-refined .detail-purchase-card-v2 .size-options button{
+  width:58px;height:52px;border:1px solid #dce7df;border-radius:12px;background:#f9fbf9;
+  color:#30483a;font-size:16px;font-weight:800;box-shadow:none
+}
+.product-detail-refined .detail-purchase-card-v2 .size-options button.selected{
+  border:1px solid #16845a;background:#16845a;color:#fff;
+  box-shadow:0 5px 13px rgba(22,132,90,.22)
+}
+.product-detail-refined .detail-purchase-card-v2 .size-options button:disabled{background:#f4f5f4;color:#b5beb8;opacity:1}
+.product-detail-refined .detail-purchase-card-v2 .color-options{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:4px}
+.product-detail-refined .detail-purchase-card-v2 .color-options button{
+  min-height:52px;padding:9px 12px;border:1px solid #e1e9e3;border-radius:12px;
+  background:#fbfcfb;color:#354b3c;font-size:14px;font-weight:700;box-shadow:none
+}
+.product-detail-refined .detail-purchase-card-v2 .color-options button.selected{
+  border:1.5px solid #16845a;background:#eff8f1;color:#146c49;
+  box-shadow:inset 0 0 0 1px #16845a
+}
+.product-detail-refined .detail-purchase-card-v2 .color-options button i{
+  width:25px;height:25px;flex-basis:25px;border:1px solid #d7dfd9;box-shadow:inset 0 0 0 2px #fff
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-quantity-block{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:17px 18px!important;margin:0 23px 4px!important;border:1px solid #e5eee7!important;
+  border-radius:13px;background:#f7faf7
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-quantity-heading{gap:2px}
+.product-detail-refined .detail-purchase-card-v2 .detail-quantity-heading .detail-option-title{font-size:16px}
+.product-detail-refined .detail-purchase-card-v2 .detail-quantity-heading .detail-option-hint{font-size:12px}
+.product-detail-refined .detail-purchase-card-v2 .qty-control{min-width:142px;height:46px;border:1px solid #dce8df;border-radius:11px;background:#fff}
+.product-detail-refined .detail-purchase-card-v2 .qty-control button{background:#edf5ef;color:#16784f}
+.product-detail-refined .detail-purchase-card-v2 .detail-action-buttons{
+  display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:18px 23px 0
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-action-buttons .btn{
+  min-height:54px;border-radius:12px;font-size:14px;font-weight:800;letter-spacing:0
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-action-buttons .detail-add-btn{
+  border:1.5px solid #16845a;background:#fff;color:#13734d
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-action-buttons .detail-buy-btn{
+  border:1px solid #16845a;background:#16845a;color:#fff;box-shadow:0 7px 16px rgba(22,132,90,.2)
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-trust-row{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;
+  margin:18px 0 0;padding:15px 18px;background:#f6faf7;border-top:1px solid #e8f0ea
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-trust-row span{
+  display:flex;align-items:center;justify-content:center;gap:6px;min-width:0;
+  padding:8px 5px;border:0;border-radius:8px;background:transparent;color:#607568;
+  font-size:11px;line-height:1.45;text-align:center
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-trust-row svg{color:#16845a}
+@media(max-width:820px) and (min-width:651px){
+ .product-detail-refined .detail-purchase-card-v2 .detail-trust-row{grid-template-columns:1fr}
+ .product-detail-refined .detail-purchase-card-v2 .detail-trust-row span{justify-content:flex-start}
+}
+@media(max-width:650px){
+ .product-detail-refined .detail-purchase-card-v2{margin-top:18px;border-radius:16px}
+ .product-detail-refined .detail-purchase-card-v2 .purchase-card-heading{padding:17px 16px 14px}
+ .product-detail-refined .detail-purchase-card-v2 .purchase-card-heading h2{font-size:19px}
+ .product-detail-refined .detail-purchase-card-v2 .detail-options-panel{padding:17px 16px 3px}
+ .product-detail-refined .detail-purchase-card-v2 .detail-option-block{padding-bottom:16px;margin-bottom:16px}
+ .product-detail-refined .detail-purchase-card-v2 .detail-option-title{font-size:17px}
+ .product-detail-refined .detail-purchase-card-v2 .detail-option-hint{font-size:13px}
+ .product-detail-refined .detail-purchase-card-v2 .size-options button{width:53px;height:49px}
+ .product-detail-refined .detail-purchase-card-v2 .color-options{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .product-detail-refined .detail-purchase-card-v2 .color-options button{min-height:49px;padding:8px;font-size:12px}
+ .product-detail-refined .detail-purchase-card-v2 .detail-quantity-block{margin:0 16px 3px!important;padding:13px 12px!important}
+ .product-detail-refined .detail-purchase-card-v2 .detail-action-buttons{grid-template-columns:1fr;gap:9px;margin:15px 16px 0}
+ .product-detail-refined .detail-purchase-card-v2 .detail-action-buttons .btn{min-height:52px;font-size:15px}
+ .product-detail-refined .detail-purchase-card-v2 .detail-trust-row{grid-template-columns:1fr;gap:2px;margin-top:14px;padding:11px 16px}
+ .product-detail-refined .detail-purchase-card-v2 .detail-trust-row span{justify-content:flex-start;padding:7px 3px;font-size:12px}
+}
+@media(max-width:360px){
+ .product-detail-refined .detail-purchase-card-v2 .color-options{grid-template-columns:1fr}
+ .product-detail-refined .detail-purchase-card-v2 .purchase-card-heading h2{font-size:17px}
+}
+@media(prefers-reduced-motion:reduce){
+ .product-detail-refined .detail-purchase-card-v2 *{transition:none!important}
+}
