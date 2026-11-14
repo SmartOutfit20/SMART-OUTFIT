@@ -4621,3 +4621,21 @@ button,input,select,textarea{font-family:inherit}
  .checkout-summary-heading h3{font-size:18px!important;line-height:1.45!important}
  .checkout-summary-heading>div>span{font-size:8px;letter-spacing:.8px}
 }
+
+
+/* Correct layout inheritance for every section inside the checkout summary */
+.checkout-order-summary>.checkout-summary-items{display:grid!important;grid-template-columns:minmax(0,1fr)!important;align-items:stretch!important;justify-content:initial!important;gap:0!important}
+.checkout-order-summary>.checkout-summary-details{display:grid!important;grid-template-columns:minmax(0,1fr)!important;align-items:stretch!important;justify-content:initial!important;gap:8px!important;padding:15px 0!important}
+.checkout-order-summary>.checkout-summary-totals{display:grid!important;grid-template-columns:minmax(0,1fr)!important;align-items:stretch!important;justify-content:initial!important;gap:12px!important;padding:16px 0 12px!important}
+.checkout-order-summary>.checkout-summary-details>.checkout-summary-detail-head{display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:8px!important;margin:8px 0 0!important;font-size:13px!important}
+.checkout-order-summary>.checkout-summary-details>.checkout-summary-detail-head:first-child{margin-top:0!important}
+.checkout-order-summary>.checkout-summary-details>p{display:block!important;margin:0 0 0 24px!important;font-size:12px!important;line-height:1.65!important;text-align:left!important;white-space:normal!important;overflow-wrap:anywhere!important}
+.checkout-order-summary>.checkout-summary-totals>div{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;margin:0!important;font-size:13px!important;line-height:1.5!important}
+.checkout-order-summary>.checkout-summary-totals>.checkout-grand-total{margin-top:3px!important;padding:14px 13px!important}
+.checkout-order-summary>.checkout-summary-delivery-note{display:block!important;text-align:left!important;line-height:1.7!important;white-space:normal!important;overflow-wrap:anywhere!important}
+.checkout-order-summary>.checkout-summary-trust{display:flex!important;align-items:flex-start!important;justify-content:flex-start!important;gap:9px!important;margin:14px 0 0!important;text-align:left!important;white-space:normal!important}
+.checkout-order-summary>.checkout-summary-trust span{display:block;min-width:0;line-height:1.65!important;overflow-wrap:anywhere}
+@media(max-width:560px){
+ .checkout-order-summary>.checkout-summary-details>p{font-size:12px!important}
+ .checkout-order-summary>.checkout-summary-totals>div{font-size:13px!important}
+}
