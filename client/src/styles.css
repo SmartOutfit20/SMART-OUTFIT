@@ -5212,3 +5212,56 @@ button,input,select,textarea{font-family:inherit}
  .product-detail-refined .detail-related-heading h2{font-size:20px}
 }
 @media(prefers-reduced-motion:reduce){.product-detail-refined .detail-thumbnails button{transition:none}}
+
+
+/* Clear, spacious product variant selectors and purchase controls */
+.product-detail-refined .detail-options-panel{gap:20px;padding:20px;background:#fbfdfb}
+.product-detail-refined .detail-option-block{display:flex;flex-direction:column;gap:12px}
+.product-detail-refined .detail-option-block .option-label{display:flex;flex-direction:column;align-items:flex-start;gap:4px;margin:0}
+.product-detail-refined .detail-option-title{display:block;color:#26372d;font-size:14px;font-weight:800;line-height:1.5}
+.product-detail-refined .detail-option-hint{display:block;color:#87938a;font-size:11px;line-height:1.55;text-align:left}
+.product-detail-refined .size-options{display:flex;flex-wrap:wrap;gap:10px}
+.product-detail-refined .size-options button{width:52px;height:48px;display:grid;place-items:center;border:1px solid #dbe5dd;border-radius:9px;background:#fff;color:#33443a;font:800 13px Manrope,sans-serif;transition:border-color .18s,background .18s,transform .18s}
+.product-detail-refined .size-options button.selected{border:2px solid #16845a;background:#eaf5ee;color:#126c48;box-shadow:0 0 0 3px #16845a16}
+.product-detail-refined .size-options button:disabled{opacity:.35;text-decoration:line-through;cursor:not-allowed}
+.product-detail-refined .color-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:9px}
+.product-detail-refined .color-options button{width:100%;min-width:0;min-height:48px;display:flex;align-items:center;justify-content:flex-start;gap:10px;padding:9px 12px;border:1px solid #e0e8e2;border-radius:9px;background:#fff;color:#435247;font-family:'Hind Siliguri',sans-serif;font-size:12px;font-weight:650;text-align:left;transition:border-color .18s,background .18s}
+.product-detail-refined .color-options button i{width:22px;height:22px;flex:0 0 22px;border:1px solid #0002;border-radius:50%;box-shadow:inset 0 0 0 2px #fff}
+.product-detail-refined .color-options button span{min-width:0;overflow-wrap:anywhere}
+.product-detail-refined .color-options button.selected{border:2px solid #16845a;background:#eef7f0;color:#176d49;box-shadow:0 0 0 2px #16845a12}
+.product-detail-refined .color-options button:disabled{opacity:.38;cursor:not-allowed}
+.product-detail-refined .detail-quantity-block{display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:18px;padding-top:15px;border-top:1px solid #e8eee9}
+.product-detail-refined .detail-quantity-heading{display:flex;flex-direction:column;gap:3px}
+.product-detail-refined .qty-control{height:46px;min-width:132px;display:flex;align-items:center;justify-content:space-between;gap:0;padding:4px;border:1px solid #dce5de;border-radius:10px;background:#fff}
+.product-detail-refined .qty-control button{width:36px;height:36px;display:grid;place-items:center;border:0;border-radius:7px;background:#f0f6f1;color:#16845a}
+.product-detail-refined .qty-control button:not(:disabled):hover{background:#e1f0e5}
+.product-detail-refined .qty-control button:disabled{opacity:.35}
+.product-detail-refined .qty-control b{min-width:26px;color:#26372d;font:800 14px Manrope,sans-serif;text-align:center}
+.product-detail-refined .detail-action-buttons{gap:12px;margin-top:18px}
+.product-detail-refined .detail-action-buttons .btn{display:flex;align-items:center;justify-content:center;gap:10px;padding:12px 16px;font-size:14px;font-weight:800;line-height:1.4;white-space:normal;transition:background .18s,border-color .18s,transform .18s}
+.product-detail-refined .detail-action-buttons .btn:not(:disabled):active{transform:translateY(1px)}
+.product-detail-refined .detail-action-buttons .detail-add-btn{background:#fff;color:#16845a}
+.product-detail-refined .detail-action-buttons .detail-buy-btn{border:1px solid #16845a;background:#16845a;color:#fff}
+.product-detail-refined .detail-action-buttons .btn:disabled{opacity:.45;cursor:not-allowed}
+@media(max-width:650px){
+ .product-detail-refined .detail-options-panel{gap:18px;padding:15px}
+ .product-detail-refined .detail-option-title{font-size:13px}
+ .product-detail-refined .detail-option-hint{font-size:10px}
+ .product-detail-refined .size-options{gap:8px}
+ .product-detail-refined .size-options button{width:48px;height:45px}
+ .product-detail-refined .color-options{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .product-detail-refined .color-options button{min-height:46px;padding:8px;font-size:11px;gap:7px}
+ .product-detail-refined .color-options button i{width:19px;height:19px;flex-basis:19px}
+ .product-detail-refined .detail-quantity-block{align-items:center}
+ .product-detail-refined .qty-control{min-width:124px;height:44px}
+ .product-detail-refined .qty-control button{width:34px;height:34px}
+ .product-detail-refined .detail-action-buttons{grid-template-columns:1fr;gap:9px}
+ .product-detail-refined .detail-action-buttons .btn{min-height:50px;font-size:14px}
+}
+@media(max-width:360px){
+ .product-detail-refined .color-options{grid-template-columns:minmax(0,1fr)}
+ .product-detail-refined .detail-quantity-block{align-items:flex-start;flex-direction:column}
+}
+@media(prefers-reduced-motion:reduce){
+ .product-detail-refined .size-options button,.product-detail-refined .color-options button,.product-detail-refined .detail-action-buttons .btn{transition:none}
+}
