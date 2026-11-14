@@ -16,7 +16,7 @@ export function Home(){
  const [banners,setBanners]=useState([])
  const [activeBanner,setActiveBanner]=useState(0)
  const bannerTouchStartX=useRef(null)
- useEffect(()=>{getProducts({limit:4}).then(r=>{if(r.items?.length)setLatest(r.items.map(normalizeProduct))}).catch(()=>{});api.get('/storefront').then(({data})=>{const items=Array.isArray(data.homepageBanners)?data.homepageBanners.filter(x=>x&&x.enabled!==false).sort((x,y)=>(x.sortOrder||0)-(y.sortOrder||0)):[];setBanners(items)}).catch(()=>{})},[])
+ useEffect(()=>{getProducts({limit:4}).then(r=>{if(r.items?.length)setLatest(r.items.map(normalizeProduct))}).catch(()=>{});api.get('/storefront').then(({data})=>{const items=Array.isArray(data.homepageBanners)?data.homepageBanners.filter(x=>x&&x.enabled!==false&&typeof x.image==='string'&&x.image.trim()).sort((x,y)=>(x.sortOrder||0)-(y.sortOrder||0)):[];setBanners(items)}).catch(()=>{})},[])
  useEffect(()=>{if(activeBanner>=banners.length)setActiveBanner(0)},[banners.length,activeBanner])
  useEffect(()=>{if(banners.length<2)return;const timer=window.setInterval(()=>setActiveBanner(current=>(current+1)%banners.length),4500);return()=>window.clearInterval(timer)},[banners.length])
  const featured=latest
