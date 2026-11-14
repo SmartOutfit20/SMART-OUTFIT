@@ -5063,3 +5063,43 @@ button,input,select,textarea{font-family:inherit}
     gap: 14px;
   }
 }
+
+
+/* Slightly inset storefront content so it sits safely inside the
+   unchanged header and footer content edges on desktop and tablet. */
+@media (min-width: 1101px) {
+  .site-main > .hero,
+  .site-main > .benefits,
+  .site-main > .section,
+  .site-main > .promo,
+  .site-main > .page-wrap,
+  .site-main > .auth-wrap,
+  .site-main > .account-wrap,
+  .site-main > .orders-page,
+  .site-main > .info-page {
+    box-sizing: border-box;
+    width: min(1200px, calc(100% - 48px));
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 0;
+  }
+}
+@media (min-width: 821px) and (max-width: 1100px) {
+  .site-main > .hero,
+  .site-main > .benefits,
+  .site-main > .section,
+  .site-main > .promo,
+  .site-main > .page-wrap,
+  .site-main > .auth-wrap,
+  .site-main > .account-wrap,
+  .site-main > .orders-page,
+  .site-main > .info-page {
+    box-sizing: border-box;
+    width: calc(100% - 48px);
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 0;
+  }
+}
