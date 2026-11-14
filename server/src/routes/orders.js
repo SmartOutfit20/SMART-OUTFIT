@@ -104,12 +104,18 @@ router.post('/', async (req, res, next) => {
       }
 
       // MongoDB sessions do not support parallel operations inside a transaction.
-      const deliverySetting = await Setting.findOne({ key: 'deliveryCharge' }).session(session).lean()
+      const insideDeliverySetting = await Setting.findOne({ key: 'insideDhakaDeliveryCharge' }).session(session).lean()
+      const outsideDeliverySetting = await Setting.findOne({ key: 'outsideDhakaDeliveryCharge' }).session(session).lean()
+      const legacyDeliverySetting = await Setting.findOne({ key: 'deliveryCharge' }).session(session).lean()
       const freeThresholdSetting = await Setting.findOne({ key: 'freeShippingThreshold' }).session(session).lean()
       const advanceEnabledSetting = await Setting.findOne({ key: 'advancePaymentEnabled' }).session(session).lean()
-      const configuredDelivery = Number(deliverySetting?.value ?? process.env.DELIVERY_CHARGE_BDT ?? 100)
+      const legacyDelivery = Number(legacyDeliverySetting?.value ?? process.env.DELIVERY_CHARGE_BDT ?? 100)
+      const insideDelivery = Number(insideDeliverySetting?.value ?? legacyDelivery)
+      const outsideDelivery = Number(outsideDeliverySetting?.value ?? legacyDelivery)
       const freeShippingThreshold = Number(freeThresholdSetting?.value ?? 3000)
       const advancePaymentEnabled = advanceEnabledSetting?.value !== false
+      const isInsideDhaka = address.district.toLocaleLowerCase('en-BD') === 'dhaka'
+      const configuredDelivery = isInsideDhaka ? insideDelivery : outsideDelivery
       const deliveryCharge = calculateDeliveryCharge(subtotal, configuredDelivery, freeShippingThreshold)
       const advancePaymentAmount = advancePaymentEnabled ? deliveryCharge : 0
       if (advancePaymentAmount > 0 && (!['bkash', 'nagad'].includes(advancePaymentMethod) || !/^01[3-9]\d{8}$/.test(advancePaymentSender) || advancePaymentTransactionId.length < 6 || advancePaymentTransactionId.length > 80)) {
