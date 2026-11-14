@@ -7629,7 +7629,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 @media (max-width: 900px) {
   .header {
     height: auto;
-    min-height: 114px;
+    min-height: 112px;
     flex-wrap: wrap;
     row-gap: 5px;
     padding-top: 9px;
@@ -7656,7 +7656,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 @media (max-width: 650px) {
   .header {
-    min-height: 108px;
+    min-height: 112px;
     row-gap: 3px;
     padding-top: 7px;
     padding-bottom: 7px;
