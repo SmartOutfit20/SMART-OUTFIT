@@ -9432,3 +9432,30 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   .footer-complete .payment-mastercard i+i { margin-left: -6px; }
   .footer-complete .payment-amex { font-size: 9px; }
 }
+
+
+/* Tablet footer payment marks: keep all accepted methods on one row */
+@media (min-width: 651px) and (max-width: 900px) {
+  .footer-complete .footer-payment-logos {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 4px;
+    width: max-content;
+    max-width: 100%;
+  }
+  .footer-complete .payment-logo {
+    flex: 0 1 39px;
+    min-width: 0;
+    height: 24px;
+    padding: 0 3px;
+    font-size: 9px;
+  }
+  .footer-complete .payment-visa { font-size: 13px; }
+  .footer-complete .payment-nagad,
+  .footer-complete .payment-rocket { font-size: 8px; }
+  .footer-complete .payment-mastercard { min-width: 0; }
+  .footer-complete .payment-mastercard i { width: 15px; height: 15px; }
+  .footer-complete .payment-mastercard i+i { margin-left: -6px; }
+  .footer-complete .payment-amex { font-size: 9px; }
+}
