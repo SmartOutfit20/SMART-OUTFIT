@@ -9125,7 +9125,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   }
 }
 
-/* Desktop footer social links: compact branded logo buttons in one row */
+/* Desktop footer social links: polished brand-style buttons in one row */
 @media (min-width: 901px) {
   .footer-complete .footer-social-links {
     display: flex;
@@ -9143,30 +9143,34 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     justify-content: center;
     gap: 5px;
     min-width: 0;
-    padding: 6px 8px;
-    border: 1px solid #ffffff30;
-    border-radius: 7px;
+    padding: 7px 8px;
+    border: 1px solid #ffffff35;
+    border-radius: 8px;
+    background: #ffffff0d;
+    color: #f7f3fa;
     font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .1px;
     line-height: 1;
     white-space: nowrap;
+    box-shadow: 0 2px 8px #00000012;
+    transition: background .2s ease, border-color .2s ease, transform .2s ease, box-shadow .2s ease;
   }
   .footer-complete .footer-social-links a svg {
     display: block;
-    width: 14px;
-    height: 14px;
-    flex: 0 0 14px;
+    width: 15px;
+    height: 15px;
+    flex: 0 0 15px;
   }
-  .footer-complete .footer-social-links a:nth-child(1) svg {
-    color: #1877f2;
-  }
-  .footer-complete .footer-social-links a:nth-child(2) svg {
-    color: #f16aa8;
-  }
-  .footer-complete .footer-social-links a:nth-child(3) svg {
-    color: #ff3030;
-  }
-  .footer-complete .footer-social-links a:nth-child(4) svg {
-    color: #25f4ee;
+  .footer-complete .footer-social-links .social-facebook svg { color: #1877f2; }
+  .footer-complete .footer-social-links .social-instagram { border-color: #e76b9a70; }
+  .footer-complete .footer-social-links .social-youtube { border-color: #ff003355; }
+  .footer-complete .footer-social-links .social-tiktok { border-color: #25f4ee55; }
+  .footer-complete .footer-social-links a:hover {
+    background: #ffffff1c;
+    border-color: #ffffff85;
+    box-shadow: 0 5px 14px #00000025;
+    transform: translateY(-2px);
   }
 }
 
