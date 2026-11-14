@@ -23,7 +23,7 @@ async function ensureOrderSerials(session) {
       const serial = current + index + 1
       return { updateOne: {
         filter: { _id: item._id, serialNumber: { $exists: false } },
-        update: { $set: { serialNumber: serial, orderNumber: '#' + String(serial).padStart(6, '0') } }
+        update: { $set: { serialNumber: serial, orderNumber: '#' + String(serial).padStart(4, '0') } }
       } }
     }), { session, ordered: true })
   } else if (current > (Number(counter?.value) || 0)) {
@@ -38,7 +38,7 @@ async function nextOrderSerial(session) {
     { new: true, upsert: true, session }
   ).lean()
   const serialNumber = Number(counter.value)
-  return { serialNumber, orderNumber: '#' + String(serialNumber).padStart(6, '0') }
+  return { serialNumber, orderNumber: '#' + String(serialNumber).padStart(4, '0') }
 }
 
 async function migrateOrderSerials() {
