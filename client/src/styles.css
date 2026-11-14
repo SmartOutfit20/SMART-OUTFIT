@@ -9124,3 +9124,48 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     box-sizing: border-box;
   }
 }
+
+/* Desktop footer social links: compact branded logo buttons in one row */
+@media (min-width: 901px) {
+  .footer-complete .footer-social-links {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    width: 100%;
+    max-width: 100%;
+  }
+  .footer-complete .footer-social-links a {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-width: 0;
+    padding: 6px 8px;
+    border: 1px solid #ffffff30;
+    border-radius: 7px;
+    font-size: 9px;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .footer-complete .footer-social-links a svg {
+    display: block;
+    width: 14px;
+    height: 14px;
+    flex: 0 0 14px;
+  }
+  .footer-complete .footer-social-links a:nth-child(1) svg {
+    color: #1877f2;
+  }
+  .footer-complete .footer-social-links a:nth-child(2) svg {
+    color: #f16aa8;
+  }
+  .footer-complete .footer-social-links a:nth-child(3) svg {
+    color: #ff3030;
+  }
+  .footer-complete .footer-social-links a:nth-child(4) svg {
+    color: #25f4ee;
+  }
+}
