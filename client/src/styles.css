@@ -489,18 +489,18 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
 /* SMART OUTFIT centered desktop canvas — preserve the existing visual design */
 @media (min-width: 1101px) {
   .header {
-    padding-left: max(16px, calc((100vw - 1240px) / 2));
-    padding-right: max(16px, calc((100vw - 1240px) / 2));
+    padding-left: max(16px, calc((100vw - 1220px) / 2));
+    padding-right: max(16px, calc((100vw - 1220px) / 2));
   }
   .announcement {
-    padding-left: max(16px, calc((100vw - 1240px) / 2));
-    padding-right: max(16px, calc((100vw - 1240px) / 2));
+    padding-left: max(16px, calc((100vw - 1220px) / 2));
+    padding-right: max(16px, calc((100vw - 1220px) / 2));
   }
   .hero,
   .benefits,
   .section,
   .promo {
-    width: min(1240px, calc(100% - 32px));
+    width: min(1220px, calc(100% - 32px));
     margin-left: auto;
     margin-right: auto;
   }
@@ -509,37 +509,37 @@ body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
   .section { padding-left: 0; padding-right: 0; }
   .promo { padding-left: clamp(48px, 7vw, 88px); padding-right: clamp(48px, 7vw, 88px); }
   .page-wrap {
-    width: min(1240px, calc(100% - 32px));
-    max-width: 1240px;
+    width: min(1220px, calc(100% - 32px));
+    max-width: 1220px;
     margin-left: auto;
     margin-right: auto;
     padding-left: 0;
     padding-right: 0;
   }
   .account-wrap {
-    width: min(1240px, calc(100% - 32px));
-    max-width: 1240px;
+    width: min(1220px, calc(100% - 32px));
+    max-width: 1220px;
     padding-left: 0;
     padding-right: 0;
   }
   .orders-page,
   .info-page {
-    max-width: 1240px;
+    max-width: 1220px;
     margin-left: auto;
     margin-right: auto;
   }
   .footer-complete {
-    padding-left: max(16px, calc((100vw - 1240px) / 2));
-    padding-right: max(16px, calc((100vw - 1240px) / 2));
+    padding-left: max(16px, calc((100vw - 1220px) / 2));
+    padding-right: max(16px, calc((100vw - 1220px) / 2));
   }
   .admin-content {
-    max-width: 1240px;
+    max-width: 1220px;
     margin-left: auto;
     margin-right: auto;
   }
   .admin-top {
-    padding-left: max(16px, calc((100vw - 1240px) / 2));
-    padding-right: max(16px, calc((100vw - 1240px) / 2));
+    padding-left: max(16px, calc((100vw - 1220px) / 2));
+    padding-right: max(16px, calc((100vw - 1220px) / 2));
   }
 }
 @media (min-width: 821px) and (max-width: 1100px) {
@@ -2904,7 +2904,7 @@ button,input,select,textarea{font-family:inherit}
 
 /* SMART OUTFIT — refreshed customer account dashboard */
 .account-dashboard{
-  max-width:1240px!important;
+  max-width:1220px!important;
   padding:clamp(28px,4vw,54px) clamp(16px,3vw,36px) 76px!important;
   color:#263129;
   font-family:'Hind Siliguri','DM Sans',sans-serif;
@@ -3105,7 +3105,7 @@ button,input,select,textarea{font-family:inherit}
 .customer-menu-copy small{font:400 10px 'Hind Siliguri',sans-serif;color:#879188;line-height:1.4}
 .customer-menu-arrow{flex:0 0 auto;color:#a0aaa2}
 .customer-account-menu a.is-active .customer-menu-arrow{color:#16845a}
-.account-subpage{max-width:1240px!important;padding-top:34px!important}
+.account-subpage{max-width:1220px!important;padding-top:34px!important}
 .account-subpage>.customer-account-menu{margin-bottom:26px!important}
 @media(max-width:1000px){.customer-account-menu{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:700px){
@@ -5005,8 +5005,8 @@ button,input,select,textarea{font-family:inherit}
   .site-main > .auth-wrap,
   .site-main > .account-wrap {
     box-sizing: border-box;
-    width: min(1240px, calc(100% - 32px));
-    max-width: 1240px;
+    width: min(1220px, calc(100% - 32px));
+    max-width: 1220px;
     margin-left: auto;
     margin-right: auto;
     padding-left: 0;
@@ -5016,8 +5016,8 @@ button,input,select,textarea{font-family:inherit}
   .site-main > .orders-page,
   .site-main > .info-page {
     box-sizing: border-box;
-    width: min(1240px, calc(100% - 32px));
-    max-width: 1240px;
+    width: min(1220px, calc(100% - 32px));
+    max-width: 1220px;
     margin-left: auto;
     margin-right: auto;
   }
@@ -5030,7 +5030,7 @@ button,input,select,textarea{font-family:inherit}
   .site-main > .info-page {
     box-sizing: border-box;
     width: calc(100% - 40px);
-    max-width: 1240px;
+    max-width: 1220px;
     margin-left: auto;
     margin-right: auto;
     min-width: 0;
