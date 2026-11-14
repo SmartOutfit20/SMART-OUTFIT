@@ -9111,4 +9111,16 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   }
 }
 
-
+/* Tablet-only 35px side gutters for requested customer pages */
+@media (min-width: 651px) and (max-width: 900px) {
+  .page-wrap.orders-page.orders-page-clean,
+  .page-wrap.cart-page,
+  .account-wrap.account-dashboard,
+  .page-wrap.shop-page.shop-page-classic,
+  .footer.footer-complete,
+  .page-wrap.product-detail-refined {
+    padding-left: 35px !important;
+    padding-right: 35px !important;
+    box-sizing: border-box;
+  }
+}
