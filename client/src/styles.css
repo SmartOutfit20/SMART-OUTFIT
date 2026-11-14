@@ -7978,3 +7978,91 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     flex-wrap: wrap;
   }
 }
+
+/* SMART OUTFIT: tablet header — menu and logo left, desktop-style search and actions right. */
+@media (min-width: 651px) and (max-width: 900px) {
+  .header {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    column-gap: 12px;
+    min-height: 80px;
+    height: auto;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .header .mobile-menu-toggle {
+    display: inline-flex;
+    order: 1;
+    flex: 0 0 38px;
+    width: 38px;
+    margin: 0;
+  }
+  .header .brand {
+    order: 2;
+    flex: 0 1 auto;
+    max-width: 30%;
+    min-width: 0;
+    margin: 0;
+  }
+  .header .header-actions.search-expanded {
+    order: 3;
+    display: flex;
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
+    align-items: center;
+    justify-content: flex-end;
+    gap: clamp(5px, 1vw, 10px);
+    margin-left: auto;
+  }
+  .header .mobile-search-toggle {
+    display: none;
+  }
+  .header .header-actions.search-expanded .header-search-panel {
+    position: relative;
+    inset: auto;
+    display: flex;
+    flex: 1 1 220px;
+    width: auto;
+    min-width: 120px;
+    max-width: 310px;
+    height: 42px;
+    min-height: 42px;
+    align-items: center;
+    gap: 9px;
+    margin: 0;
+    padding: 0 11px;
+    border: 1px solid #dfe6e1;
+    border-radius: 5px;
+    background: #fff;
+    box-shadow: 0 3px 12px rgba(22, 132, 90, .08);
+  }
+  .header .header-actions.search-expanded .header-search-field-icon {
+    display: block;
+    flex: 0 0 18px;
+    color: #77717e;
+  }
+  .header .header-actions.search-expanded .header-search-panel input {
+    display: block;
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    height: 38px;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    box-shadow: none;
+    font-size: 13px;
+  }
+  .header .header-actions.search-expanded .icon-btn {
+    order: 3;
+    flex: 0 0 32px;
+    width: 32px;
+    min-width: 32px;
+    height: 36px;
+    padding: 4px;
+  }
+}
