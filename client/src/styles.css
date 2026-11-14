@@ -7656,7 +7656,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 @media (max-width: 650px) {
   .header {
-    min-height: 80px;
+    min-height: 56px;
     row-gap: 3px;
     padding-top: 7px;
     padding-bottom: 7px;
@@ -7716,7 +7716,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 @media (max-width: 650px) {
   .header {
-    min-height: 80px;
+    min-height: 56px;
     height: auto;
     row-gap: 7px;
     padding: 7px 8px 9px;
@@ -7954,5 +7954,15 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   .home-page > .hero.hero-managed .hero-managed-image--incoming,
   .home-page > .hero.hero-managed .hero-managed-image--outgoing {
     animation-duration: .01ms !important;
+  }
+}
+
+
+/* SMART OUTFIT: tablet header sizing and wrapping. */
+@media (min-width: 651px) and (max-width: 900px) {
+  .header {
+    min-height: 180px;
+    height: auto;
+    flex-wrap: wrap;
   }
 }
