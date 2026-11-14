@@ -257,7 +257,11 @@ router.get('/:id/share-image', async (req, res, next) => {
 
 router.get('/:id', async (req, res, next) => {
   try {
-    const item = await Product.findOne({ _id: req.params.id, isPublished: true }).populate('category', 'name slug')
+    const identifier = String(req.params.id || '')
+    const filter = /^[a-f0-9]{24}$/i.test(identifier)
+      ? { _id: identifier, isPublished: true }
+      : { slug: identifier, isPublished: true }
+    const item = await Product.findOne(filter).populate('category', 'name slug')
     if (!item) return res.status(404).json({ message: 'Product not found' })
     res.json(item)
   } catch (e) { next(e) }
