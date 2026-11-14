@@ -139,6 +139,7 @@ export function ProductDetail(){
     {savings>0&&<p className="detail-savings">আপনি সাশ্রয় করছেন <b>{money(savings)}</b></p>}
     {p.description&&<p className="detail-description">{p.description}</p>}
     <div className={selectedStock>0?'detail-stock-line':'detail-stock-line is-out'}><i/>{stockLabel}{selectedStock>0&&selectedStock<=5&&<span> · দ্রুত অর্ডার করুন</span>}</div>
+    <section className="detail-purchase-card" aria-label="পণ্যের অপশন ও অর্ডার">
     <div className="detail-options-panel">
      <div className="detail-option-block">
       <div className="option-label"><span className="detail-option-title">সাইজ নির্বাচন করুন</span><span className="detail-option-hint">আপনার পছন্দের সাইজে ট্যাপ করুন</span></div>
@@ -149,6 +150,7 @@ export function ProductDetail(){
     </div>
     <div className="detail-action-buttons"><button type="button" className="btn btn-outline detail-add-btn" disabled={!p._id||selectedStock<1||qty>selectedStock} onClick={()=>{for(let i=0;i<qty;i++)addToCart({...p,stock:selectedStock},size,color)}}><span>{!p._id?'PREVIEW ONLY':selectedStock<1?'স্টকে নেই':'কার্টে যোগ করুন'}</span></button><button type="button" className="btn btn-dark detail-buy-btn" disabled={!p._id||selectedStock<1||qty>selectedStock} onClick={()=>{for(let i=0;i<qty;i++)addToCart({...p,stock:selectedStock},size,color);navigate('/checkout')}}><span>{!p._id?'PREVIEW ONLY':selectedStock<1?'স্টকে নেই':'এখনই কিনুন'}</span><ArrowRight size={17}/></button></div>
     <div className="detail-trust-row"><span><ShieldCheck size={17}/> নিরাপদ কেনাকাটা</span><span><Truck size={17}/> দেশজুড়ে ডেলিভারি</span><span><RotateCcw size={17}/> সহজ রিটার্ন সাপোর্ট</span></div>
+    </section>
    </div>
   </div>
   {relatedProducts.length>0&&<section className="section detail-related-section shop-page-classic"><div className="detail-related-heading"><span className="eyebrow">আপনার জন্য বাছাই করা</span><h2>এগুলোও আপনার ভালো লাগতে পারে</h2><p>আপনার পছন্দের সঙ্গে মানানসই আরও কিছু স্টাইল</p></div><div className="product-grid shop-product-grid">{relatedProducts.map(x=><ProductCard key={x.id} product={x}/>)}</div></section>}
