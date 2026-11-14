@@ -152,7 +152,7 @@ export function Checkout(){
  const [error,setError]=useState(''),[busy,setBusy]=useState(false),[placed,setPlaced]=useState(null),[couponCode,setCouponCode]=useState(''),[coupon,setCoupon]=useState(null),[couponMessage,setCouponMessage]=useState(''),[couponBusy,setCouponBusy]=useState(false),[insideDelivery,setInsideDelivery]=useState(100),[outsideDelivery,setOutsideDelivery]=useState(130),[freeShippingThreshold,setFreeShippingThreshold]=useState(3000),[paymentSettings,setPaymentSettings]=useState({}),[advanceMethod,setAdvanceMethod]=useState('bkash'),[advanceSender,setAdvanceSender]=useState(''),[advanceTransaction,setAdvanceTransaction]=useState('')
  const invalidCartItems=cart.filter(x=>! /^[a-f0-9]{24}$/i.test(String(x._id||x.id||'')))
  const subtotal=cart.reduce((n,x)=>n+x.price*x.qty,0),discount=Number(coupon?.discount||0)
- const isInsideDhaka=String(form.district||'').trim().toLowerCase()==='dhaka'
+ const isInsideDhaka=['dhaka','ঢাকা'].includes(String(form.district||'').trim().toLowerCase())
  const selectedDelivery=isInsideDhaka?insideDelivery:outsideDelivery
  const deliveryFee=freeShippingThreshold>0&&subtotal>=freeShippingThreshold?0:selectedDelivery
  const total=Math.max(0,subtotal-discount+deliveryFee)
