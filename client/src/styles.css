@@ -4102,3 +4102,94 @@ button,input,select,textarea{font-family:inherit}
   background:#116b49;
   border-color:#116b49;
 }
+
+
+/* Make homepage New Collection cards follow the exact mobile Shop card rhythm */
+@media(max-width:700px){
+  .home-new-collection .shop-product-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:15px 10px;
+    align-items:start;
+  }
+  .home-new-collection .shop-product-grid>.product-card{
+    min-width:0;
+    width:100%;
+    max-width:100%;
+  }
+  .home-new-collection .shop-product-grid .product-art{
+    width:100%;
+    aspect-ratio:1/1;
+    height:auto;
+    min-height:0;
+  }
+  .home-new-collection .shop-product-grid .product-info{
+    display:flex;
+    flex-direction:column;
+    min-width:0;
+    padding:10px 9px 11px!important;
+  }
+  .home-new-collection .shop-product-grid .product-category{
+    margin:0 0 3px;
+    line-height:1.25;
+  }
+  .home-new-collection .shop-product-grid .product-name{
+    min-height:0;
+    margin:3px 0 5px;
+    font-size:clamp(10px,3vw,12px);
+    line-height:1.35;
+    overflow-wrap:anywhere;
+  }
+  .home-new-collection .shop-product-grid .product-bottom{
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    gap:8px;
+    margin:0!important;
+    padding:0;
+    line-height:1.25;
+    color:#16845a!important;
+  }
+  .home-new-collection .shop-product-grid .product-bottom>div{
+    display:flex;
+    align-items:baseline;
+    flex-wrap:wrap;
+    gap:7px;
+  }
+  .home-new-collection .shop-product-grid .product-bottom b{
+    color:#16845a!important;
+    font-weight:850;
+  }
+  .home-new-collection .shop-product-grid .product-bottom del{
+    color:#929a94!important;
+    font-size:10px;
+  }
+  .home-new-collection .shop-product-grid .product-card-actions{
+    padding:0!important;
+    margin-top:8px!important;
+    gap:6px;
+  }
+  .home-new-collection .shop-product-grid .quick-add,
+  .home-new-collection .shop-product-grid .stock-out{
+    position:static;
+    display:flex;
+    opacity:1;
+    transform:none;
+    width:100%;
+    min-height:42px;
+    height:42px;
+    margin:0;
+    padding:0 10px;
+    border-radius:10px!important;
+    box-sizing:border-box;
+    font-size:10px;
+  }
+}
+@media(max-width:380px){
+  .home-new-collection .shop-product-grid{gap:13px 8px}
+  .home-new-collection .shop-product-grid .quick-add,
+  .home-new-collection .shop-product-grid .stock-out{font-size:9px;padding:0 5px}
+}
+@media(prefers-reduced-motion:reduce){
+  .home-new-collection .shop-product-grid .quick-add{transition:none}
+}
