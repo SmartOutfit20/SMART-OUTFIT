@@ -262,6 +262,7 @@ router.post('/', ...adminOnly, async (req, res, next) => {
     payload.slug = await uniqueProductSlug(payload.slug)
     await assignProductSerial(payload)
     const product = await Product.create(payload)
+    ActivityLog.create({actor:req.user.sub,action:'product.created',resource:'product',resourceId:product._id.toString(),ip:String(req.ip||'').slice(0,80),metadata:{name:product.name,sku:product.sku||''}}).catch(()=>{})
     res.status(201).json(product)
   } catch (e) { next(productWriteError(e)) }
 })
@@ -275,6 +276,7 @@ router.patch('/:id', ...adminOnly, async (req, res, next) => {
     if (product.slug && product.slug !== payload.slug) product.legacySlugs.addToSet(product.slug)
     product.set(payload)
     await product.save()
+    ActivityLog.create({actor:req.user.sub,action:'product.updated',resource:'product',resourceId:product._id.toString(),ip:String(req.ip||'').slice(0,80),metadata:{name:product.name,sku:product.sku||''}}).catch(()=>{})
     res.json(product)
   } catch (e) { next(productWriteError(e)) }
 })
@@ -283,6 +285,7 @@ router.delete('/:id', ...adminOnly, async (req, res, next) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id)
     if (!product) return res.status(404).json({ message: 'Product not found' })
+    ActivityLog.create({actor:req.user.sub,action:'product.deleted',resource:'product',resourceId:product._id.toString(),ip:String(req.ip||'').slice(0,80),metadata:{name:product.name,sku:product.sku||''}}).catch(()=>{})
     res.json({ message: 'Product deleted' })
   } catch (e) { next(e) }
 })
