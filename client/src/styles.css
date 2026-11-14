@@ -7321,7 +7321,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 .home-page > .hero.hero-managed .hero-copy {
   width: 100%;
-  max-width: 680px;
+  max-width: 400px;
   min-width: 0;
   grid-column: auto;
   z-index: 1;
