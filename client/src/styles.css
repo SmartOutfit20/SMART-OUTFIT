@@ -9329,3 +9329,72 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 @media (prefers-reduced-motion: reduce) {
   .footer-complete .footer-social-links a { transition: none; }
 }
+
+
+/* Footer payment method marks */
+.footer-complete .footer-payment { margin-top: 20px; }
+.footer-complete .footer-payment>b {
+  display: block;
+  margin-bottom: 10px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .8px;
+}
+.footer-complete .footer-payment-logos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  max-width: 100%;
+}
+.footer-complete .payment-logo {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-width: 48px;
+  height: 27px;
+  padding: 0 7px;
+  overflow: hidden;
+  border-radius: 5px;
+  background: #fff;
+  box-shadow: 0 2px 7px #00000018;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -.35px;
+}
+.footer-complete .payment-bkash { color: #d12053; font-style: italic; }
+.footer-complete .payment-nagad { color: #ef6b22; font-size: 10px; }
+.footer-complete .payment-nagad i {
+  width: 8px; height: 8px; margin-right: 4px;
+  border: 2px solid #ef6b22; border-radius: 50%;
+}
+.footer-complete .payment-rocket { color: #7b2c91; font-size: 10px; }
+.footer-complete .payment-rocket i {
+  width: 7px; height: 12px; margin-right: 4px;
+  border-radius: 60% 60% 45% 45%;
+  background: linear-gradient(180deg,#ec4b9b 0 35%,#71359a 36% 100%);
+  transform: rotate(18deg);
+}
+.footer-complete .payment-visa { color: #173b83; font-size: 15px; font-style: italic; }
+.footer-complete .payment-mastercard { min-width: 48px; }
+.footer-complete .payment-mastercard i {
+  width: 17px; height: 17px; border-radius: 50%;
+  background: #eb001b;
+}
+.footer-complete .payment-mastercard i+i {
+  margin-left: -7px; background: #f79e1b; opacity: .95;
+}
+.footer-complete .payment-amex {
+  color: #fff; background: #2475b9; font-size: 11px; letter-spacing: .1px;
+}
+@media (max-width: 650px) {
+  .footer-complete .footer-payment { margin-top: 17px; }
+  .footer-complete .footer-payment-logos { gap: 6px; }
+  .footer-complete .payment-logo { min-width: 45px; height: 25px; padding: 0 6px; font-size: 10px; }
+  .footer-complete .payment-visa { font-size: 14px; }
+}
