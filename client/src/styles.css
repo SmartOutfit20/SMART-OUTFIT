@@ -7341,6 +7341,20 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     min-height: 400px;
     padding: 28px 22px;
   }
+  /* Mobile managed banners display as a clean 393 x 129 image strip. */
+  .home-page > .hero.hero-managed {
+    width: 100%;
+    max-width: 393px;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 393 / 129;
+    padding: 0;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .home-page > .hero.hero-managed .hero-copy {
+    display: none;
+  }
   .home-page > .hero.hero-managed .hero-copy {
     max-width: 100%;
   }
