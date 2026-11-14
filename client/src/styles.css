@@ -8446,3 +8446,11 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     grid-column: 1 / -1;
   }
 }
+
+
+/* SMART OUTFIT: tablet-only footer top spacing adjustment */
+@media (min-width: 651px) and (max-width: 900px) {
+  .footer.footer-complete {
+    padding-top: 25px !important;
+  }
+}
