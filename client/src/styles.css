@@ -8066,3 +8066,20 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     padding: 4px;
   }
 }
+
+/* SMART OUTFIT: tablet search starts beside the logo; action icons stay at the far right. */
+@media (min-width: 651px) and (max-width: 900px) {
+  .header .header-actions.search-expanded {
+    justify-content: flex-start;
+  }
+  .header .header-actions.search-expanded .header-search-panel {
+    flex: 1 1 180px;
+    width: auto;
+    min-width: 100px;
+    max-width: none;
+    margin-right: auto;
+  }
+  .header .header-actions.search-expanded .wishlist-icon {
+    margin-left: auto;
+  }
+}
