@@ -2,7 +2,8 @@ import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-do
 import { ShoppingBag, Package, Menu, X, UserRound, Heart, House, ChevronDown, ChevronRight, Shirt, Tag, Star, Sparkles, Watch, Footprints, Baby, Gem, Gift, Flame, Crown, Glasses, Backpack, Search, Facebook, Instagram, Youtube, Music2, Download, Phone, ArrowUp } from 'lucide-react'
 import { useShop } from '../context/ShopContext'
 import { useEffect, useLayoutEffect, useState } from 'react'
-import api from '../services/api'\nimport RouteErrorBoundary from './RouteErrorBoundary'
+import api from '../services/api'
+import RouteErrorBoundary from './RouteErrorBoundary'
 
 const MENU_ICONS={shirt:Shirt,tag:Tag,'shopping-bag':ShoppingBag,star:Star,sparkles:Sparkles,heart:Heart,watch:Watch,footprints:Footprints,baby:Baby,gem:Gem,gift:Gift,flame:Flame,crown:Crown,glasses:Glasses,backpack:Backpack}
 export function Layout(){
