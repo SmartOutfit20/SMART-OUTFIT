@@ -7789,3 +7789,81 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     display: flex;
   }
 }
+
+/* SMART OUTFIT: mobile header keeps menu + logo on the left and all actions on the right. */
+@media (max-width: 900px) {
+  .header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    column-gap: 10px;
+    row-gap: 6px;
+  }
+  .header .mobile-menu-toggle {
+    order: 1;
+    flex: 0 0 auto;
+  }
+  .header .brand {
+    order: 2;
+    flex: 0 1 auto;
+    min-width: 0;
+    margin-right: 0;
+  }
+  .header .mobile-search-toggle {
+    order: 3;
+    margin-left: auto;
+    flex: 0 0 30px;
+  }
+  .header .header-actions.search-expanded .icon-btn {
+    order: 3;
+    flex: 0 0 30px;
+    width: 30px;
+    min-width: 30px;
+    justify-content: center;
+  }
+  .header .header-actions.search-expanded .header-search-panel {
+    order: 4;
+    flex: 0 0 100%;
+    width: 100%;
+  }
+}
+@media (max-width: 650px) {
+  .header {
+    column-gap: 7px;
+    row-gap: 7px;
+  }
+  .header .brand {
+    font-size: 12px;
+    gap: 7px;
+  }
+  .header .mobile-search-toggle,
+  .header .header-actions.search-expanded .icon-btn {
+    flex-basis: 28px;
+    width: 28px;
+    min-width: 28px;
+  }
+}
+@media (max-width: 370px) {
+  .header {
+    column-gap: 5px;
+    padding-left: 9px;
+    padding-right: 9px;
+  }
+  .header .brand {
+    font-size: 11px;
+    letter-spacing: .5px;
+    gap: 5px;
+  }
+  .header .brand-mark {
+    width: 29px;
+    height: 29px;
+    font-size: 17px;
+  }
+  .header .mobile-search-toggle,
+  .header .header-actions.search-expanded .icon-btn {
+    flex-basis: 25px;
+    width: 25px;
+    min-width: 25px;
+  }
+}
