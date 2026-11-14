@@ -4355,3 +4355,77 @@ button,input,select,textarea{font-family:inherit}
  .checkout-page-refined .checkout-form>.btn{min-height:48px;font-size:11px}
 }
 @media(prefers-reduced-motion:reduce){.checkout-page-refined .checkout-form input,.checkout-page-refined .checkout-form select,.checkout-page-refined .checkout-form textarea,.checkout-page-refined .coupon-row input,.product-detail-refined .size-options button{transition:none}}
+
+
+/* Checkout readability and visual hierarchy pass */
+.checkout-page-refined{max-width:1220px;padding-top:34px}
+.checkout-page-heading{margin-bottom:28px;padding-bottom:21px}
+.checkout-page-heading .eyebrow{font-size:11px;letter-spacing:1.15px}
+.checkout-page-heading h1{font-size:36px;line-height:1.3;margin:10px 0 7px;letter-spacing:-.45px}
+.checkout-page-heading p{font-size:15px;line-height:1.7;color:#66736a}
+.checkout-page-refined .checkout-layout{gap:26px;grid-template-columns:minmax(0,1.5fr) minmax(310px,.82fr)}
+.checkout-page-refined .checkout-form{padding:30px;border-radius:16px;box-shadow:0 10px 32px #1d35240b}
+.checkout-page-refined .checkout-form>h3{font-size:19px;line-height:1.5;margin-bottom:20px;padding-bottom:14px}
+.checkout-page-refined .checkout-form>h3:not(:first-child){margin-top:30px}
+.checkout-page-refined .checkout-form>h3 small,.checkout-order-summary>h3 small{font-size:10px;letter-spacing:.8px}
+.checkout-page-refined .form-grid{gap:19px 16px}
+.checkout-page-refined .checkout-form label{gap:9px;font-size:14px;line-height:1.55;font-weight:700;color:#29372e}
+.checkout-page-refined .checkout-form input:not([type=radio]),.checkout-page-refined .checkout-form select,.checkout-page-refined .checkout-form textarea,.checkout-page-refined .coupon-row input{min-height:51px;padding:12px 14px;border-radius:9px;font-size:15px;line-height:1.5}
+.checkout-page-refined .checkout-form textarea{min-height:112px}
+.checkout-page-refined .coupon-row{gap:11px}
+.checkout-page-refined .coupon-row button{min-width:112px;font-size:13px;border-radius:9px}
+.checkout-page-refined .coupon-message{font-size:13px;line-height:1.6}
+.checkout-page-refined .payment-choice{gap:9px;padding:18px;border-radius:10px}
+.checkout-page-refined .payment-choice>b{font-size:15px;line-height:1.6}
+.checkout-page-refined .payment-choice span,.checkout-page-refined .payment-choice p{font-size:13px;line-height:1.8}
+.checkout-page-refined .payment-method-options{gap:12px;margin:15px 0}
+.checkout-page-refined .payment-method-options label{font-size:14px;padding:12px 17px;border-radius:9px}
+.checkout-page-refined .payment-method-options input{width:17px;height:17px;accent-color:#16845a}
+.checkout-page-refined .checkout-form>.btn{min-height:56px;margin-top:26px;border-radius:10px;font-size:15px;letter-spacing:.1px}
+.checkout-page-refined .checkout-order-summary{padding:26px;border-radius:16px}
+.checkout-order-summary>h3{font-size:19px;line-height:1.5;margin-bottom:21px;padding-bottom:17px}
+.checkout-order-summary>div{gap:14px;margin:16px 0;font-size:14px;line-height:1.65}
+.checkout-order-summary>div span{font-size:14px;line-height:1.65}
+.checkout-order-summary>div b{font-size:14px}
+.checkout-order-summary>div:last-of-type b{font-size:21px}
+.checkout-order-summary>hr{margin:19px 0}
+.checkout-order-summary>small{font-size:12px;line-height:1.8;margin-top:17px}
+.checkout-page-refined .checkout-note,.checkout-page-refined .api-notice{font-size:14px;line-height:1.75;padding:14px 17px;border-radius:9px}
+.checkout-page-refined .empty-state{padding:40px 20px}
+@media(max-width:800px){
+ .checkout-page-refined .checkout-layout{grid-template-columns:minmax(0,1fr);gap:17px}
+ .checkout-page-refined .checkout-order-summary{grid-row:1}
+ .checkout-page-refined .checkout-form{grid-row:2}
+}
+@media(max-width:600px){
+ .checkout-page-refined{padding:25px 4.5% 52px}
+ .checkout-page-heading{margin-bottom:19px;padding-bottom:16px}
+ .checkout-page-heading .eyebrow{font-size:9px;letter-spacing:.85px}
+ .checkout-page-heading h1{font-size:29px;margin:8px 0 5px}
+ .checkout-page-heading p{font-size:13px}
+ .checkout-page-refined .checkout-layout{gap:14px}
+ .checkout-page-refined .checkout-order-summary{padding:19px;border-radius:13px}
+ .checkout-order-summary>h3{font-size:17px;margin-bottom:16px;padding-bottom:13px}
+ .checkout-order-summary>div{font-size:13px;margin:13px 0;gap:10px}
+ .checkout-order-summary>div span{font-size:13px}
+ .checkout-order-summary>div b{font-size:13px}
+ .checkout-order-summary>div:last-of-type b{font-size:19px}
+ .checkout-order-summary>small{font-size:11px;line-height:1.75}
+ .checkout-page-refined .checkout-form{padding:21px 17px;border-radius:13px}
+ .checkout-page-refined .checkout-form>h3{font-size:16px;margin-bottom:15px}
+ .checkout-page-refined .checkout-form>h3:not(:first-child){margin-top:24px}
+ .checkout-page-refined .checkout-form>h3 small{font-size:9px}
+ .checkout-page-refined .form-grid{grid-template-columns:minmax(0,1fr);gap:15px}
+ .checkout-page-refined .checkout-form label{font-size:13px;gap:8px}
+ .checkout-page-refined .checkout-form input:not([type=radio]),.checkout-page-refined .checkout-form select,.checkout-page-refined .checkout-form textarea,.checkout-page-refined .coupon-row input{min-height:49px;font-size:14px;padding:11px 12px}
+ .checkout-page-refined .checkout-form textarea{min-height:100px}
+ .checkout-page-refined .coupon-row{gap:8px}
+ .checkout-page-refined .coupon-row button{min-width:88px;font-size:12px}
+ .checkout-page-refined .payment-choice{padding:15px}
+ .checkout-page-refined .payment-choice>b{font-size:14px}
+ .checkout-page-refined .payment-choice span,.checkout-page-refined .payment-choice p{font-size:12px;line-height:1.75}
+ .checkout-page-refined .payment-method-options label{font-size:13px;padding:11px 14px}
+ .checkout-page-refined .checkout-form>.btn{min-height:54px;font-size:14px;margin-top:21px}
+ .checkout-page-refined .checkout-note,.checkout-page-refined .api-notice{font-size:13px;line-height:1.7}
+}
+@media(prefers-reduced-motion:reduce){.checkout-page-refined .checkout-form input,.checkout-page-refined .checkout-form select,.checkout-page-refined .checkout-form textarea,.checkout-page-refined .coupon-row input{transition:none}}
