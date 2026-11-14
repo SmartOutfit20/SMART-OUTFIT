@@ -295,10 +295,47 @@ export function CustomerOrders(){
  const [orders,setOrders]=useState([]),[error,setError]=useState(''),[loading,setLoading]=useState(true)
  useEffect(()=>{if(!user){setLoading(false);return}let live=true;api.get('/orders/mine').then(({data})=>{if(live)setOrders(data||[])}).catch(e=>{if(live)setError(e.response?.data?.message||'Could not load your orders.')}).finally(()=>{if(live)setLoading(false)});return()=>{live=false}},[user])
  const stages=['pending','confirmed','processing','shipped','delivered']
+ const statusLabels={pending:'অপেক্ষমাণ',confirmed:'নিশ্চিত',processing:'প্রস্তুত হচ্ছে',shipped:'পাঠানো হয়েছে',delivered:'ডেলিভারি সম্পন্ন',cancelled:'বাতিল',returned:'রিটার্ন'}
  if(!user)return <div className="auth-wrap"><div className="auth-card"><h1>MY ORDERS</h1><p>Sign in to view your purchases and delivery tracking.</p><Link className="btn btn-dark full-btn" to="/login?next=%2Forders">SIGN IN</Link><p className="auth-switch">New customer? <Link to="/register?next=%2Forders">Create an account</Link></p></div></div>
- return <div className="page-wrap orders-page"><div className="breadcrumb"><Link to="/">HOME</Link> / MY ORDERS</div><div className="page-title"><div><span className="eyebrow">YOUR PURCHASES</span><h1>MY ORDERS</h1><p>Track order progress, courier details and order updates.</p></div></div><div className="orders-toolbar"><span>{orders.length} ORDER{orders.length===1?'':'S'}</span></div>{error&&<p className="api-notice">{error}</p>}{loading?<p className="muted">Loading your orders…</p>:!orders.length?<div className="empty-state"><h2>You have no orders yet.</h2><p>Your order history and tracking details will appear here after checkout.</p></div>:<div className="orders-list">{orders.map(o=>{const ix=stages.indexOf(o.status);return <article className="order-track-card" key={o._id}><div className="order-track-heading"><div><span className="eyebrow">ORDER NUMBER</span><h2>{o.orderNumber}</h2><small>{new Date(o.createdAt).toLocaleString()}</small></div><span className={'account-status status-'+o.status}>{o.status}</span></div><div className="order-track-summary"><span>{o.items?.length||0} item(s)</span><b>৳{Number(o.total||0).toLocaleString('en-BD')}</b><span>{o.paymentMethod?.toUpperCase()} · {o.paymentStatus}</span></div><div className="order-line-items">{(o.items||[]).map((item,i)=><div className="order-line-item" key={i}><div><b>{item.name||'Product'}</b><small>{[item.size,item.color].filter(Boolean).join(' · ')||'Standard variant'} · Qty {item.quantity||1}</small></div><strong>৳{(Number(item.unitPrice||0)*Number(item.quantity||1)).toLocaleString('en-BD')}</strong></div>)}</div><div className="order-extra-grid"><section><b>ডেলিভারি ঠিকানা</b><span>{o.deliveryAddress?.name||'—'}</span><span>{o.deliveryAddress?.phone||'—'}</span><small>{[o.deliveryAddress?.address,o.deliveryAddress?.upazila,o.deliveryAddress?.district,o.deliveryAddress?.division].filter(Boolean).join(', ')||'ঠিকানা দেওয়া নেই'}</small></section><section><b>পেমেন্ট ও মূল্য</b><span>{(o.paymentMethod||'COD').toUpperCase()} · {o.paymentStatus||'unpaid'}</span>{Number(o.advancePaymentAmount||0)>0&&<span>অগ্রিম: ৳{Number(o.advancePaymentAmount).toLocaleString('en-BD')} ({o.advancePaymentMethod||''})</span>}<small>পণ্য: ৳{Number(o.subtotal||0).toLocaleString('en-BD')} · ডেলিভারি: ৳{Number(o.deliveryCharge||0).toLocaleString('en-BD')} · ছাড়: ৳{Number(o.discount||0).toLocaleString('en-BD')}</small></section></div><div className="order-progress">{stages.map((x,i)=><div key={x} className={ix>=i?'done':''}><i/ ><span>{x}</span></div>)}</div>{(o.courier||o.trackingNumber)&&<div className="courier-track"><b>Delivery tracking</b><span>Courier: {o.courier||'Assigned'}</span><span>Tracking ID: {o.trackingNumber||'Pending'}</span></div>}{o.status==='cancelled'&&<div className="order-cancel-notice"><b>Order cancellation notice</b><p>{o.cancellationReason||'This order was cancelled by the store.'}</p></div>}{o.statusHistory?.length>0&&<details className="order-history-details"><summary>View order updates</summary>{o.statusHistory.map((h,i)=><p key={i}><b>{h.status}</b> · {new Date(h.createdAt).toLocaleString()}<br/>{h.note}</p>)}</details>}</article>})}</div>}</div>
+ return <div className="page-wrap orders-page orders-page-clean" lang="bn">
+  <div className="breadcrumb"><Link to="/">হোম</Link> / আমার অর্ডার</div>
+  <div className="orders-page-heading"><div><span className="eyebrow">SMART OUTFIT · YOUR PURCHASES</span><h1>আমার অর্ডার</h1><p>আপনার কেনাকাটা, পেমেন্ট এবং ডেলিভারির আপডেট এক জায়গায় দেখুন।</p></div><Link to="/shop" className="orders-continue-link"><ShoppingBag size={16}/> কেনাকাটা চালিয়ে যান</Link></div>
+  <div className="orders-toolbar"><span>মোট {orders.length}টি অর্ডার</span><span>সর্বশেষ অর্ডার আগে দেখানো হচ্ছে</span></div>
+  {error&&<p className="api-notice">{error}</p>}
+  {loading?<div className="orders-loading">আপনার অর্ডারগুলো লোড হচ্ছে…</div>:!orders.length?<div className="empty-state orders-empty"><ShoppingBag size={34}/><h2>এখনো কোনো অর্ডার নেই</h2><p>আপনার প্রথম পছন্দের পণ্যটি বেছে নিয়ে অর্ডার করুন। অর্ডার করলে সব তথ্য এখানে দেখা যাবে।</p><Link to="/shop" className="btn btn-dark">পণ্য দেখুন <ArrowRight size={16}/></Link></div>:<div className="orders-list">{orders.map(o=>{
+   const ix=stages.indexOf(o.status)
+   const cancelled=['cancelled','returned'].includes(o.status)
+   const date=new Date(o.createdAt)
+   return <article className="order-track-card order-track-card-clean" key={o._id}>
+    <header className="order-track-heading order-track-heading-clean">
+     <div className="order-track-title"><span className="eyebrow">অর্ডার নম্বর</span><h2>{o.orderNumber}</h2><small>{Number.isNaN(date.getTime())?'':date.toLocaleString('bn-BD',{dateStyle:'medium',timeStyle:'short'})}</small></div>
+     <span className={'account-status status-'+o.status}>{statusLabels[o.status]||o.status}</span>
+    </header>
+    <div className="order-track-overview">
+     <div><small>মোট পণ্য</small><b>{o.items?.reduce((n,item)=>n+Number(item.quantity||1),0)||0}টি</b></div>
+     <div><small>অর্ডারের মোট</small><b className="order-total-strong">৳{Number(o.total||0).toLocaleString('en-BD')}</b></div>
+     <div><small>পেমেন্ট</small><b>{o.advancePaymentAmount>0?'অগ্রিম + COD':'Cash on Delivery'}</b></div>
+    </div>
+    <section className="order-clean-section">
+     <div className="order-clean-section-heading"><h3>অর্ডার করা পণ্য</h3><span>{o.items?.length||0}টি পণ্য</span></div>
+     <div className="order-clean-products">{(o.items||[]).map((item,i)=><div className="order-clean-product" key={item._id||i}>
+      <div className="order-clean-product-image">{item.product?.images?.[0]?<img src={item.product.images[0]} alt={item.name||'পণ্য'}/>:<ShoppingBag size={20}/>}</div>
+      <div className="order-clean-product-copy"><b>{item.name||item.product?.name||'পণ্য'}</b><small>{[item.size&&'সাইজ: '+item.size,item.color&&'রং: '+item.color].filter(Boolean).join(' · ')||'সাধারণ ভ্যারিয়েন্ট'} · পরিমাণ {item.quantity||1}</small></div>
+      <strong>৳{(Number(item.unitPrice||0)*Number(item.quantity||1)).toLocaleString('en-BD')}</strong>
+     </div>)}</div>
+    </section>
+    <div className="order-clean-info-grid">
+     <section><h3>ডেলিভারি ঠিকানা</h3><b>{o.deliveryAddress?.name||'—'}</b><span>{o.deliveryAddress?.phone||'—'}</span><p>{[o.deliveryAddress?.address,o.deliveryAddress?.upazila,o.deliveryAddress?.district,o.deliveryAddress?.division].filter(Boolean).join(', ')||'ঠিকানা দেওয়া নেই'}</p></section>
+     <section><h3>পেমেন্ট ও মূল্য</h3><div><span>পণ্যের মূল্য</span><b>৳{Number(o.subtotal||0).toLocaleString('en-BD')}</b></div>{Number(o.discount)>0&&<div><span>ছাড়</span><b>− ৳{Number(o.discount).toLocaleString('en-BD')}</b></div>}<div><span>ডেলিভারি চার্জ</span><b>৳{Number(o.deliveryCharge||0).toLocaleString('en-BD')}</b></div>{Number(o.advancePaymentAmount)>0&&<div><span>অগ্রিম ডেলিভারি পেমেন্ট</span><b>৳{Number(o.advancePaymentAmount).toLocaleString('en-BD')}</b></div>}<div className="order-clean-total"><span>সর্বমোট</span><b>৳{Number(o.total||0).toLocaleString('en-BD')}</b></div><small>{o.paymentStatus==='pending'?'পেমেন্ট যাচাই অপেক্ষমাণ':o.paymentStatus||'পেমেন্টের অবস্থা আপডেট হয়নি'}</small></section>
+    </div>
+    {!cancelled&&<section className="order-clean-progress"><h3>অর্ডারের অগ্রগতি</h3><div className="order-progress">{stages.map((x,i)=><div key={x} className={ix>=i?'done':''}><i/><span>{statusLabels[x]}</span></div>)}</div></section>}
+    {(o.courier||o.trackingNumber)&&<div className="courier-track"><b>ডেলিভারি ট্র্যাকিং</b><span>কুরিয়ার: {o.courier||'নির্ধারিত হয়নি'}</span><span>ট্র্যাকিং নম্বর: {o.trackingNumber||'অপেক্ষমাণ'}</span></div>}
+    {cancelled&&<div className="order-cancel-notice"><b>{o.status==='returned'?'রিটার্ন আপডেট':'অর্ডার বাতিলের তথ্য'}</b><p>{o.cancellationReason||statusLabels[o.status]}</p></div>}
+    {o.statusHistory?.length>0&&<details className="order-history-details"><summary>অর্ডারের আপডেট দেখুন <span>{o.statusHistory.length}টি আপডেট</span></summary>{o.statusHistory.map((h,i)=><p key={i}><b>{statusLabels[h.status]||h.status}</b> · {new Date(h.createdAt).toLocaleString('bn-BD')}<br/>{h.note}</p>)}</details>}
+   </article>
+  })}</div>}
+ </div>
 }
-
 export function SimplePage({title}){
  const [form,setForm]=useState({name:'',email:'',phone:'',subject:'',message:''}),[notice,setNotice]=useState(''),[error,setError]=useState(''),[busy,setBusy]=useState(false),[store,setStore]=useState({storeName:'SMART OUTFIT',supportEmail:'',supportPhone:'',storeAddress:'',aboutText:'',shippingPolicy:'',returnPolicy:''})
  useEffect(()=>{api.get('/storefront').then(({data})=>setStore(s=>({...s,...data}))).catch(()=>{})},[])
