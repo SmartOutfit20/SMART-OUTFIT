@@ -4592,3 +4592,19 @@ button,input,select,textarea{font-family:inherit}
  .order-success-foot{font-size:9px}
 }
 @media(prefers-reduced-motion:reduce){.order-success *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+
+
+/* Fix legacy checkout summary rules leaking into the redesigned summary sections */
+.checkout-order-summary>.checkout-summary-heading{margin:0 0 17px!important;gap:12px!important;font-size:inherit!important}
+.checkout-order-summary>.checkout-summary-items{margin:0!important;gap:0!important;font-size:inherit!important}
+.checkout-order-summary>.checkout-summary-details{margin:0!important;gap:7px!important;font-size:inherit!important}
+.checkout-order-summary>.checkout-summary-totals{margin:0!important;gap:12px!important;font-size:inherit!important}
+.checkout-order-summary>.checkout-summary-delivery-note{display:block;margin:0!important;padding:11px 12px;gap:0!important;font-size:11px!important}
+.checkout-order-summary>.checkout-summary-trust{margin:14px 0 0!important;gap:9px!important;font-size:11px!important}
+.checkout-order-summary>.checkout-summary-details>p{margin:0 0 0 24px}
+.checkout-order-summary>.checkout-summary-totals>.checkout-grand-total{margin-top:3px!important}
+@media(max-width:560px){
+ .checkout-order-summary>.checkout-summary-heading{margin-bottom:14px!important}
+ .checkout-order-summary>.checkout-summary-items,.checkout-order-summary>.checkout-summary-details,.checkout-order-summary>.checkout-summary-totals{margin:0!important}
+ .checkout-order-summary>.checkout-summary-trust{margin-top:12px!important}
+}
