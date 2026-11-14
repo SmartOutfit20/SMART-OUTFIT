@@ -195,7 +195,7 @@ router.patch('/:id/advance-payment-verify', requireRole('super_admin', 'admin'),
 })
 
 router.get('/mine', async (req, res, next) => {
-  try { res.json(await Order.find({ customer: req.user.sub }).sort({ createdAt: -1 }).lean()) }
+  try { res.json(await Order.find({ customer: req.user.sub }).populate('items.product', 'name sku images').sort({ createdAt: -1 }).lean()) }
   catch (error) { next(error) }
 })
 
