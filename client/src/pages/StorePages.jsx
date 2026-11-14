@@ -152,6 +152,8 @@ export function ProductDetail(){
   </div>
   {relatedProducts.length>0&&<section className="section detail-related-section shop-page-classic"><div className="detail-related-heading"><span className="eyebrow">আপনার জন্য বাছাই করা</span><h2>এগুলোও আপনার ভালো লাগতে পারে</h2><p>আপনার পছন্দের সঙ্গে মানানসই আরও কিছু স্টাইল</p></div><div className="product-grid shop-product-grid">{relatedProducts.map(x=><ProductCard key={x.id} product={x}/>)}</div></section>}
  </div>
+}
+
 export function Cart(){
  const {cart,changeQty}=useShop(),subtotal=cart.reduce((n,x)=>n+x.price*x.qty,0),itemCount=cart.reduce((n,x)=>n+x.qty,0)
  return <div className="page-wrap cart-page">
