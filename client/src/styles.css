@@ -8115,3 +8115,29 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   }
 }
 
+/* SMART OUTFIT: make the search icon a clear, clickable submit control on every screen. */
+.header .header-search-panel .header-search-submit {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 34px;
+  width: 34px;
+  min-width: 34px;
+  height: 34px;
+  min-height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: #16845a;
+  color: #fff;
+  cursor: pointer;
+}
+.header .header-search-panel .header-search-submit:hover,
+.header .header-search-panel .header-search-submit:focus-visible {
+  background: #116b48;
+  color: #fff;
+}
+.header .header-search-panel .header-search-submit svg {
+  display: block;
+  pointer-events: none;
+}
+
