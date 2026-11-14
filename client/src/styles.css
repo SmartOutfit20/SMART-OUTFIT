@@ -7075,14 +7075,3 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     margin-right: auto;
   }
 }
-
-/* SMART OUTFIT homepage: match the existing footer's mobile side gutters. */
-@media (max-width: 650px) {
-  .home-page > .hero,
-  .home-page > .benefits,
-  .home-page > .promo,
-  .home-page > .section {
-    padding-left: 7%;
-    padding-right: 7%;
-  }
-}
