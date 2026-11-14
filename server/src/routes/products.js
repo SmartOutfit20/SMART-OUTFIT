@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { Product, Category, ActivityLog } from '../models/index.js'
+import { Product, Category, ActivityLog, Setting } from '../models/index.js'
 import { starterProducts } from '../data/starterProducts.js'
 import { requireAuth, requireRole } from '../middleware/auth.js'
 import sharp from 'sharp'
@@ -95,6 +95,52 @@ async function ensureShortProductSlugs() {
   }
   return shortSlugMigrationPromise
 }
+let productSerialMigrationPromise
+async function nextProductSerial() {
+  const counter = await Setting.findOneAndUpdate(
+    { key: 'productSequence' },
+    { $inc: { value: 1 }, $setOnInsert: { value: 1 } },
+    { upsert: true, new: true, setDefaultsOnInsert: true }
+  )
+  return Number(counter.value)
+}
+async function ensureProductSerials() {
+  if (!productSerialMigrationPromise) {
+    productSerialMigrationPromise = (async () => {
+      const products = await Product.find().select('_id serialNumber sku createdAt').sort({ createdAt: 1, _id: 1 })
+      const highest = products.reduce((n, product) => Math.max(n, Number(product.serialNumber) || 0), 0)
+      await Setting.findOneAndUpdate(
+        { key: 'productSequence' },
+        { $max: { value: highest }, $setOnInsert: { value: highest } },
+        { upsert: true, new: true, setDefaultsOnInsert: true }
+      )
+      for (const product of products) {
+        if (Number(product.serialNumber) > 0 && product.sku) continue
+        const serialNumber = Number(product.serialNumber) > 0 ? Number(product.serialNumber) : await nextProductSerial()
+        const update = { serialNumber }
+        if (!product.sku) {
+          let sku = 'SO-' + String(serialNumber).padStart(4, '0')
+          while (await Product.exists({ sku, _id: { $ne: product._id } })) {
+            const next = await nextProductSerial()
+            sku = 'SO-' + String(next).padStart(4, '0')
+          }
+          update.sku = sku
+        }
+        await Product.updateOne({ _id: product._id }, { $set: update })
+      }
+    })().catch(error => {
+      productSerialMigrationPromise = null
+      throw error
+    })
+  }
+  return productSerialMigrationPromise
+}
+async function assignProductSerial(payload) {
+  if (payload.sku) return
+  const serialNumber = await nextProductSerial()
+  payload.serialNumber = serialNumber
+  payload.sku = 'SO-' + String(serialNumber).padStart(4, '0')
+}
 function productWriteError(error) {
   if (error?.code === 11000 && error?.keyPattern?.slug) {
     const err = new Error('A product with this URL slug already exists. Please try saving again; a unique slug will be assigned automatically.')
@@ -140,6 +186,7 @@ router.post('/admin/import-starter', ...adminOnly, async (req, res, next) => {
 router.get('/', async (req, res, next) => {
   try {
     await ensureShortProductSlugs()
+    await ensureProductSerials()
     const { q, category, page = 1, limit = 12, sort = 'newest' } = req.query
     const filter = { isPublished: true }
     if (q) filter.name = { $regex: String(q).slice(0, 80), $options: 'i' }
@@ -155,7 +202,7 @@ router.get('/', async (req, res, next) => {
 })
 
 router.get('/admin/all', ...adminOnly, async (req, res, next) => {
-  try { await ensureShortProductSlugs(); res.json(await Product.find().populate('category', 'name').sort({ createdAt: -1 }).lean()) }
+  try { await ensureShortProductSlugs(); await ensureProductSerials(); res.json(await Product.find().populate('category', 'name').sort({ createdAt: -1 }).lean()) }
   catch (e) { next(e) }
 })
 
@@ -206,8 +253,10 @@ router.patch('/admin/:id/stock', ...adminOnly, async (req, res, next) => {
 
 router.post('/', ...adminOnly, async (req, res, next) => {
   try {
+    await ensureProductSerials()
     const payload = cleanProduct(req.body); validateProduct(payload)
     payload.slug = await uniqueProductSlug(payload.slug)
+    await assignProductSerial(payload)
     const product = await Product.create(payload)
     res.status(201).json(product)
   } catch (e) { next(productWriteError(e)) }
