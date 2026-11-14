@@ -8745,3 +8745,263 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+
+/* SMART OUTFIT — complete Store Settings responsive layout.
+   Scoped to the Settings workspace; does not alter storefront header/footer or other admin pages. */
+.admin-content .admin-settings-form {
+  width: min(100%, 1220px);
+  max-width: 1220px;
+  margin-inline: auto;
+}
+.admin-content .admin-settings-section {
+  grid-template-columns: 46px minmax(0, 1fr);
+  align-items: start;
+}
+.admin-content .admin-settings-section > :not(.admin-settings-icon):not(.admin-form-heading) {
+  grid-column: 2;
+  min-width: 0;
+  max-width: 100%;
+}
+.admin-content .admin-settings-section > .admin-homepage-banners {
+  grid-column: 1 / -1;
+}
+.admin-content .admin-settings-section .admin-settings-grid,
+.admin-content .admin-settings-section .admin-brand-asset-grid {
+  width: 100%;
+  min-width: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.admin-content .admin-settings-section .admin-brand-asset-grid {
+  display: grid;
+  gap: 14px;
+}
+.admin-content .admin-settings-section .admin-store-logo-field,
+.admin-content .admin-settings-section .admin-brand-asset-card,
+.admin-content .admin-settings-section .admin-settings-note,
+.admin-content .admin-settings-section .admin-banner-size-guide,
+.admin-content .admin-settings-section .admin-homepage-banners {
+  min-width: 0;
+}
+.admin-content .admin-settings-section input:not([type="checkbox"]):not([type="file"]),
+.admin-content .admin-settings-section select,
+.admin-content .admin-settings-section textarea {
+  min-width: 0;
+  max-width: 100%;
+}
+.admin-content .admin-settings-section .admin-check {
+  align-items: center;
+  min-height: 44px;
+}
+.admin-content .admin-settings-section .admin-check input {
+  flex: 0 0 18px;
+}
+.admin-content .admin-settings-section .admin-store-logo-preview,
+.admin-content .admin-settings-section .admin-brand-asset-preview {
+  display: grid;
+  place-items: center;
+  width: min(100%, 360px);
+  min-height: 110px;
+}
+.admin-content .admin-settings-section .admin-store-logo-preview img,
+.admin-content .admin-settings-section .admin-brand-asset-preview img {
+  width: 100%;
+  max-width: 100%;
+  max-height: 180px;
+  object-fit: contain;
+}
+.admin-content .admin-settings-section .admin-upload-button,
+.admin-content .admin-settings-section .admin-cancel,
+.admin-content .admin-settings-section .admin-delete,
+.admin-content .admin-settings-section .admin-action {
+  min-height: 42px;
+  max-width: 100%;
+  line-height: 1.35;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.admin-content .admin-settings-save {
+  width: 100%;
+  max-width: 1220px;
+  margin-inline: auto;
+}
+@media (min-width: 901px) {
+  .admin-content .admin-settings-section {
+    padding: 24px;
+    gap: 8px 18px;
+  }
+  .admin-content .admin-settings-section .admin-form-heading {
+    align-self: center;
+  }
+}
+@media (min-width: 651px) and (max-width: 900px) {
+  .admin-content {
+    padding: 24px 20px;
+  }
+  .admin-content .admin-settings-section {
+    grid-template-columns: 40px minmax(0, 1fr);
+    padding: 17px;
+    gap: 10px 12px;
+  }
+  .admin-content .admin-settings-icon {
+    width: 38px;
+    height: 38px;
+  }
+  .admin-content .admin-settings-section .admin-settings-grid,
+  .admin-content .admin-settings-section .admin-brand-asset-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .admin-content .admin-settings-section .admin-form-heading > div {
+    flex-basis: 100%;
+  }
+  .admin-content .admin-settings-section .admin-form-heading > .admin-action {
+    width: auto;
+    min-width: 150px;
+  }
+  .admin-content .admin-settings-section .admin-homepage-banner-top > div {
+    flex: 1 1 100%;
+    justify-content: flex-start;
+  }
+  .admin-content .admin-settings-section .admin-homepage-banner-top > div > button {
+    flex: 1 1 110px;
+  }
+  .admin-content .admin-settings-save {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .admin-content .admin-settings-save .admin-action {
+    width: 100%;
+  }
+}
+@media (max-width: 650px) {
+  .admin-content {
+    padding: 20px 12px;
+  }
+  .admin-content .admin-settings-form {
+    gap: 13px;
+  }
+  .admin-content .admin-settings-section {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    width: 100%;
+    padding: 14px;
+  }
+  .admin-content .admin-settings-section > * {
+    width: 100%;
+    max-width: 100%;
+  }
+  .admin-content .admin-settings-icon {
+    width: 38px;
+    height: 38px;
+  }
+  .admin-content .admin-settings-section .admin-form-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    width: 100%;
+    margin: 0;
+  }
+  .admin-content .admin-settings-section .admin-form-heading > div {
+    width: 100%;
+    flex: 1 1 auto;
+  }
+  .admin-content .admin-settings-section .admin-form-heading > .admin-action {
+    width: 100%;
+    min-width: 0;
+  }
+  .admin-content .admin-settings-section .admin-settings-grid,
+  .admin-content .admin-settings-section .admin-brand-asset-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 11px;
+    width: 100%;
+  }
+  .admin-content .admin-settings-section .admin-settings-grid > *,
+  .admin-content .admin-settings-section .admin-brand-asset-grid > *,
+  .admin-content .admin-settings-section .admin-field-wide {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-width: 0;
+  }
+  .admin-content .admin-settings-section input:not([type="checkbox"]):not([type="file"]),
+  .admin-content .admin-settings-section select,
+  .admin-content .admin-settings-section textarea {
+    width: 100%;
+    min-height: 44px;
+    font-size: 16px;
+  }
+  .admin-content .admin-settings-section textarea {
+    min-height: 100px;
+  }
+  .admin-content .admin-settings-section .admin-check {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 11px;
+    line-height: 1.5;
+  }
+  .admin-content .admin-settings-section .admin-check input {
+    margin-top: 2px;
+  }
+  .admin-content .admin-settings-section .admin-store-logo-actions,
+  .admin-content .admin-settings-section .admin-homepage-banner-top,
+  .admin-content .admin-settings-section .admin-homepage-banner-top > div {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 8px;
+  }
+  .admin-content .admin-settings-section .admin-store-logo-actions > *,
+  .admin-content .admin-settings-section .admin-homepage-banner-top > div > *,
+  .admin-content .admin-settings-section .admin-upload-button {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    justify-content: center;
+  }
+  .admin-content .admin-settings-section .admin-homepage-banner-preview {
+    min-height: 100px;
+    aspect-ratio: 16 / 7;
+  }
+  .admin-content .admin-settings-section .admin-homepage-banner-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .admin-content .admin-settings-section .admin-banner-size-guide strong {
+    font-size: clamp(15px, 4vw, 20px);
+    overflow-wrap: anywhere;
+  }
+  .admin-content .admin-settings-section .admin-announcement-social-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .admin-content .admin-settings-save {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 15px;
+  }
+  .admin-content .admin-settings-save > div,
+  .admin-content .admin-settings-save .admin-action {
+    width: 100%;
+    min-width: 0;
+  }
+}
+@media (max-width: 380px) {
+  .admin-content .admin-settings-section {
+    padding: 11px;
+  }
+  .admin-content .admin-announcement-social-options {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .admin-content .admin-settings-section .admin-homepage-banner-card {
+    padding: 10px;
+  }
+}
