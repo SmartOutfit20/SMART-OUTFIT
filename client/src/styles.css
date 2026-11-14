@@ -6845,3 +6845,23 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 @media(prefers-reduced-motion:reduce){
   .btn,.filter,.quick-add,.admin-action,.icon-btn{transition:none!important}
 }
+
+
+/* SMART OUTFIT: align storefront header and footer content to the shared 1220px canvas.
+   Keep the outer bars full-width; only their inner content edges follow the page canvas. */
+@media (min-width: 1261px) {
+  .header,
+  .announcement-interactive,
+  .footer.footer-complete {
+    padding-left: max(20px, calc((100% - 1220px) / 2)) !important;
+    padding-right: max(20px, calc((100% - 1220px) / 2)) !important;
+  }
+}
+@media (min-width: 651px) and (max-width: 1260px) {
+  .header,
+  .announcement-interactive,
+  .footer.footer-complete {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+}
