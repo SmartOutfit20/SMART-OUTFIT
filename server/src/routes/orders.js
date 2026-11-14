@@ -9,6 +9,45 @@ const router = Router()
 router.use(requireAuth)
 const httpError = (message, status = 400) => Object.assign(new Error(message), { status })
 
+// Backfill existing orders chronologically, then reserve every new serial atomically.
+async function ensureOrderSerials(session) {
+  const missing = await Order.find({ serialNumber: { $exists: false } })
+    .sort({ createdAt: 1, _id: 1 }).select('_id').session(session).lean()
+  const counter = await Setting.findOne({ key: 'orderSequence' }).session(session).lean()
+  const highest = await Order.findOne({ serialNumber: { $type: 'number' } })
+    .sort({ serialNumber: -1 }).select('serialNumber').session(session).lean()
+  const current = Math.max(Number(counter?.value) || 0, Number(highest?.serialNumber) || 0)
+  if (missing.length) {
+    const last = current + missing.length
+    await Setting.updateOne({ key: 'orderSequence' }, { $set: { value: last } }, { upsert: true, session })
+    await Order.bulkWrite(missing.map((item, index) => {
+      const serial = current + index + 1
+      return { updateOne: {
+        filter: { _id: item._id, serialNumber: { $exists: false } },
+        update: { $set: { serialNumber: serial, orderNumber: '#' + String(serial).padStart(6, '0') } }
+      } }
+    }), { session, ordered: true })
+  } else if (current > (Number(counter?.value) || 0)) {
+    await Setting.updateOne({ key: 'orderSequence' }, { $set: { value: current } }, { upsert: true, session })
+  }
+}
+
+async function nextOrderSerial(session) {
+  await ensureOrderSerials(session)
+  const counter = await Setting.findOneAndUpdate(
+    { key: 'orderSequence' }, { $inc: { value: 1 } },
+    { new: true, upsert: true, session }
+  ).lean()
+  const serialNumber = Number(counter.value)
+  return { serialNumber, orderNumber: '#' + String(serialNumber).padStart(6, '0') }
+}
+
+async function migrateOrderSerials() {
+  const session = await mongoose.startSession()
+  try { await session.withTransaction(async () => ensureOrderSerials(session)) }
+  finally { await session.endSession() }
+}
+
 async function restockOrderItems(order, session) {
   for (const line of order.items || []) {
     if (!line.product) continue
@@ -57,11 +96,13 @@ router.post('/', async (req, res, next) => {
     const advancePaymentSender = String(req.body.advancePaymentSender || '').trim()
     const advancePaymentTransactionId = String(req.body.advancePaymentTransactionId || '').trim()
     const couponCode = String(req.body.couponCode || '').trim().toUpperCase()
-    const orderNumber = 'SO-' + Date.now() + '-' + randomBytes(3).toString('hex').toUpperCase()
-    let order
+    let orderNumber, serialNumber, order
 
     session = await mongoose.startSession()
     await session.withTransaction(async () => {
+      const serial = await nextOrderSerial(session)
+      orderNumber = serial.orderNumber
+      serialNumber = serial.serialNumber
       const lineItems = []
       let subtotal = 0
       for (const line of requested) {
@@ -135,7 +176,7 @@ router.post('/', async (req, res, next) => {
       }
 
       const [created] = await Order.create([{
-        orderNumber, customer: req.user.sub, items: lineItems, subtotal, deliveryCharge, discount,
+        orderNumber, serialNumber, customer: req.user.sub, items: lineItems, subtotal, deliveryCharge, discount,
         total: subtotal - discount + deliveryCharge, couponCode: coupon?.code || '', coupon: coupon?._id || undefined, couponUsageCounted: Boolean(coupon),
         statusHistory: [{ status: 'pending', note: 'Order placed successfully.' }],
         paymentMethod: 'cod', paymentStatus: advancePaymentAmount > 0 ? 'pending' : 'unpaid', advancePaymentAmount,
@@ -195,12 +236,12 @@ router.patch('/:id/advance-payment-verify', requireRole('super_admin', 'admin'),
 })
 
 router.get('/mine', async (req, res, next) => {
-  try { res.json(await Order.find({ customer: req.user.sub }).populate('items.product', 'name sku images').sort({ createdAt: -1 }).lean()) }
+  try { await migrateOrderSerials(); res.json(await Order.find({ customer: req.user.sub }).populate('items.product', 'name sku images').sort({ createdAt: -1 }).lean()) }
   catch (error) { next(error) }
 })
 
 router.get('/admin/all', requireRole('super_admin', 'admin', 'support'), async (req, res, next) => {
-  try { res.json(await Order.find().populate('customer', 'name email phone').populate('items.product', 'name sku images').sort({ createdAt: -1 }).limit(200).lean()) }
+  try { await migrateOrderSerials(); res.json(await Order.find().populate('customer', 'name email phone').populate('items.product', 'name sku images').sort({ createdAt: -1 }).limit(200).lean()) }
   catch (error) { next(error) }
 })
 
