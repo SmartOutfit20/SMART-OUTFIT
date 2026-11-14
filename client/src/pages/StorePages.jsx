@@ -310,7 +310,7 @@ export function CustomerOrders(){
    const date=new Date(o.createdAt)
    return <article className="order-track-card order-track-card-clean" key={o._id}>
     <header className="order-track-heading order-track-heading-clean">
-     <div className="order-track-title"><span className="eyebrow">অর্ডার নম্বর</span><h2>{o.orderNumber}</h2><small>{Number.isNaN(date.getTime())?'':date.toLocaleString('bn-BD',{dateStyle:'medium',timeStyle:'short'})}</small></div>
+     <div className="order-track-title"><span className="eyebrow">আপনার অর্ডার আইডি</span><h2><span className="order-number-chip">{o.orderNumber||'—'}</span></h2><small>{Number.isNaN(date.getTime())?'':date.toLocaleString('bn-BD',{dateStyle:'medium',timeStyle:'short'})}</small></div>
      <span className={'account-status status-'+o.status}>{statusLabels[o.status]||o.status}</span>
     </header>
     <div className="order-track-overview">
