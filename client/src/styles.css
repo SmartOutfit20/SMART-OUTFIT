@@ -6453,3 +6453,34 @@ body{font-size:16px;line-height:1.6}
   .product-detail-refined .detail-price-row .detail-size-options-inline{gap:4px!important;}
   .product-detail-refined .detail-price-row .detail-size-options-inline button{width:31px!important;height:30px!important;min-width:31px!important;}
 }
+
+/* Keep the color choices directly after the size buttons in the price row. */
+.product-detail-refined .detail-price-row .detail-inline-color-select{
+  display:inline-flex!important;align-items:center!important;flex-wrap:wrap!important;
+  gap:5px!important;margin:0 0 0 5px!important;
+}
+.product-detail-refined .detail-price-row .detail-color-options-inline{
+  display:inline-flex!important;align-items:center!important;flex-wrap:wrap!important;
+  gap:5px!important;margin:0!important;
+}
+.product-detail-refined .detail-price-row .detail-color-options-inline button{
+  display:inline-flex!important;align-items:center!important;gap:4px!important;
+  min-height:30px!important;padding:3px 6px!important;border:1px solid #cfded4!important;
+  border-radius:0!important;background:#fff!important;color:#315b45!important;
+  font-size:10px!important;font-weight:700!important;
+}
+.product-detail-refined .detail-price-row .detail-color-options-inline button.selected{
+  border-color:#16845a!important;background:#eef8f1!important;color:#16845a!important;
+}
+.product-detail-refined .detail-price-row .detail-color-options-inline .color-swatch{
+  display:inline-block!important;width:13px!important;height:13px!important;flex:0 0 13px!important;
+  border:1px solid #d3d9d4!important;border-radius:50%!important;
+}
+.product-detail-refined .detail-price-row .detail-color-options-inline .color-name{display:inline!important;}
+.product-detail-refined .detail-price-row .detail-color-options-inline button:disabled{opacity:.35!important;cursor:not-allowed!important;}
+@media(max-width:650px){
+  .product-detail-refined .detail-price-row .detail-inline-color-select{gap:4px!important;margin-left:2px!important;}
+  .product-detail-refined .detail-price-row .detail-color-options-inline{gap:3px!important;}
+  .product-detail-refined .detail-price-row .detail-color-options-inline button{min-height:28px!important;padding:2px 4px!important;font-size:9px!important;}
+  .product-detail-refined .detail-price-row .detail-color-options-inline .color-name{max-width:52px!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;}
+}
