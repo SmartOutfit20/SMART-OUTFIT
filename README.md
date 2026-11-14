@@ -8,10 +8,11 @@ A Bangladesh-focused MERN fashion commerce starter with a React/Vite storefront,
 - Customer carts persist in browser storage; signed-in wishlists now sync to MongoDB, while guest wishlists remain local to the browser.
 - Shared purple/black/white design system, BDT pricing, Bangladesh phone/address validation and an English-first interface with a basic language toggle.
 - Express/Mongoose APIs for products, categories, customers, orders, coupons, settings, inventory, support tickets, delivery metadata, reporting and staff roles.
+- Checkout now reserves inventory, limited coupon usage and the order in one MongoDB transaction; cancellation and advance-payment rejection restore stock and release coupon usage atomically.
 - Admin product/category CRUD, stock adjustments, order status and manual advance-payment verification, coupon management, customer access controls and store settings.
 
 ## Not yet live / requires configuration
-- Database-backed account registration/login, checkout/order persistence and admin permissions.
+- Full production end-to-end and concurrency tests against the live MongoDB Atlas database.
 - Real bKash/Nagad/Rocket payment processing and server-side verification.
 - Pathao/Steadfast/RedX courier booking and tracking.
 - Cloudinary media uploads, email/SMS, Google OAuth, refunds, 2FA and scheduled backups.
@@ -22,7 +23,7 @@ No payment success, courier booking, or database persistence is simulated as a r
 ## Requirements
 - Node.js 20+
 - npm 10+
-- MongoDB Atlas or local MongoDB
+- MongoDB Atlas or a MongoDB replica set (checkout uses multi-document transactions)
 
 ## Run locally
 ```bash
@@ -83,3 +84,12 @@ The starter deliberately does not create a default administrator or expose a pub
 - Added a MongoDB-backed wishlist on customer accounts, with authenticated list/add/remove endpoints.
 - Signed-in storefront sessions load and update the account wishlist; guest wishlists remain browser-local. Wishlist state is cleared on logout/account switching to avoid leaking one customer's saved products to another account on a shared device.
 - The API caps each account wishlist at 200 products and rejects invalid or unpublished product IDs.
+
+
+## Transactional checkout increment (2026-11-14)
+- Added server-side Bangladesh delivery-address and phone validation helpers, strict cart-line normalization, duplicate-variant merging and per-variant quantity limits.
+- Order placement now uses a MongoDB session transaction so stock decrements, coupon usage reservation and order creation either all commit or all roll back. Invalid advance-payment details no longer leave stock deducted.
+- Coupon usage limits are reserved atomically at checkout and released on order cancellation or advance-payment rejection.
+- Cancellation and advance-payment verification now update order status, inventory and coupon usage in the same transaction. Shipped/delivered orders must use the return workflow; verified advance delivery payments cannot be cancelled until a refund is resolved.
+- The delivery workspace no longer exposes a cancellation path that bypasses inventory restoration.
+- These transactions require MongoDB Atlas or another replica-set/sharded MongoDB deployment. Unit tests cover checkout validation and calculations; live database concurrency tests remain outstanding.
