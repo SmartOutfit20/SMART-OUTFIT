@@ -318,11 +318,11 @@ export function CustomerOrders(){
     </div>
     <section className="order-clean-section">
      <div className="order-clean-section-heading"><h3>অর্ডার করা পণ্য</h3><span>{o.items?.length||0}টি পণ্য</span></div>
-     <div className="order-clean-products">{(o.items||[]).map((item,i)=><div className="order-clean-product" key={item._id||i}>
-      <div className="order-clean-product-image">{item.product?.images?.[0]?<img src={item.product.images[0]} alt={item.name||'পণ্য'}/>:<ShoppingBag size={20}/>}</div>
-      <div className="order-clean-product-copy"><b>{item.name||item.product?.name||'পণ্য'}</b><small>{[item.size&&'সাইজ: '+item.size,item.color&&'রং: '+item.color].filter(Boolean).join(' · ')||'সাধারণ ভ্যারিয়েন্ট'} · পরিমাণ {item.quantity||1}</small></div>
-      <strong>৳{(Number(item.unitPrice||0)*Number(item.quantity||1)).toLocaleString('en-BD')}</strong>
-     </div>)}</div>
+     <div className="order-clean-products">{(o.items||[]).map((item,i)=>{const productName=item.name||item.productName||item.title||item.product?.name||item.product?.title||item.productSnapshot?.name||item.snapshot?.name||'পণ্যের নাম পাওয়া যায়নি';const productImage=item.image||item.productImage||item.product?.image||item.product?.images?.[0]||item.images?.[0]||item.productSnapshot?.image||item.snapshot?.image;return <div className="order-clean-product" key={item._id||i}>
+      <div className="order-clean-product-image">{productImage?<img src={productImage} alt={productName}/>:<ShoppingBag size={20}/>}</div>
+      <div className="order-clean-product-copy"><b>{productName}</b><small>{[item.size&&'সাইজ: '+item.size,item.color&&'রং: '+item.color,item.sku&&'SKU: '+item.sku].filter(Boolean).join(' · ')||'সাধারণ ভ্যারিয়েন্ট'} · পরিমাণ {item.quantity||1}</small></div>
+      <strong>৳{(Number(item.unitPrice||item.price||0)*Number(item.quantity||1)).toLocaleString('en-BD')}</strong>
+     </div>})}</div>
     </section>
     <div className="order-clean-info-grid">
      <section><h3>ডেলিভারি ঠিকানা</h3><b>{o.deliveryAddress?.name||'—'}</b><span>{o.deliveryAddress?.phone||'—'}</span><p>{[o.deliveryAddress?.address,o.deliveryAddress?.upazila,o.deliveryAddress?.district,o.deliveryAddress?.division].filter(Boolean).join(', ')||'ঠিকানা দেওয়া নেই'}</p></section>
