@@ -8161,3 +8161,199 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 @media (min-width:701px) and (max-width:900px){.shop-managed-banner-slider{width:min(100%,768px);aspect-ratio:768/252;margin-bottom:20px}}
 @media (max-width:700px){.shop-managed-banner-slider{width:100%;aspect-ratio:393/129;margin-bottom:18px}.shop-managed-banner-controls{inset-inline:7px}.shop-managed-banner-controls button{width:29px;height:29px;font-size:21px}.shop-managed-banner-dots{bottom:6px;gap:5px}.shop-managed-banner-dots button{width:6px;height:6px}.shop-managed-banner-dots button.active{width:16px}.shop-managed-banner-slider .shop-managed-banner-copy{max-width:55%;left:5%;gap:3px}.shop-managed-banner-slider .shop-managed-banner-copy b{font-size:clamp(10px,3.2vw,18px)}.shop-managed-banner-slider .shop-managed-banner-copy small{font-size:clamp(7px,1.9vw,11px)}}
 @media(prefers-reduced-motion:reduce){.shop-managed-banner-slider .shop-managed-banner-image--incoming,.shop-managed-banner-slider .shop-managed-banner-image--outgoing{animation-duration:.01ms!important}.shop-managed-banner-dots button{transition:none}}
+
+
+/* SMART OUTFIT — Store Settings responsive safeguards.
+   Scoped to the admin settings workspace; storefront header/footer and shared layout remain untouched. */
+.admin-content .admin-settings-form,
+.admin-content .admin-settings-form * {
+  box-sizing: border-box;
+}
+.admin-content .admin-settings-form {
+  width: 100%;
+  min-width: 0;
+}
+.admin-content .admin-settings-section {
+  min-width: 0;
+  max-width: 100%;
+}
+.admin-content .admin-settings-section > *,
+.admin-content .admin-settings-grid > *,
+.admin-content .admin-form-heading,
+.admin-content .admin-form-heading > div {
+  min-width: 0;
+  max-width: 100%;
+}
+.admin-content .admin-settings-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 0;
+}
+.admin-content .admin-settings-grid label,
+.admin-content .admin-settings-grid input,
+.admin-content .admin-settings-grid select,
+.admin-content .admin-settings-grid textarea {
+  min-width: 0;
+  max-width: 100%;
+}
+.admin-content .admin-settings-grid input,
+.admin-content .admin-settings-grid select,
+.admin-content .admin-settings-grid textarea {
+  width: 100%;
+}
+.admin-content .admin-settings-status {
+  flex: 0 1 auto;
+  max-width: 100%;
+  white-space: normal;
+}
+.admin-content .admin-store-logo-preview,
+.admin-content .admin-brand-asset-preview {
+  max-width: 100%;
+  overflow: hidden;
+}
+.admin-content .admin-store-logo-preview img,
+.admin-content .admin-brand-asset-preview img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.admin-content .admin-store-logo-actions,
+.admin-content .admin-homepage-banner-top,
+.admin-content .admin-form-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+}
+.admin-content .admin-homepage-banner-top > div {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  min-width: 0;
+  max-width: 100%;
+}
+.admin-content .admin-homepage-banner-card,
+.admin-content .admin-shop-banner-card,
+.admin-content .admin-brand-asset-card {
+  min-width: 0;
+  max-width: 100%;
+}
+.admin-content .admin-upload-button,
+.admin-content .admin-settings-form button {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.admin-content .admin-settings-form button svg {
+  flex: 0 0 auto;
+}
+.admin-content .admin-settings-form .admin-field-wide {
+  grid-column: 1 / -1;
+}
+@media (min-width: 601px) and (max-width: 900px) {
+  .admin-content .admin-settings-form {
+    gap: 14px;
+  }
+  .admin-content .admin-settings-section {
+    padding: 16px;
+  }
+  .admin-content .admin-settings-grid {
+    gap: 12px;
+  }
+  .admin-content .admin-store-logo-actions > *,
+  .admin-content .admin-homepage-banner-top > div > * {
+    flex: 0 1 auto;
+  }
+  .admin-content .admin-form-actions .admin-action {
+    min-height: 44px;
+  }
+}
+@media (max-width: 600px) {
+  .admin-content .admin-welcome.admin-welcome-premium {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .admin-content .admin-settings-form {
+    padding: 12px;
+    gap: 12px;
+  }
+  .admin-content .admin-settings-section {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    min-width: 0;
+    padding: 13px;
+    gap: 11px;
+  }
+  .admin-content .admin-settings-section .admin-form-heading {
+    width: 100%;
+    margin: 0;
+  }
+  .admin-content .admin-settings-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+    gap: 11px;
+  }
+  .admin-content .admin-settings-grid > *,
+  .admin-content .admin-settings-grid .admin-field-wide {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-width: 0;
+  }
+  .admin-content .admin-settings-grid input,
+  .admin-content .admin-settings-grid select,
+  .admin-content .admin-settings-grid textarea {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    min-height: 44px;
+    font-size: 16px;
+  }
+  .admin-content .admin-settings-grid textarea {
+    min-height: 96px;
+  }
+  .admin-content .admin-store-logo-actions,
+  .admin-content .admin-homepage-banner-top,
+  .admin-content .admin-homepage-banner-top > div,
+  .admin-content .admin-form-actions {
+    width: 100%;
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .admin-content .admin-store-logo-actions > *,
+  .admin-content .admin-homepage-banner-top > div > *,
+  .admin-content .admin-form-actions > *,
+  .admin-content .admin-upload-button {
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+    justify-content: center;
+  }
+  .admin-content .admin-store-logo-preview {
+    min-height: 88px;
+  }
+  .admin-content .admin-brand-asset-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .admin-content .admin-announcement-social-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .admin-content .admin-settings-section .admin-settings-icon {
+    flex: 0 0 auto;
+  }
+}
+@media (max-width: 360px) {
+  .admin-content .admin-settings-form {
+    padding: 9px;
+  }
+  .admin-content .admin-settings-section {
+    padding: 10px;
+  }
+  .admin-content .admin-announcement-social-options {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
