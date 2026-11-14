@@ -9256,3 +9256,76 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     padding: 24px !important;
   }
 }
+
+
+/* Footer social icons: circular, icon-only brand buttons on every device */
+.footer-complete .footer-social-links {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 12px;
+  width: max-content;
+  max-width: 100%;
+  margin-top: 12px;
+}
+.footer-complete .footer-social-links a {
+  display: inline-flex;
+  flex: 0 0 42px;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 50%;
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 2px 7px #00000018;
+  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+.footer-complete .footer-social-links a span { display: none; }
+.footer-complete .footer-social-links a svg {
+  display: block;
+  width: 25px;
+  height: 25px;
+  flex: 0 0 25px;
+}
+.footer-complete .footer-social-links .social-facebook { background: #1877f2; }
+.footer-complete .footer-social-links .social-facebook svg { color: #fff; }
+.footer-complete .footer-social-links .social-instagram {
+  background: linear-gradient(135deg, #833ab4 0%, #e1306c 52%, #fcb045 100%);
+}
+.footer-complete .footer-social-links .social-instagram svg rect,
+.footer-complete .footer-social-links .social-instagram svg circle {
+  stroke: #fff !important;
+}
+.footer-complete .footer-social-links .social-instagram svg circle:last-child { fill: #fff; }
+.footer-complete .footer-social-links .social-youtube { background: #ff0033; }
+.footer-complete .footer-social-links .social-youtube svg path:first-child { fill: #fff; }
+.footer-complete .footer-social-links .social-youtube svg path:last-child { fill: #ff0033; }
+.footer-complete .footer-social-links .social-tiktok { background: #111; }
+.footer-complete .footer-social-links .social-tiktok svg { width: 24px; height: 24px; }
+.footer-complete .footer-social-links a:hover {
+  filter: brightness(1.06);
+  box-shadow: 0 5px 12px #00000025;
+  transform: translateY(-2px);
+}
+@media (max-width: 650px) {
+  .footer-complete .footer-social-links { gap: 10px; }
+  .footer-complete .footer-social-links a {
+    flex-basis: 38px;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+  }
+  .footer-complete .footer-social-links a svg {
+    width: 23px;
+    height: 23px;
+    flex-basis: 23px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .footer-complete .footer-social-links a { transition: none; }
+}
