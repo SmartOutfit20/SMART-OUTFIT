@@ -48,6 +48,11 @@ export function Shop(){
  const [stockOnly,setStockOnly]=useState(false)
  const [maxPrice,setMaxPrice]=useState(20000)
  const [shopBanners,setShopBanners]=useState([])
+ const [activeShopBanner,setActiveShopBanner]=useState(0)
+ const [previousShopBanner,setPreviousShopBanner]=useState(null)
+ const [shopBannerDirection,setShopBannerDirection]=useState(1)
+ const shopBannerTouchStartX=useRef(null)
+ const changeShopBanner=useCallback((next,direction=1)=>{if(next===activeShopBanner)return;setPreviousShopBanner(shopBanners[activeShopBanner]||null);setShopBannerDirection(direction);setActiveShopBanner(next)},[shopBanners,activeShopBanner])
  const category=params.get('category')||'All'
  useEffect(()=>{setQuery(params.get('search')||'')},[params])
  useEffect(()=>{
@@ -59,7 +64,11 @@ export function Shop(){
    .finally(()=>{if(active)setLoading(false)})
   return ()=>{active=false}
  },[query,sort])
- useEffect(()=>{let active=true;api.get('/storefront').then(({data})=>{if(active)setShopBanners((data.shopBanners||[]).filter(x=>x&&x.enabled!==false&&x.image).sort((a,b)=>(a.sortOrder||0)-(b.sortOrder||0)))}).catch(()=>{});return()=>{active=false}},[])
+ useEffect(()=>{let active=true;api.get('/storefront').then(({data})=>{if(active){setShopBanners((data.shopBanners||[]).filter(x=>x&&x.enabled!==false&&typeof x.image==='string'&&x.image.trim()).sort((a,b)=>(a.sortOrder||0)-(b.sortOrder||0)));setActiveShopBanner(0)}}).catch(()=>{});return()=>{active=false}},[])
+ useEffect(()=>{if(activeShopBanner>=shopBanners.length)setActiveShopBanner(0)},[shopBanners.length,activeShopBanner])
+ useEffect(()=>{if(!previousShopBanner)return;const timer=window.setTimeout(()=>setPreviousShopBanner(null),850);return()=>window.clearTimeout(timer)},[previousShopBanner,activeShopBanner])
+ useEffect(()=>{if(shopBanners.length<2)return;const timer=window.setInterval(()=>changeShopBanner((activeShopBanner+1)%shopBanners.length,1),4500);return()=>window.clearInterval(timer)},[shopBanners.length,activeShopBanner,changeShopBanner])
+ const activeShopBannerItem=shopBanners[activeShopBanner]||null
  const items=useMemo(()=>remote.filter(p=>{
   const matchesCategory=category==='All'||p.category===category
   const term=query.trim().toLowerCase()
@@ -73,7 +82,7 @@ export function Shop(){
  const clearFilters=()=>{setSizeFilter('');setStockOnly(false);setMaxPrice(20000);setParams(prev=>{const next=new URLSearchParams(prev);next.delete('category');return next})}
  const chooseCategory=name=>setParams(prev=>{const next=new URLSearchParams(prev);if(name==='All')next.delete('category');else next.set('category',name);return next})
  return <div className="page-wrap shop-page shop-page-classic">
-  {shopBanners.length>0&&<section className="shop-managed-banner">{shopBanners.slice(0,3).map((banner,index)=><Link to={banner.buttonLink||'/shop'} className="shop-managed-banner-slide" key={index}><img src={banner.image} alt={banner.title||'SMART OUTFIT Shop banner'}/>{(banner.title||banner.description)&&<span className="shop-managed-banner-copy">{banner.title&&<b>{banner.title}</b>}{banner.description&&<small>{banner.description}</small>}</span>}</Link>)}</section>}
+  {activeShopBannerItem?.image&&<section className="shop-managed-banner shop-managed-banner-slider" aria-label="Shop promotions" onTouchStart={event=>{shopBannerTouchStartX.current=event.changedTouches[0]?.clientX??null}} onTouchEnd={event=>{const endX=event.changedTouches[0]?.clientX;if(shopBannerTouchStartX.current!==null&&endX!==undefined&&Math.abs(endX-shopBannerTouchStartX.current)>45&&shopBanners.length>1){changeShopBanner((activeShopBanner+(endX<shopBannerTouchStartX.current?1:-1)+shopBanners.length)%shopBanners.length,endX<shopBannerTouchStartX.current?1:-1)}shopBannerTouchStartX.current=null}}>{previousShopBanner?.image&&<div key={'out-'+(previousShopBanner._id||previousShopBanner.id||previousShopBanner.image)} className={'shop-managed-banner-image shop-managed-banner-image--outgoing '+(shopBannerDirection>0?'slide-next':'slide-previous')} style={{backgroundImage:'url('+previousShopBanner.image+')'}}/>}<Link key={activeShopBannerItem._id||activeShopBannerItem.id||activeShopBannerItem.image} to={activeShopBannerItem.buttonLink||'/shop'} className={'shop-managed-banner-image shop-managed-banner-image--incoming '+(shopBannerDirection>0?'slide-next':'slide-previous')} style={{backgroundImage:'url('+activeShopBannerItem.image+')'}} aria-label={activeShopBannerItem.title||'Explore shop'}>{(activeShopBannerItem.title||activeShopBannerItem.description)&&<span className="shop-managed-banner-copy">{activeShopBannerItem.title&&<b>{activeShopBannerItem.title}</b>}{activeShopBannerItem.description&&<small>{activeShopBannerItem.description}</small>}</span>}</Link>{shopBanners.length>1&&<><div className="shop-managed-banner-controls"><button type="button" aria-label="Previous banner" onClick={()=>changeShopBanner((activeShopBanner-1+shopBanners.length)%shopBanners.length,-1)}>‹</button><button type="button" aria-label="Next banner" onClick={()=>changeShopBanner((activeShopBanner+1)%shopBanners.length,1)}>›</button></div><div className="shop-managed-banner-dots" role="group" aria-label="Shop banner navigation">{shopBanners.map((item,index)=><button key={item._id||item.id||index} type="button" className={index===activeShopBanner?'active':''} aria-label={'Show banner '+(index+1)} aria-current={index===activeShopBanner?'true':undefined} onClick={()=>changeShopBanner(index,index>=activeShopBanner?1:-1)}/>)}</div></>}</section>}
   <div className="breadcrumb"><Link to="/">HOME</Link> / <Link to="/shop">SHOP</Link>{category!=='All'&&<> / {category.toUpperCase()}</>}</div>
   <div className="page-title"><div><span className="eyebrow">THE SMART OUTFIT EDIT</span><h1>{category==='All'?'SHOP ALL':category.toUpperCase()}</h1><p>{category==='All'?'Find your next favourite piece.':`Explore our ${category.toLowerCase()} collection.`}</p></div><input className="search-input" placeholder="পণ্য খুঁজুন..." value={query} onChange={e=>setQuery(e.target.value)}/></div>
   <div className="filter-row shop-classic-filter-row"><div className="shop-category-filters">{cats.map(c=><button type="button" className={category===c?'filter active':'filter'} key={c} onClick={()=>chooseCategory(c)}>{c==='All'?'All Products':c}</button>)}</div><button type="button" className={filterOpen?'shop-refine-toggle active':'shop-refine-toggle'} onClick={()=>setFilterOpen(v=>!v)}><SlidersHorizontal size={15}/> Filters</button><select value={sort} onChange={e=>setSort(e.target.value)}><option value="featured">Recommended</option><option value="newest">Latest</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option></select></div>
