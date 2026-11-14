@@ -99,7 +99,7 @@ let productSerialMigrationPromise
 async function nextProductSerial() {
   const counter = await Setting.findOneAndUpdate(
     { key: 'productSequence' },
-    { $inc: { value: 1 }, $setOnInsert: { value: 1 } },
+    { $inc: { value: 1 } },
     { upsert: true, new: true, setDefaultsOnInsert: true }
   )
   return Number(counter.value)
@@ -111,7 +111,7 @@ async function ensureProductSerials() {
       const highest = products.reduce((n, product) => Math.max(n, Number(product.serialNumber) || 0), 0)
       await Setting.findOneAndUpdate(
         { key: 'productSequence' },
-        { $max: { value: highest }, $setOnInsert: { value: highest } },
+        { $max: { value: highest } },
         { upsert: true, new: true, setDefaultsOnInsert: true }
       )
       for (const product of products) {
@@ -136,10 +136,14 @@ async function ensureProductSerials() {
   return productSerialMigrationPromise
 }
 async function assignProductSerial(payload) {
-  if (payload.sku) return
-  const serialNumber = await nextProductSerial()
+  let serialNumber = await nextProductSerial()
+  let sku = 'SO-' + String(serialNumber).padStart(4, '0')
+  while (await Product.exists({ sku })) {
+    serialNumber = await nextProductSerial()
+    sku = 'SO-' + String(serialNumber).padStart(4, '0')
+  }
   payload.serialNumber = serialNumber
-  payload.sku = 'SO-' + String(serialNumber).padStart(4, '0')
+  payload.sku = sku
 }
 function productWriteError(error) {
   if (error?.code === 11000 && error?.keyPattern?.slug) {
