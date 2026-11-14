@@ -5065,7 +5065,7 @@ button,input,select,textarea{font-family:inherit}
 }
 
 
-/* Final small width adjustment: keep content closer to the shared header/footer edges. */
+/* Fine-tune storefront content edges to sit close to the header/footer inset. */
 @media (min-width: 1101px) {
   .site-main > .hero,
   .site-main > .benefits,
@@ -5077,8 +5077,8 @@ button,input,select,textarea{font-family:inherit}
   .site-main > .orders-page,
   .site-main > .info-page {
     box-sizing: border-box;
-    width: min(1240px, calc(100% - 32px));
-    max-width: 1240px;
+    width: min(1220px, calc(100% - 40px));
+    max-width: 1220px;
     margin-left: auto;
     margin-right: auto;
     min-width: 0;
@@ -5095,8 +5095,8 @@ button,input,select,textarea{font-family:inherit}
   .site-main > .orders-page,
   .site-main > .info-page {
     box-sizing: border-box;
-    width: calc(100% - 32px);
-    max-width: 1240px;
+    width: calc(100% - 40px);
+    max-width: 1220px;
     margin-left: auto;
     margin-right: auto;
     min-width: 0;
