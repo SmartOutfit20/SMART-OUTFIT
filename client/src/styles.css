@@ -4997,3 +4997,29 @@ button,input,select,textarea{font-family:inherit}
 .route-error-panel{min-height:42vh;display:grid;place-items:center;padding:36px 20px;text-align:center;background:#fff}.route-error-panel>div{max-width:560px}.route-error-panel h2{margin:12px 0;font-size:clamp(22px,4vw,30px);color:#202923}.route-error-panel p{color:#66736c;line-height:1.8}.route-error-actions{display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap;margin-top:22px}.route-error-actions button{border:0;border-radius:8px;padding:12px 18px;background:#16845A;color:#fff;font:inherit;font-weight:700;cursor:pointer}.route-error-actions a{color:#16845A;font-weight:700;text-decoration:none}.app-loading-screen{min-height:40vh;display:grid;place-items:center;padding:32px;color:#16845A;font-weight:700;text-align:center}
 @media(max-width:520px){.route-error-panel{min-height:36vh;padding:28px 16px}.route-error-actions{flex-direction:column}.route-error-actions button,.route-error-actions a{width:100%;max-width:260px}}
 @media(prefers-reduced-motion:reduce){.route-error-panel *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+
+/* Storefront page gutters: align every route's content with the existing footer inset.
+   Section backgrounds remain full-width; only their content gets the shared side spacing. */
+.site-main > * {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: max(5vw, 24px);
+  padding-right: max(5vw, 24px);
+}
+@media (max-width: 760px) {
+  .site-main > * {
+    padding-left: max(6vw, 18px);
+    padding-right: max(6vw, 18px);
+  }
+}
+@media (max-width: 420px) {
+  .site-main > * {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+}
