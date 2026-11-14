@@ -3932,3 +3932,114 @@ button,input,select,textarea{font-family:inherit}
   .orders-page .order-progress{padding:12px 9px 4px;overflow-x:auto}
   .orders-page .courier-track{padding:12px;gap:7px 12px;font-size:11px}
 }
+
+
+/* Product detail recommendations: reuse the Shop catalogue grid */
+.detail-related-section{
+  margin-top:clamp(34px,5vw,58px);
+  padding-top:clamp(28px,4vw,42px);
+  border-top:1px solid #e8eee9;
+}
+.detail-related-section>h2{
+  margin:0 0 20px;
+  color:#26352b;
+  font:800 clamp(17px,2vw,22px)/1.3 'Manrope','Hind Siliguri',sans-serif;
+  letter-spacing:.2px;
+}
+.detail-related-section .shop-product-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:clamp(10px,1.8vw,20px);
+}
+.detail-copy .size-options button{
+  min-width:44px;
+  height:44px;
+  padding:0 12px;
+  border:1px solid #dce6df;
+  border-radius:9px;
+  background:#fff;
+  color:#3b493e;
+  font:700 12px 'Manrope','Hind Siliguri',sans-serif;
+  transition:border-color .18s,background .18s,color .18s,box-shadow .18s;
+}
+.detail-copy .size-options button:hover:not(:disabled){
+  border-color:#16845a;
+  background:#f4faf6;
+}
+.detail-copy .size-options button.selected{
+  border-color:#16845a;
+  background:#16845a;
+  color:#fff;
+  box-shadow:0 3px 9px rgba(22,132,90,.18);
+}
+.detail-copy .size-options button:disabled,
+.detail-copy .color-options button:disabled{
+  opacity:.38;
+  cursor:not-allowed;
+  text-decoration:line-through;
+}
+.detail-copy .color-options button{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  min-height:42px;
+  padding:6px 11px;
+  border:1px solid #dce6df;
+  border-radius:9px;
+  background:#fff;
+  color:#3b493e;
+  font:600 11px 'Hind Siliguri',sans-serif;
+  transition:border-color .18s,background .18s,box-shadow .18s;
+}
+.detail-copy .color-options button i{
+  display:block;
+  width:18px;
+  height:18px;
+  flex:0 0 18px;
+  border:1px solid #d6ddd8;
+  border-radius:50%;
+  box-shadow:inset 0 0 0 2px #ffffff;
+}
+.detail-copy .color-options button.selected{
+  border:1.5px solid #16845a;
+  background:#f0f8f3;
+  color:#126b49;
+  box-shadow:0 0 0 2px rgba(22,132,90,.09);
+}
+.detail-copy .option-label{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:19px 0 10px;
+  color:#34443a;
+  font-weight:700;
+}
+.detail-copy .qty-control{
+  height:42px;
+  border:1px solid #dce6df;
+  border-radius:10px;
+  background:#fff;
+}
+.detail-copy .detail-action-buttons{gap:10px}
+.detail-copy .detail-action-buttons .btn{
+  min-height:46px;
+  border-radius:10px;
+  font-weight:700;
+}
+@media(max-width:900px){
+  .detail-related-section .shop-product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+}
+@media(max-width:700px){
+  .detail-related-section{margin-top:28px;padding-top:24px}
+  .detail-related-section>h2{margin-bottom:15px;font-size:17px}
+  .detail-related-section .shop-product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+  .detail-related-section .shop-product-grid .product-info{padding:10px 8px 11px}
+  .detail-related-section .shop-product-grid .product-name{margin:4px 0 6px;line-height:1.35}
+  .detail-related-section .shop-product-grid .product-bottom{margin:0}
+  .detail-copy .size-options{gap:8px}
+  .detail-copy .size-options button{min-width:42px;width:auto;height:42px;border-radius:8px}
+  .detail-copy .color-options{gap:8px}
+  .detail-copy .color-options button{min-height:40px;border-radius:8px;padding:6px 9px}
+  .detail-copy .detail-action-buttons .btn{border-radius:9px}
+}
