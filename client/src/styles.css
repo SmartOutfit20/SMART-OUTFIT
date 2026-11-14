@@ -3696,7 +3696,7 @@ button,input,select,textarea{font-family:inherit}
 .shop-recommendation-heading>div{min-width:0}
 .shop-managed-banner-slide{min-width:0}
 @media(max-width:700px){
- .shop-page-classic{padding-left:20px;padding-right:20px}
+ .shop-page-classic{padding-left:16px;padding-right:16px}
  .shop-page-classic .breadcrumb{margin-bottom:17px;font-size:9px;overflow-wrap:anywhere}
  .shop-page-classic .page-title{display:flex;flex-direction:column;align-items:stretch;gap:12px;margin-bottom:18px}
  .shop-page-classic .page-title>div{min-width:0}
@@ -6861,8 +6861,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   .header,
   .announcement-interactive,
   .footer.footer-complete {
-    padding-left: 20px !important;
-    padding-right: 20px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
   }
 }
 
