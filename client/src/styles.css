@@ -5994,3 +5994,109 @@ body{font-size:16px;line-height:1.6}
 @media(prefers-reduced-motion:reduce){
  .product-detail-refined .detail-purchase-card-v2 .detail-action-buttons .btn{transition:none}
 }
+
+
+/* Simple product purchase controls — intentionally quiet and uncluttered. */
+.product-detail-refined .detail-purchase-card-v2{
+  margin-top:18px!important;padding:16px!important;overflow:visible!important;
+  border:1px solid #e7e4eb!important;border-radius:8px!important;
+  background:#fff!important;box-shadow:none!important;
+}
+.product-detail-refined .detail-purchase-card-v2:before{content:none!important;display:none!important}
+.product-detail-refined .detail-purchase-card-v2 .purchase-card-heading{display:none!important}
+.product-detail-refined .detail-purchase-card-v2 .detail-options-panel{
+  display:flex!important;flex-direction:column!important;gap:16px!important;
+  padding:0!important;background:#fff!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-option-block:not(.detail-quantity-block){
+  margin:0!important;padding:0 0 14px!important;border:0!important;
+  border-bottom:1px solid #eeeeF1!important;border-radius:0!important;
+  background:transparent!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .option-label{
+  display:block!important;margin:0 0 9px!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .option-label .detail-option-title{
+  color:#24212a!important;font-size:14px!important;font-weight:700!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .option-label .detail-option-title:before{display:none!important}
+.product-detail-refined .detail-purchase-card-v2 .option-label .detail-option-hint{display:none!important}
+.product-detail-refined .detail-purchase-card-v2 .size-options{
+  display:flex!important;flex-wrap:wrap!important;gap:7px!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .size-options button{
+  width:43px!important;height:39px!important;border:1px solid #dedbe3!important;
+  border-radius:5px!important;background:#fff!important;color:#28242e!important;
+  box-shadow:none!important;font-size:13px!important;transform:none!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .size-options button.selected{
+  border:1px solid #6d28d9!important;background:#6d28d9!important;color:#fff!important;
+  box-shadow:none!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .size-options button.selected:after{display:none!important}
+.product-detail-refined .detail-purchase-card-v2 .color-options{
+  display:flex!important;flex-wrap:wrap!important;gap:8px!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .color-options button{
+  min-width:0!important;min-height:36px!important;padding:5px 9px!important;
+  display:inline-flex!important;align-items:center!important;gap:7px!important;
+  border:1px solid #e2dfe6!important;border-radius:5px!important;
+  background:#fff!important;color:#302b35!important;box-shadow:none!important;
+  font-size:12px!important;transform:none!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .color-options button i{
+  width:17px!important;height:17px!important;flex:0 0 17px!important;
+  border:1px solid #d6d2da!important;box-shadow:none!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .color-options button.selected{
+  border:1px solid #6d28d9!important;background:#f7f3fc!important;
+  color:#4c1d95!important;box-shadow:none!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .color-options button.selected span:after{
+  content:"✓"!important;display:inline!important;margin-left:5px!important;
+  width:auto!important;height:auto!important;border-radius:0!important;
+  background:transparent!important;color:#6d28d9!important;font-size:11px!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-quantity-block{
+  display:flex!important;align-items:center!important;justify-content:space-between!important;
+  gap:12px!important;margin:0!important;padding:0 0 14px!important;
+  border:0!important;border-bottom:1px solid #eeeeF1!important;border-radius:0!important;
+  background:transparent!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-quantity-heading .detail-option-title{
+  color:#24212a!important;font-size:14px!important;font-weight:700!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-quantity-heading .detail-option-hint{display:none!important}
+.product-detail-refined .detail-purchase-card-v2 .qty-control{
+  height:36px!important;min-width:105px!important;gap:13px!important;
+  padding:0 8px!important;border:1px solid #dedbe3!important;
+  border-radius:5px!important;background:#fff!important;box-shadow:none!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .qty-control button{
+  padding:3px!important;background:transparent!important;color:#29242f!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-action-buttons{
+  display:grid!important;grid-template-columns:1fr 1fr!important;gap:9px!important;
+  margin:15px 0 0!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-action-buttons .btn{
+  width:100%!important;min-height:43px!important;padding:10px 12px!important;
+  border-radius:5px!important;box-shadow:none!important;transform:none!important;
+  font-size:12px!important;letter-spacing:0!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-action-buttons .detail-add-btn{
+  border:1px solid #28232e!important;background:#28232e!important;color:#fff!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-action-buttons .detail-buy-btn{
+  border:1px solid #6d28d9!important;background:#6d28d9!important;color:#fff!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-trust-row{display:none!important}
+@media(max-width:650px){
+ .product-detail-refined .detail-purchase-card-v2{padding:13px!important;border-radius:7px!important}
+ .product-detail-refined .detail-purchase-card-v2 .detail-action-buttons{grid-template-columns:1fr 1fr!important}
+ .product-detail-refined .detail-purchase-card-v2 .size-options{display:flex!important}
+ .product-detail-refined .detail-purchase-card-v2 .size-options button{width:42px!important;height:38px!important}
+}
+@media(max-width:360px){
+ .product-detail-refined .detail-purchase-card-v2 .detail-action-buttons{grid-template-columns:1fr!important}
+}
