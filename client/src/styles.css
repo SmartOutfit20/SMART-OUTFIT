@@ -5065,8 +5065,7 @@ button,input,select,textarea{font-family:inherit}
 }
 
 
-/* Slightly inset storefront content so it sits safely inside the
-   unchanged header and footer content edges on desktop and tablet. */
+/* Fine-tune storefront content edges to sit close to the header/footer inset. */
 @media (min-width: 1101px) {
   .site-main > .hero,
   .site-main > .benefits,
@@ -5078,8 +5077,8 @@ button,input,select,textarea{font-family:inherit}
   .site-main > .orders-page,
   .site-main > .info-page {
     box-sizing: border-box;
-    width: min(1200px, calc(100% - 48px));
-    max-width: 1200px;
+    width: min(1220px, calc(100% - 40px));
+    max-width: 1220px;
     margin-left: auto;
     margin-right: auto;
     min-width: 0;
@@ -5096,8 +5095,8 @@ button,input,select,textarea{font-family:inherit}
   .site-main > .orders-page,
   .site-main > .info-page {
     box-sizing: border-box;
-    width: calc(100% - 48px);
-    max-width: 1200px;
+    width: calc(100% - 40px);
+    max-width: 1220px;
     margin-left: auto;
     margin-right: auto;
     min-width: 0;
