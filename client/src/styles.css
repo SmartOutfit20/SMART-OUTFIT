@@ -9007,3 +9007,17 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     padding: 10px;
   }
 }
+
+
+/* SMART OUTFIT — tablet-only requested spacing overrides */
+@media (min-width: 651px) and (max-width: 900px) {
+  .footer.footer-complete {
+    padding: 35px 35px 72px !important;
+  }
+  .header {
+    padding: 9px 35px !important;
+  }
+  .page-wrap.shop-page.shop-page-classic {
+    padding: 35px 0 0 !important;
+  }
+}
