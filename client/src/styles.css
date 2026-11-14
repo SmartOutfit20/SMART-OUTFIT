@@ -7751,3 +7751,12 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     min-height: 39px;
   }
 }
+
+/* SMART OUTFIT: align managed hero copy with the 1220px content boundary. */
+.home-page > .hero.hero-managed .hero-copy {
+  width: 100%;
+  max-width: 1220px;
+  min-width: 0px;
+  z-index: 1;
+  grid-column: auto;
+}
