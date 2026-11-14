@@ -7752,11 +7752,13 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   }
 }
 
-/* SMART OUTFIT: align managed hero copy with the 1220px content boundary. */
+/* SMART OUTFIT: keep managed hero copy within the banner frame. */
 .home-page > .hero.hero-managed .hero-copy {
   width: 100%;
-  max-width: 1220px;
-  min-width: 0px;
+  max-width: 400px;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
   z-index: 1;
   grid-column: auto;
 }
