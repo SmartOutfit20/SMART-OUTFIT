@@ -139,7 +139,8 @@ export function ProductDetail(){
     {savings>0&&<p className="detail-savings">আপনি সাশ্রয় করছেন <b>{money(savings)}</b></p>}
     {p.description&&<p className="detail-description">{p.description}</p>}
     <div className={selectedStock>0?'detail-stock-line':'detail-stock-line is-out'}><i/>{stockLabel}{selectedStock>0&&selectedStock<=5&&<span> · দ্রুত অর্ডার করুন</span>}</div>
-    <section className="detail-purchase-card" aria-label="পণ্যের অপশন ও অর্ডার">
+    <section className="detail-purchase-card detail-purchase-card-v2" aria-label="পণ্যের অপশন ও অর্ডার">
+    <div className="purchase-card-heading"><div><span>YOUR PERFECT FIT</span><h2>আপনার পছন্দ বেছে নিন</h2></div><small>01 — 03</small></div>
     <div className="detail-options-panel">
      <div className="detail-option-block">
       <div className="option-label"><span className="detail-option-title">সাইজ নির্বাচন করুন</span><span className="detail-option-hint">আপনার পছন্দের সাইজে ট্যাপ করুন</span></div>
