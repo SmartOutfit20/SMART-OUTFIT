@@ -7760,3 +7760,30 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   z-index: 1;
   grid-column: auto;
 }
+
+/* SMART OUTFIT: mobile search opens only after tapping its search icon. */
+.header .mobile-search-toggle {
+  display: none;
+}
+@media (max-width: 900px) {
+  .header .mobile-search-toggle {
+    display: inline-flex;
+    order: 3;
+    flex: 0 0 32px;
+    width: 32px;
+    min-width: 32px;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+  }
+  .header .header-actions.search-expanded .header-search-panel {
+    display: none;
+  }
+  .header .header-actions.search-expanded.mobile-search-open .header-search-panel {
+    display: flex;
+  }
+}
