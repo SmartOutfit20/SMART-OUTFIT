@@ -8144,7 +8144,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 
 
 /* SMART OUTFIT: Shop hero carousel follows the homepage banner behaviour. */
-.shop-managed-banner-slider{position:relative;display:block;width:100%;max-width:1220px;margin:0 auto 24px;aspect-ratio:3.05/1;overflow:hidden;isolation:isolate;background:#f3f4f2;scroll-snap-type:none}
+.shop-managed-banner-slider{position:relative;display:block;width:calc(100% + 16%);max-width:1220px;margin:0 0 24px -8%;aspect-ratio:1220/400;overflow:hidden;isolation:isolate;background:#f3f4f2;scroll-snap-type:none}
 .shop-managed-banner-slider .shop-managed-banner-image{position:absolute;inset:0;display:block;width:100%;height:100%;background-color:#f3f4f2;background-position:center;background-repeat:no-repeat;background-size:cover;color:#fff;overflow:hidden}
 .shop-managed-banner-slider .shop-managed-banner-image--outgoing{z-index:1;pointer-events:none}
 .shop-managed-banner-slider .shop-managed-banner-image--incoming{z-index:2}
@@ -8158,8 +8158,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .shop-managed-banner-dots button{width:8px;height:8px;padding:0;border:0;border-radius:99px;background:#ffffff99;cursor:pointer;transition:width .2s ease,background .2s ease}
 .shop-managed-banner-dots button.active{width:22px;background:#fff}
 .shop-managed-banner-slider .shop-managed-banner-copy{z-index:3}
-@media (min-width:701px) and (max-width:900px){.shop-managed-banner-slider{width:min(100%,768px);aspect-ratio:768/252;margin-bottom:20px}}
-@media (max-width:700px){.shop-managed-banner-slider{width:100%;max-width:393px;height:auto;min-height:0;aspect-ratio:393/129;padding:0;margin-left:auto;margin-right:auto;margin-bottom:18px}.shop-managed-banner-controls{inset-inline:7px}.shop-managed-banner-controls button{width:29px;height:29px;font-size:21px}.shop-managed-banner-dots{bottom:6px;gap:5px}.shop-managed-banner-dots button{width:6px;height:6px}.shop-managed-banner-dots button.active{width:16px}.shop-managed-banner-slider .shop-managed-banner-copy{max-width:55%;left:5%;gap:3px}.shop-managed-banner-slider .shop-managed-banner-copy b{font-size:clamp(10px,3.2vw,18px)}.shop-managed-banner-slider .shop-managed-banner-copy small{font-size:clamp(7px,1.9vw,11px)}}
+@media (min-width:701px) and (max-width:900px){.shop-managed-banner-slider{width:calc(100% + 70px);max-width:768px;margin-left:-35px;aspect-ratio:768/252;margin-bottom:20px}}
+@media (max-width:700px){.shop-managed-banner-slider{width:calc(100% + 10%);max-width:393px;height:auto;min-height:0;aspect-ratio:393/129;padding:0;margin-left:-5%;margin-right:0;margin-bottom:18px}.shop-managed-banner-controls{inset-inline:7px}.shop-managed-banner-controls button{width:29px;height:29px;font-size:21px}.shop-managed-banner-dots{bottom:6px;gap:5px}.shop-managed-banner-dots button{width:6px;height:6px}.shop-managed-banner-dots button.active{width:16px}.shop-managed-banner-slider .shop-managed-banner-copy{max-width:55%;left:5%;gap:3px}.shop-managed-banner-slider .shop-managed-banner-copy b{font-size:clamp(10px,3.2vw,18px)}.shop-managed-banner-slider .shop-managed-banner-copy small{font-size:clamp(7px,1.9vw,11px)}}
 @media(prefers-reduced-motion:reduce){.shop-managed-banner-slider .shop-managed-banner-image--incoming,.shop-managed-banner-slider .shop-managed-banner-image--outgoing{animation-duration:.01ms!important}.shop-managed-banner-dots button{transition:none}}
 
 
