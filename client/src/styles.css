@@ -9312,6 +9312,22 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   box-shadow: 0 5px 12px #00000025;
   transform: translateY(-2px);
 }
+/* Tablet footer social buttons: slightly more compact than desktop */
+@media (min-width: 651px) and (max-width: 900px) {
+  .footer-complete .footer-social-links { gap: 8px; }
+  .footer-complete .footer-social-links a {
+    flex-basis: 34px;
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+  }
+  .footer-complete .footer-social-links a svg {
+    width: 20px;
+    height: 20px;
+    flex-basis: 20px;
+  }
+}
+
 @media (max-width: 650px) {
   .footer-complete .footer-social-links { gap: 10px; }
   .footer-complete .footer-social-links a {
