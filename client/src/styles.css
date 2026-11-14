@@ -8448,10 +8448,12 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 
 
-/* SMART OUTFIT: tablet-only footer spacing adjustment */
+/* SMART OUTFIT: tablet-only spacing for footer, header and shop page */
 @media (min-width: 651px) and (max-width: 900px) {
-  .footer.footer-complete {
-    padding: 35px 30px 72px !important;
+  .footer.footer-complete,
+  .header,
+  .page-wrap.shop-page.shop-page-classic {
+    padding: 35px 35px 72px !important;
   }
 }
 
