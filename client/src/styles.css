@@ -7028,3 +7028,50 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   .product-detail-refined .detail-purchase-card-v2 .detail-action-buttons{grid-template-columns:1fr}
   .product-detail-refined .detail-price-row .detail-color-options-inline .color-name{max-width:42px!important}
 }
+
+
+/* SMART OUTFIT homepage only: align content to the shared 1220px canvas. */
+@media (min-width: 1261px) {
+  .home-page > .hero,
+  .home-page > .benefits,
+  .home-page > .promo {
+    padding-left: max(20px, calc((100% - 1220px) / 2));
+    padding-right: max(20px, calc((100% - 1220px) / 2));
+  }
+}
+@media (min-width: 651px) {
+  .home-page > .section { padding-left: 20px; padding-right: 20px; }
+  .home-page > .section > .section-heading,
+  .home-page > .section > .category-grid,
+  .home-page > .section > .product-grid {
+    width: 100%;
+    max-width: 1220px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+@media (max-width: 1260px) {
+  .home-page > .hero,
+  .home-page > .benefits,
+  .home-page > .promo {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+@media (max-width: 650px) {
+  .home-page > .hero,
+  .home-page > .benefits,
+  .home-page > .promo,
+  .home-page > .section {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .home-page > .section > .section-heading,
+  .home-page > .section > .category-grid,
+  .home-page > .section > .product-grid {
+    width: 100%;
+    max-width: 1220px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
