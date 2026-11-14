@@ -4608,3 +4608,16 @@ button,input,select,textarea{font-family:inherit}
  .checkout-order-summary>.checkout-summary-items,.checkout-order-summary>.checkout-summary-details,.checkout-order-summary>.checkout-summary-totals{margin:0!important}
  .checkout-order-summary>.checkout-summary-trust{margin-top:12px!important}
 }
+
+
+/* Keep Bengali checkout summary title readable and naturally wrapped */
+.checkout-summary-heading{min-width:0;align-items:center}
+.checkout-summary-heading>div{flex:1 1 auto;min-width:0}
+.checkout-summary-heading>div>span{display:block;line-height:1.5;white-space:nowrap}
+.checkout-summary-heading h3{display:block!important;font-family:'Hind Siliguri','DM Sans',sans-serif!important;font-size:20px!important;font-weight:700!important;line-height:1.5!important;letter-spacing:0!important;white-space:normal!important;word-break:normal!important;overflow-wrap:normal!important;text-align:left;margin:5px 0 0!important}
+.checkout-summary-bag{flex:0 0 auto;white-space:nowrap}
+@media(max-width:560px){
+ .checkout-summary-heading{gap:9px}
+ .checkout-summary-heading h3{font-size:18px!important;line-height:1.45!important}
+ .checkout-summary-heading>div>span{font-size:8px;letter-spacing:.8px}
+}
