@@ -6742,3 +6742,106 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
 
+
+
+/* SMART OUTFIT unified button system — brand charcoal, white and muted brand accent */
+:root{
+  --so-primary:#21113c;
+  --so-primary-hover:#35204f;
+  --so-accent:#6e42a4;
+  --so-accent-soft:#f3eff7;
+  --so-control-border:#d9d3df;
+  --so-control-text:#211b2a;
+}
+/* Replace the overly bright violet accent with the established SMART OUTFIT palette. */
+:root{--so-purple:#6e42a4;--so-purple-dark:#21113c}
+.eyebrow,.nav a.active,.icon-btn:hover,.section-heading>a:hover,.filter:hover,
+.auth-switch a,.option-label span,.text-link:hover{color:var(--so-accent)!important}
+.btn,.full-btn,.quick-add,.admin-action,.filter.active,.header-search-panel button,
+.newsletter button,.mobile-menu-toggle,.shop-refine-toggle,.shop-refine-reset,
+.pwa-install-button,.back-to-top-button,.info-action-row .btn{
+  min-height:42px;border-radius:3px;font-weight:700;letter-spacing:.45px;
+  transition:background-color .18s ease,border-color .18s ease,color .18s ease,box-shadow .18s ease,transform .18s ease;
+}
+.btn{min-height:46px;padding:12px 22px;font-size:11px}
+.btn-dark,.full-btn,.quick-add,.admin-action,.header-search-panel button,.newsletter button{
+  background:var(--so-primary)!important;color:#fff!important;border:1px solid var(--so-primary)!important;
+}
+.btn-dark:hover,.full-btn:hover,.quick-add:hover,.admin-action:hover,
+.header-search-panel button:hover,.newsletter button:hover{
+  background:var(--so-primary-hover)!important;border-color:var(--so-primary-hover)!important;
+  box-shadow:0 5px 14px rgba(33,17,60,.15);transform:translateY(-1px)
+}
+.btn-light{background:#fff!important;color:var(--so-primary)!important;border:1px solid #fff!important}
+.btn-light:hover{background:#f3eff7!important;border-color:#f3eff7!important}
+.btn-outline,.admin-cancel,.admin-refresh,.shop-refine-reset,.filter:not(.active),
+.text-btn,.admin-delete,.size-options button,.color-options button,.qty-control button{
+  border:1px solid var(--so-control-border);border-radius:3px;transition:all .18s ease
+}
+.btn-outline{background:transparent;color:var(--so-primary);padding:11px 19px}
+.btn-outline:hover,.admin-cancel:hover,.admin-refresh:hover,.shop-refine-reset:hover,
+.filter:not(.active):hover{background:var(--so-accent-soft);border-color:var(--so-accent);color:var(--so-primary)}
+button:disabled,.btn:disabled{opacity:.48;cursor:not-allowed;transform:none!important;box-shadow:none!important}
+/* Consistent tap targets, readable labels and focus states for every control. */
+button:not(.icon-btn):not(.wish-btn):not(.qty-control button):not(.mobile-bottom-nav button){
+  -webkit-tap-highlight-color:transparent
+}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
+  outline:2px solid var(--so-accent)!important;outline-offset:2px
+}
+.filter,.admin-action,.admin-cancel,.admin-refresh,.shop-refine-toggle,.shop-refine-reset,
+.admin-delete,.text-btn,.payment-choice,.option-label{font-size:11px}
+.filter{min-height:37px;padding:8px 13px;background:#fff}
+.filter.active{background:var(--so-primary)!important;border-color:var(--so-primary)!important;color:#fff!important}
+.size-options button{min-width:42px;min-height:40px;background:#fff;color:var(--so-primary);font-weight:700}
+.size-options button.selected,.color-options button.selected{background:var(--so-primary)!important;border-color:var(--so-primary)!important;color:#fff!important}
+.qty-control{min-height:40px;border-radius:3px}
+.qty-control button{width:27px;height:27px;background:#fff;color:var(--so-primary)}
+.qty-control button:hover{background:var(--so-accent-soft)}
+.admin-action{min-height:39px;padding:10px 15px}
+.admin-cancel,.admin-refresh{min-height:38px;padding:9px 13px;background:#fff;color:var(--so-primary)}
+.admin-delete{min-height:30px;padding:7px 10px}
+/* Header counters: live item counts, using the site's deep brand shade instead of bright violet. */
+.header-actions{gap:clamp(10px,1.5vw,18px)}
+.header-actions .icon-btn{position:relative;min-width:34px;min-height:38px;justify-content:center;padding:5px 7px}
+.header-actions .icon-btn sup{
+  position:absolute;top:-3px;right:-4px;display:grid;place-items:center;
+  min-width:17px;height:17px;padding:0 4px;border:1.5px solid #fff;border-radius:20px;
+  background:var(--so-primary)!important;color:#fff!important;
+  font-size:9px;line-height:1;font-weight:800;font-variant-numeric:tabular-nums;
+}
+.header-actions .wishlist-icon sup{background:#21113c!important}
+/* Header stays usable on tablet and mobile; counters remain visible beside the icons. */
+@media(max-width:900px){
+  .header{gap:14px;padding-left:4%;padding-right:4%}
+  .nav{gap:clamp(8px,1.3vw,13px);font-size:9px}
+  .header-actions{gap:8px}
+  .header-actions .icon-btn{min-width:32px;padding:4px 6px}
+}
+@media(max-width:650px){
+  .header{height:64px;min-height:64px;gap:7px;padding:0 12px}
+  .header-actions{gap:5px;flex:0 0 auto}
+  .header-actions .icon-btn{min-width:30px;min-height:36px;padding:4px}
+  .header-actions .icon-btn svg{width:18px;height:18px}
+  .header-actions .icon-btn sup{top:-2px;right:-3px;min-width:16px;height:16px;font-size:8px}
+  .brand{min-width:0;max-width:42%;overflow:hidden}
+  .brand>span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .brand-logo{max-width:100%;height:auto;max-height:36px}
+  .btn{min-height:43px;padding:11px 15px;font-size:10px}
+  .filter{min-height:35px;padding:7px 10px;font-size:9px}
+  .admin-action,.admin-cancel,.admin-refresh{min-height:36px;padding:8px 11px;font-size:9px}
+  .auth-card{padding:25px 19px}
+  .checkout-form{padding:19px 14px}
+  .admin-product-form{padding:14px}
+}
+@media(max-width:370px){
+  .header{padding:0 8px}
+  .brand{max-width:37%;gap:5px;font-size:10px}
+  .brand-mark{width:29px;height:29px;flex:0 0 29px}
+  .header-actions{gap:2px}
+  .header-actions .icon-btn{min-width:27px;padding:3px}
+  .header-actions .icon-btn svg{width:17px;height:17px}
+}
+@media(prefers-reduced-motion:reduce){
+  .btn,.filter,.quick-add,.admin-action,.icon-btn{transition:none!important}
+}
