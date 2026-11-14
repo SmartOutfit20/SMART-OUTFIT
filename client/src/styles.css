@@ -4999,27 +4999,67 @@ button,input,select,textarea{font-family:inherit}
 @media(prefers-reduced-motion:reduce){.route-error-panel *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 
 
-/* Storefront page gutters: align every route's content with the existing footer inset.
-   Section backgrounds remain full-width; only their content gets the shared side spacing. */
-.site-main > * {
-  box-sizing: border-box;
-  width: 100%;
-  max-width: none;
-  min-width: 0;
-  margin-left: 0;
-  margin-right: 0;
-  padding-left: max(5vw, 24px);
-  padding-right: max(5vw, 24px);
-}
-@media (max-width: 760px) {
-  .site-main > * {
-    padding-left: max(6vw, 18px);
-    padding-right: max(6vw, 18px);
+/* Desktop and tablet storefront canvas: keep page content aligned with the
+   centered header/footer content width without flattening each page's own layout. */
+@media (min-width: 1101px) {
+  .site-main > .auth-wrap,
+  .site-main > .account-wrap {
+    box-sizing: border-box;
+    width: min(1240px, calc(100% - 32px));
+    max-width: 1240px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .site-main > .page-wrap,
+  .site-main > .orders-page,
+  .site-main > .info-page {
+    box-sizing: border-box;
+    width: min(1240px, calc(100% - 32px));
+    max-width: 1240px;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
-@media (max-width: 420px) {
-  .site-main > * {
-    padding-left: 18px;
-    padding-right: 18px;
+@media (min-width: 821px) and (max-width: 1100px) {
+  .site-main > .auth-wrap,
+  .site-main > .account-wrap,
+  .site-main > .page-wrap,
+  .site-main > .orders-page,
+  .site-main > .info-page {
+    box-sizing: border-box;
+    width: calc(100% - 40px);
+    max-width: 1240px;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 0;
+  }
+  .site-main > .auth-wrap,
+  .site-main > .account-wrap,
+  .site-main > .page-wrap {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .site-main .detail-layout {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+    gap: clamp(20px, 3vw, 36px);
+  }
+  .site-main .product-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (min-width: 821px) and (max-width: 980px) {
+  .site-main .hero {
+    grid-template-columns: minmax(0, 1fr) minmax(0, .8fr);
+    padding-left: clamp(28px, 5vw, 54px);
+    padding-right: clamp(28px, 5vw, 54px);
+  }
+  .site-main .category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .site-main .product-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
   }
 }
