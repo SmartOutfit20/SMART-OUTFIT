@@ -9169,3 +9169,10 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     color: #25f4ee;
   }
 }
+
+/* Tablet-only spacing for product detail information panel */
+@media (min-width: 651px) and (max-width: 900px) {
+  .detail-copy {
+    padding: 24px !important;
+  }
+}
