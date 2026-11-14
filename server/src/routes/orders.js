@@ -27,8 +27,8 @@ async function restockOrderItems(order, session) {
 }
 
 async function releaseCouponUsage(order, session) {
-  if (!order.couponUsageCounted || !order.couponCode) return
-  await Coupon.updateOne({ code: order.couponCode, usageCount: { $gt: 0 } }, { $inc: { usageCount: -1 } }, { session })
+  if (!order.couponUsageCounted || !order.coupon) return
+  await Coupon.updateOne({ _id: order.coupon, usageCount: { $gt: 0 } }, { $inc: { usageCount: -1 } }, { session })
   order.couponUsageCounted = false
 }
 
@@ -127,7 +127,7 @@ router.post('/', async (req, res, next) => {
 
       const [created] = await Order.create([{
         orderNumber, customer: req.user.sub, items: lineItems, subtotal, deliveryCharge, discount,
-        total: subtotal - discount + deliveryCharge, couponCode: coupon?.code || '', couponUsageCounted: Boolean(coupon),
+        total: subtotal - discount + deliveryCharge, couponCode: coupon?.code || '', coupon: coupon?._id || undefined, couponUsageCounted: Boolean(coupon),
         statusHistory: [{ status: 'pending', note: 'Order placed successfully.' }],
         paymentMethod: 'cod', paymentStatus: advancePaymentAmount > 0 ? 'pending' : 'unpaid', advancePaymentAmount,
         advancePaymentMethod: advancePaymentAmount > 0 ? advancePaymentMethod : '',
