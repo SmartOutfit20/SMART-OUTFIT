@@ -80,7 +80,7 @@ export function Shop(){
 }
 
 export function ProductDetail(){
- const {id}=useParams(),{addToCart}=useShop(),navigate=useNavigate()
+ const {id}=useParams(),{addToCart,toggleWish,wishlist}=useShop(),navigate=useNavigate()
  const [p,setP]=useState(()=>demoProducts.find(x=>x.id===id)||null),[loading,setLoading]=useState(true),[size,setSize]=useState(''),[color,setColor]=useState(''),[qty,setQty]=useState(1),[activeImage,setActiveImage]=useState(0),[relatedProducts,setRelatedProducts]=useState([])
  useEffect(()=>{let live=true;setLoading(true);setP(demoProducts.find(x=>x.id===id)||null);api.get(`/products/${encodeURIComponent(id)}`).then(({data})=>{if(!live)return;const product=normalizeProduct(data);setP(product);if(product.slug&&product.slug!==id)navigate(`/product/${encodeURIComponent(product.slug)}`,{replace:true})}).catch(async()=>{try{const categories=await getCategories();if(!live)return;const slugify=value=>String(value||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');const category=categories.find(item=>String(item.slug||'').toLowerCase()===String(id).toLowerCase()||slugify(item.name)===String(id).toLowerCase());if(category){navigate(`/shop?category=${encodeURIComponent(category.name)}`,{replace:true});return}}catch(error){console.warn('Could not resolve category URL:',error)}if(live)setP(null)}).finally(()=>{if(live)setLoading(false)});return()=>{live=false}},[id,navigate])
  useEffect(()=>{
@@ -127,7 +127,7 @@ export function ProductDetail(){
     <div className="detail-art" style={{'--art':p.color}}>
      {discountPercent>0&&<span className="detail-sale-badge">-{discountPercent}% OFF</span>}
      {p.images?.length?<img src={p.images[Math.min(activeImage,p.images.length-1)]} alt={p.name+' product view '+(activeImage+1)}/>:<div className="detail-shape">SO</div>}
-     <span className={selectedStock>0?'detail-image-stock':'detail-image-stock is-out'}><i/>{stockLabel}</span>
+     <button type="button" className={`detail-wish-btn ${wishlist.includes(String(p.id))?'active':''}`} onClick={()=>toggleWish(p.id)} aria-label={wishlist.includes(String(p.id))?'উইশলিস্ট থেকে সরান':'উইশলিস্টে যোগ করুন'} aria-pressed={wishlist.includes(String(p.id))}><Heart size={21} fill={wishlist.includes(String(p.id))?'currentColor':'none'}/></button><span className={selectedStock>0?'detail-image-stock':'detail-image-stock is-out'}><i/>{stockLabel}</span>
     </div>
     {p.images?.length>1&&<div className="detail-thumbnails" aria-label="Product images">{p.images.map((src,i)=><button type="button" className={activeImage===i?'active':''} key={src+i} onClick={()=>setActiveImage(i)} aria-label={'Show product image '+(i+1)} aria-pressed={activeImage===i}><img src={src} alt={p.name+' thumbnail '+(i+1)}/></button>)}</div>}
     <div className="detail-gallery-note"><span><ShieldCheck size={16}/> নিরাপদ অর্ডার</span><span><Truck size={16}/> দেশজুড়ে ডেলিভারি</span><span><RotateCcw size={16}/> রিটার্ন সাপোর্ট</span></div>
