@@ -8083,3 +8083,35 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     margin-left: auto;
   }
 }
+
+/* SMART OUTFIT: tablet header items share one row so search sits directly after the logo. */
+@media (min-width: 651px) and (max-width: 900px) {
+  .header {
+    column-gap: clamp(5px, 1vw, 10px);
+  }
+  .header .header-actions.search-expanded {
+    display: contents;
+  }
+  .header .header-actions.search-expanded .header-search-panel {
+    order: 3;
+    flex: 1 1 180px;
+    width: auto;
+    min-width: 100px;
+    max-width: none;
+    margin: 0;
+  }
+  .header .header-actions.search-expanded .mobile-search-toggle {
+    display: none;
+  }
+  .header .header-actions.search-expanded .wishlist-icon {
+    order: 4;
+    margin-left: auto;
+  }
+  .header .header-actions.search-expanded .cart-icon {
+    order: 5;
+  }
+  .header .header-actions.search-expanded .account-icon {
+    order: 6;
+  }
+}
+
