@@ -8454,3 +8454,294 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     padding-top: 25px !important;
   }
 }
+
+
+/* SMART OUTFIT — settings page and banner builder final layout polish.
+   Keep this scoped to the admin settings workspace; shared storefront layout is untouched. */
+.admin-content .admin-settings-form,
+.admin-content .admin-settings-section,
+.admin-content .admin-settings-section *,
+.admin-content .admin-settings-save {
+  min-width: 0;
+}
+.admin-content .admin-settings-section {
+  overflow: visible;
+}
+.admin-content .admin-settings-section .admin-form-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+}
+.admin-content .admin-settings-section .admin-form-heading > div {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+.admin-content .admin-settings-section .admin-form-heading h3,
+.admin-content .admin-settings-section .admin-form-heading p,
+.admin-content .admin-settings-section .admin-form-heading .eyebrow {
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+.admin-content .admin-settings-section .admin-form-heading > .admin-action {
+  flex: 0 1 auto;
+  min-width: 140px;
+  min-height: 42px;
+  white-space: normal;
+  line-height: 1.35;
+  text-align: center;
+}
+.admin-content .admin-homepage-banners {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+.admin-content .admin-homepage-banner-card {
+  display: grid;
+  gap: 14px;
+  width: 100%;
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid #e2ebe3;
+  border-radius: 13px;
+  background: #fbfdfb;
+}
+.admin-content .admin-homepage-banner-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  width: 100%;
+}
+.admin-content .admin-homepage-banner-top > b {
+  flex: 0 1 auto;
+  min-width: 90px;
+  color: #24372b;
+  line-height: 1.45;
+}
+.admin-content .admin-homepage-banner-top > div {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1 1 300px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.admin-content .admin-homepage-banner-top > div > button {
+  flex: 1 1 95px;
+  min-width: 0;
+  min-height: 38px;
+  padding: 8px 10px;
+  line-height: 1.3;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+.admin-content .admin-homepage-banner-preview {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  aspect-ratio: 16 / 5;
+  height: auto;
+  min-height: 110px;
+  display: grid;
+  place-items: center;
+}
+.admin-content .admin-homepage-banner-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.admin-content .admin-homepage-banner-preview > span {
+  padding: 14px;
+  text-align: center;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+}
+.admin-content .admin-homepage-banner-card .admin-settings-grid {
+  width: 100%;
+  min-width: 0;
+  align-items: start;
+}
+.admin-content .admin-homepage-banner-card .admin-upload-button {
+  max-width: 100%;
+  min-height: 42px;
+  line-height: 1.4;
+  text-align: center;
+  white-space: normal;
+}
+.admin-content .admin-homepage-banner-card small,
+.admin-content .admin-settings-note,
+.admin-content .admin-settings-grid small,
+.admin-content .admin-store-logo-field > p,
+.admin-content .admin-brand-asset-card p {
+  line-height: 1.65;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+.admin-content .admin-settings-grid label {
+  min-width: 0;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+}
+.admin-content .admin-settings-grid input,
+.admin-content .admin-settings-grid select,
+.admin-content .admin-settings-grid textarea {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+}
+.admin-content .admin-settings-grid .admin-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  min-width: 0;
+  line-height: 1.5;
+}
+.admin-content .admin-settings-grid .admin-check input {
+  flex: 0 0 18px;
+  width: 18px;
+  min-width: 18px;
+  min-height: 18px;
+  margin: 2px 0 0;
+}
+.admin-content .admin-announcement-social-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+.admin-content .admin-announcement-social-options label {
+  min-width: 0;
+  max-width: 100%;
+  line-height: 1.4;
+  overflow-wrap: break-word;
+}
+.admin-content .admin-settings-save {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.admin-content .admin-settings-save .admin-action {
+  min-height: 46px;
+  padding: 12px 18px;
+  line-height: 1.35;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+  .admin-content .admin-settings-section {
+    padding: 17px;
+    gap: 10px 12px;
+  }
+  .admin-content .admin-settings-section .admin-form-heading {
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .admin-content .admin-settings-section .admin-form-heading > div {
+    flex-basis: 100%;
+  }
+  .admin-content .admin-settings-section .admin-form-heading > .admin-action {
+    align-self: flex-start;
+    min-width: 160px;
+  }
+  .admin-content .admin-homepage-banner-card {
+    padding: 13px;
+    gap: 12px;
+  }
+  .admin-content .admin-homepage-banner-top {
+    align-items: flex-start;
+  }
+  .admin-content .admin-homepage-banner-top > div {
+    flex-basis: 100%;
+    justify-content: flex-start;
+  }
+  .admin-content .admin-homepage-banner-top > div > button {
+    flex: 1 1 110px;
+  }
+  .admin-content .admin-settings-save {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .admin-content .admin-settings-save .admin-action {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-content .admin-settings-section .admin-form-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .admin-content .admin-settings-section .admin-form-heading > div {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+  .admin-content .admin-settings-section .admin-form-heading > .admin-action {
+    width: 100%;
+    min-width: 0;
+  }
+  .admin-content .admin-homepage-banners {
+    gap: 12px;
+  }
+  .admin-content .admin-homepage-banner-card {
+    padding: 12px;
+    gap: 11px;
+    border-radius: 11px;
+  }
+  .admin-content .admin-homepage-banner-top {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 9px;
+  }
+  .admin-content .admin-homepage-banner-top > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+    gap: 7px;
+  }
+  .admin-content .admin-homepage-banner-top > div > button {
+    width: 100%;
+    min-height: 40px;
+    flex: none;
+  }
+  .admin-content .admin-homepage-banner-preview {
+    min-height: 100px;
+    aspect-ratio: 16 / 7;
+  }
+  .admin-content .admin-homepage-banner-card .admin-settings-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+  .admin-content .admin-homepage-banner-card .admin-settings-grid > * {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+  .admin-content .admin-announcement-social-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .admin-content .admin-settings-save {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .admin-content .admin-settings-save > div,
+  .admin-content .admin-settings-save .admin-action {
+    width: 100%;
+  }
+}
+
+@media (max-width: 360px) {
+  .admin-content .admin-homepage-banner-card {
+    padding: 10px;
+  }
+  .admin-content .admin-announcement-social-options {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
