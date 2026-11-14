@@ -7719,7 +7719,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     min-height: 112px;
     height: auto;
     row-gap: 7px;
-    padding: 7px 12px 9px;
+    padding: 7px 8px 9px;
   }
   .header .mobile-menu-toggle { order: 1; }
   .header .brand { order: 2; }
