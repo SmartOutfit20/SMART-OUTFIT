@@ -9085,7 +9085,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 /* Mobile-only footer side spacing */
 @media (max-width: 700px) {
   .footer.footer-complete {
-    padding-left: 20px !important;
-    padding-right: 20px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
   }
 }
