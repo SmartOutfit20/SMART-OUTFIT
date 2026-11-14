@@ -4130,3 +4130,34 @@ button,input,select,textarea{font-family:inherit}
  .detail-copy .detail-action-buttons .btn{min-height:48px}
 }
 @media(prefers-reduced-motion:reduce){.detail-copy .size-options button{transform:none!important;transition:none!important}}
+
+
+/* Related products grid alignment: use the same outer gutters as Shop page */
+.detail-related-section.shop-page-classic{
+  width:100%;
+  max-width:100%;
+  box-sizing:border-box;
+  padding-left:0!important;
+  padding-right:0!important;
+}
+.detail-related-section.shop-page-classic>.shop-product-grid{
+  width:100%;
+  max-width:100%;
+  margin-left:0!important;
+  margin-right:0!important;
+  padding-left:0!important;
+  padding-right:0!important;
+  box-sizing:border-box;
+}
+@media(max-width:700px){
+  .page-wrap:has(.detail-layout)>.detail-related-section.shop-page-classic{
+    padding-left:0!important;
+    padding-right:0!important;
+    margin-left:0!important;
+    margin-right:0!important;
+  }
+  .detail-related-section.shop-page-classic>.shop-product-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:13px 10px;
+  }
+}
