@@ -1,12 +1,16 @@
 import { Router } from 'express'
 import mongoose from 'mongoose'
 import { requireAuth, requireRole } from '../middleware/auth.js'
-import { Order, Product, Coupon, Setting } from '../models/index.js'
+import { Order, Product, Coupon, Setting, ActivityLog } from '../models/index.js'
 import { normalizeDeliveryAddress, deliveryAddressError, normalizeRequestedItems, calculateCouponDiscount, calculateDeliveryCharge } from '../services/checkoutRules.js'
 
 const router = Router()
 router.use(requireAuth)
 const httpError = (message, status = 400) => Object.assign(new Error(message), { status })
+async function recordOrderActivity(req,action,order,metadata={}) {
+ try { await ActivityLog.create({actor:req.user?.sub,action,resource:'order',resourceId:String(order?._id||''),ip:String(req.ip||'').slice(0,80),metadata}) }
+ catch(error) { console.error('Order activity log could not be saved:',error.message) }
+}
 
 // Backfill existing orders chronologically, then reserve every new serial atomically.
 async function ensureOrderSerials(session) {
@@ -230,6 +234,7 @@ router.patch('/:id/advance-payment-verify', requireRole('super_admin', 'admin'),
       updatedOrder = order
     })
     res.json(updatedOrder)
+    await recordOrderActivity(req,'advance_payment.'+decision,updatedOrder,{decision,paymentMethod:updatedOrder.advancePaymentMethod,status:updatedOrder.status})
   } catch (error) { next(error) }
   finally { if (session) await session.endSession() }
 })
@@ -283,6 +288,7 @@ router.patch('/:id/status', requireRole('super_admin', 'admin', 'support', 'edit
       updatedOrder = order
     })
     res.json(updatedOrder)
+    await recordOrderActivity(req,'order.status.updated',updatedOrder,{status:updatedOrder.status,paymentStatus:updatedOrder.paymentStatus})
   } catch (error) { next(error) }
   finally { if (session) await session.endSession() }
 })
