@@ -7490,3 +7490,46 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   border-color: #116b49 !important;
   box-shadow: 0 5px 14px rgba(22, 132, 90, .18) !important;
 }
+
+
+/* SMART OUTFIT: desktop search expands inline inside the existing header row. */
+@media (min-width: 901px) {
+  .header .header-actions.search-expanded {
+    flex: 0 1 470px;
+    min-width: 0;
+    gap: 9px;
+  }
+  .header .header-actions.search-expanded .header-search-panel {
+    position: relative;
+    inset: auto;
+    z-index: 1;
+    display: flex;
+    flex: 1 1 330px;
+    width: auto;
+    min-width: 190px;
+    max-width: 390px;
+    min-height: 44px;
+    padding: 5px 7px 5px 12px;
+    gap: 8px;
+    border: 1px solid #d9e8df;
+    border-radius: 7px;
+    background: #fff;
+    box-shadow: 0 5px 18px rgba(22, 132, 90, .10);
+    animation: smartOutfitSearchExpand .22s ease-out both;
+  }
+  .header .header-actions.search-expanded .header-search-panel input {
+    min-width: 0;
+    height: 32px;
+    font-size: 13px;
+  }
+  .header .header-actions.search-expanded .header-search-panel button {
+    min-height: 32px;
+    padding: 0 12px;
+    border-radius: 5px;
+    white-space: nowrap;
+  }
+}
+@keyframes smartOutfitSearchExpand {
+  from { opacity: 0; transform: scaleX(.92); transform-origin: right center; }
+  to { opacity: 1; transform: scaleX(1); transform-origin: right center; }
+}
