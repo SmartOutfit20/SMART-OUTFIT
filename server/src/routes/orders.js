@@ -114,7 +114,7 @@ router.post('/', async (req, res, next) => {
       const outsideDelivery = Number(outsideDeliverySetting?.value ?? legacyDelivery)
       const freeShippingThreshold = Number(freeThresholdSetting?.value ?? 3000)
       const advancePaymentEnabled = advanceEnabledSetting?.value !== false
-      const isInsideDhaka = address.district.toLocaleLowerCase('en-BD') === 'dhaka'
+      const isInsideDhaka = ['dhaka','ঢাকা'].includes(address.district.trim().toLowerCase())
       const configuredDelivery = isInsideDhaka ? insideDelivery : outsideDelivery
       const deliveryCharge = calculateDeliveryCharge(subtotal, configuredDelivery, freeShippingThreshold)
       const advancePaymentAmount = advancePaymentEnabled ? deliveryCharge : 0
