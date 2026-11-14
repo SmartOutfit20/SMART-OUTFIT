@@ -7923,16 +7923,16 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   z-index: 2;
 }
 .home-page > .hero.hero-managed .hero-managed-image--incoming.slide-next {
-  animation: smartOutfitHeroPushInFromRight .78s cubic-bezier(.22,.75,.25,1) both;
+  animation: smartOutfitHeroPushInFromRight .1.2s cubic-bezier(.22,.65,.25,1) both;
 }
 .home-page > .hero.hero-managed .hero-managed-image--outgoing.slide-next {
-  animation: smartOutfitHeroPushOutToLeft .78s cubic-bezier(.22,.75,.25,1) both;
+  animation: smartOutfitHeroPushOutToLeft .1.2s cubic-bezier(.22,.65,.25,1) both;
 }
 .home-page > .hero.hero-managed .hero-managed-image--incoming.slide-previous {
-  animation: smartOutfitHeroPushInFromLeft .78s cubic-bezier(.22,.75,.25,1) both;
+  animation: smartOutfitHeroPushInFromLeft .1.2s cubic-bezier(.22,.65,.25,1) both;
 }
 .home-page > .hero.hero-managed .hero-managed-image--outgoing.slide-previous {
-  animation: smartOutfitHeroPushOutToRight .78s cubic-bezier(.22,.75,.25,1) both;
+  animation: smartOutfitHeroPushOutToRight .1.2s cubic-bezier(.22,.65,.25,1) both;
 }
 @keyframes smartOutfitHeroPushInFromRight {
   from { transform: translate3d(100%,0,0); }
