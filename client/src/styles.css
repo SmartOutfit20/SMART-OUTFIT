@@ -4043,3 +4043,62 @@ button,input,select,textarea{font-family:inherit}
   .detail-copy .color-options button{min-height:40px;border-radius:8px;padding:6px 9px}
   .detail-copy .detail-action-buttons .btn{border-radius:9px}
 }
+
+
+/* Match product detail controls to the Shop page product-card palette */
+.detail-copy{
+  --deep:#202720;
+  --purple:#16845a;
+  --so-accent:#16845a;
+  --so-accent-soft:#edf5f0;
+  --ink:#202720;
+  --muted:#747b74;
+  --line:#e8e8e2;
+  --soft:#f7f7f3;
+}
+.detail-copy .size-options button{
+  border-color:#e0e8e1;
+  background:#fff;
+  color:#202720;
+}
+.detail-copy .size-options button:hover:not(:disabled){
+  border-color:#16845a;
+  background:#edf5f0;
+}
+.detail-copy .size-options button.selected{
+  background:#16845a;
+  border-color:#16845a;
+  color:#fff;
+  box-shadow:0 3px 9px #16845a24;
+}
+.detail-copy .color-options button{
+  border-color:#e0e8e1;
+  background:#fff;
+  color:#202720;
+}
+.detail-copy .color-options button.selected{
+  border-color:#16845a;
+  background:#edf5f0;
+  color:#116b49;
+  box-shadow:0 0 0 2px #16845a14;
+}
+.detail-copy .color-options button i{
+  border-color:#d7dfd8;
+}
+.detail-copy .qty-control{
+  border-color:#e0e8e1;
+  color:#202720;
+}
+.detail-copy .detail-action-buttons .btn-primary,
+.detail-copy .detail-action-buttons .primary-btn,
+.detail-copy .detail-action-buttons .add-cart-btn{
+  background:#16845a;
+  border-color:#16845a;
+  color:#fff;
+}
+.detail-copy .detail-action-buttons .btn-primary:hover,
+.detail-copy .detail-action-buttons .primary-btn:hover,
+.detail-copy .detail-action-buttons .add-cart-btn:hover{
+  background:#116b49;
+  border-color:#116b49;
+}
