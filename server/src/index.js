@@ -136,7 +136,15 @@ app.get('/product/:id', async (req, res, next) => {
       : { $or: [{ slug: identifier }, { legacySlugs: identifier }], isPublished: true }
     const product = await Product.findOne(productFilter).select('name slug description price images').lean()
     if (!product) {
-      // Let the React router resolve collection/category slugs such as /product/men-s.
+      // Category links may have been shared using the legacy /product/:slug shape.
+      // Resolve them on the server so a hard refresh never renders Product not found.
+      const categories = await Category.find({ isActive: true }).select('name slug').lean()
+      const slugifyCategory = value => String(value || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+      const category = categories.find(item =>
+        String(item.slug || '').toLowerCase() === identifier.toLowerCase() ||
+        slugifyCategory(item.name) === identifier.toLowerCase()
+      )
+      if (category) return res.redirect(302, '/shop?category=' + encodeURIComponent(category.name))
       return res.sendFile(path.join(clientDistPath, 'index.html'))
     }
     const seo = await seoSettings()
