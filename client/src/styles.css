@@ -5265,3 +5265,135 @@ button,input,select,textarea{font-family:inherit}
 @media(prefers-reduced-motion:reduce){
  .product-detail-refined .size-options button,.product-detail-refined .color-options button,.product-detail-refined .detail-action-buttons .btn{transition:none}
 }
+
+
+/* Readability pass: increase small interface typography without changing the
+   shared canvas, component positions, or the existing brand styling. */
+html{font-size:16px}
+body{font-size:16px;line-height:1.6}
+.site-main p{font-size:15px;line-height:1.75}
+.site-main li{font-size:15px;line-height:1.7}
+.site-main :is(input,select,textarea){font-size:15px}
+.site-main :is(label,.muted,.api-notice){font-size:14px}
+.site-main small{font-size:12px}
+.announcement{font-size:12px;letter-spacing:1px}
+.brand{font-size:17px}
+.brand small{font-size:10px}
+.nav,.header .nav .nav-category-group>a{font-size:13px}
+.icon-btn small,.icon-btn sup{font-size:11px}
+.eyebrow{font-size:11px;letter-spacing:1.5px}
+.btn{font-size:13px;letter-spacing:.6px}
+.hero p,.promo p,.section-heading p,.page-title p{font-size:15px;line-height:1.75}
+.benefits b{font-size:14px}
+.benefits small{font-size:12px}
+.section-heading h2,.section h2{font-size:29px}
+.section-heading>a{font-size:12px}
+.category-tile span,.category-tile small{font-size:11px}
+.product-tag{font-size:10px}
+.quick-add{font-size:12px}
+.product-category{font-size:11px}
+.product-name{font-size:15px;line-height:1.5}
+.product-bottom{font-size:13px}
+.product-bottom del,.detail-price del{font-size:12px}
+.rating{font-size:12px}
+.footer p,.footer a{font-size:13px;line-height:1.8}
+.footer>div>b{font-size:12px}
+.newsletter button{font-size:12px}
+.copyright{font-size:11px}
+.breadcrumb{font-size:11px;line-height:1.7}
+.filter,.filter-row select{font-size:12px}
+.result-count{font-size:11px}
+.option-label{font-size:12px}
+.size-options button{font-size:13px}
+.detail-perks{font-size:12px}
+.cart-item-info b{font-size:15px}
+.cart-item-info small{font-size:12px}
+.cart-item-info strong{font-size:14px}
+.summary>div{font-size:13px}
+.summary>small{font-size:12px}
+.auth-card p,.auth-card small{font-size:13px}
+.auth-card label,.checkout-form label{font-size:13px}
+.auth-card input,.checkout-form input,.checkout-form select,.checkout-form textarea{font-size:15px}
+.checkout-note{font-size:13px}
+.payment-choice{font-size:14px}
+.payment-choice span{font-size:12px}
+.admin-sidebar>a{font-size:13px}
+.admin-label{font-size:11px}
+.admin-sidebar-bottom{font-size:12px}
+.admin-top{font-size:13px}
+.admin-top small{font-size:12px}
+.admin-content{font-size:14px}
+.admin-content h1{font-size:32px}
+.admin-stat small,.admin-stat span{font-size:12px}
+.admin-panel h3{font-size:14px}
+.admin-panel p{font-size:14px}
+.admin-panel>small{font-size:12px}
+.admin-product-form label,.admin-product-section-grid>label,.admin-category-editor>label{font-size:13px}
+.admin-product-form input,.admin-product-form select,.admin-inline-form input,.admin-product-section-grid input:not([type=checkbox]),.admin-product-section-grid select,.admin-product-section-grid textarea,.admin-category-editor>label input,.admin-category-editor>label select{font-size:14px}
+.admin-table{font-size:13px}
+.admin-table th{font-size:11px}
+.admin-table td small{font-size:11px}
+.admin-category-row{font-size:13px}
+.admin-action,.admin-cancel,.admin-refresh{font-size:12px}
+.info-page[lang="bn"]{font-size:17px}
+.info-page[lang="bn"] .info-policy p,.info-page[lang="bn"] .info-policy li,.info-page[lang="bn"] .info-faq-list details p,.info-page[lang="bn"] .info-muted{font-size:16px;line-height:1.9}
+.product-detail-refined .detail-copy h1{font-size:clamp(29px,3.2vw,41px)}
+.product-detail-refined .detail-description{font-size:15px!important}
+.product-detail-refined .detail-option-title{font-size:15px}
+.product-detail-refined .detail-option-hint{font-size:12px}
+.product-detail-refined .color-options button{font-size:13px}
+.product-detail-refined .detail-gallery-note span,.product-detail-refined .detail-trust-row span{font-size:12px}
+.product-detail-refined .detail-stock-line{font-size:13px}
+.product-detail-refined .detail-price{font-size:clamp(26px,2.7vw,33px)}
+@media(max-width:820px){
+  body{font-size:16px}
+  .site-main p,.site-main li{font-size:15px}
+  .site-main small{font-size:12px}
+  .nav{font-size:13px}
+  .product-name{font-size:14px}
+  .product-bottom{font-size:12px}
+  .quick-add{font-size:11px}
+  .footer p,.footer a{font-size:13px}
+  .admin-sidebar>a{font-size:12px}
+  .admin-content{font-size:14px}
+}
+@media(max-width:650px){
+  .announcement{font-size:11px;letter-spacing:.5px}
+  .brand{font-size:15px}
+  .brand small{font-size:9px}
+  .hero p,.promo p,.section-heading p,.page-title p{font-size:14px}
+  .section-heading h2,.section h2{font-size:24px}
+  .section-heading>a{font-size:11px}
+  .category-tile span,.category-tile small{font-size:10px}
+  .product-category{font-size:10px}
+  .product-name{font-size:13px;line-height:1.5}
+  .product-bottom{font-size:12px}
+  .quick-add{height:38px;font-size:10px;letter-spacing:.3px}
+  .page-title h1,.page-wrap>h1,.auth-card h1{font-size:32px}
+  .breadcrumb{font-size:10px}
+  .filter{font-size:12px;padding:9px 11px}
+  .filter-row select{font-size:13px}
+  .result-count{font-size:11px}
+  .footer p,.footer a{font-size:12px}
+  .footer>div>b{font-size:12px}
+  .admin-sidebar>a{font-size:12px}
+  .admin-top{font-size:12px}
+  .admin-content{padding:22px 15px;font-size:14px}
+  .admin-content h1{font-size:27px}
+  .admin-stat small,.admin-stat span{font-size:11px}
+  .admin-stat strong{font-size:21px}
+  .admin-table{font-size:12px}
+  .admin-table th{font-size:10px}
+  .admin-product-form label,.admin-product-section-grid>label,.admin-category-editor>label{font-size:13px}
+  .product-detail-refined .detail-copy h1{font-size:clamp(27px,7vw,34px)}
+  .product-detail-refined .detail-description{font-size:14px!important}
+  .product-detail-refined .detail-option-title{font-size:14px}
+  .product-detail-refined .detail-option-hint{font-size:11px}
+  .product-detail-refined .color-options button{font-size:12px}
+  .product-detail-refined .detail-action-buttons .btn{font-size:15px}
+}
+@media(max-width:380px){
+  .product-name{font-size:12px}
+  .product-bottom{font-size:11px}
+  .quick-add{font-size:9px}
+}
