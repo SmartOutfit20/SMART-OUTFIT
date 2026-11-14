@@ -5587,3 +5587,98 @@ body{font-size:16px;line-height:1.6}
 @media(prefers-reduced-motion:reduce){
  .product-detail-refined .detail-purchase-card-v2 *{transition:none!important}
 }
+
+
+/* Clearer, more legible size and colour selectors in the product purchase card. */
+.product-detail-refined .detail-purchase-card-v2 .detail-option-block:not(.detail-quantity-block){
+  padding:17px 16px 18px;margin:0 0 14px;border:1px solid #e3ece5;
+  border-radius:14px;background:linear-gradient(145deg,#fbfdfb,#f5f9f6)
+}
+.product-detail-refined .detail-purchase-card-v2 .option-label{
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;
+  gap:4px;margin:0 0 14px;letter-spacing:0
+}
+.product-detail-refined .detail-purchase-card-v2 .option-label .detail-option-title{
+  display:flex;align-items:center;gap:8px;font-size:18px;line-height:1.5
+}
+.product-detail-refined .detail-purchase-card-v2 .option-label .detail-option-title:before{
+  content:"";display:block;width:4px;height:21px;border-radius:4px;background:#16845a
+}
+.product-detail-refined .detail-purchase-card-v2 .option-label .detail-option-hint{
+  display:block;padding-left:12px;font-size:13px;line-height:1.55;color:#718478
+}
+.product-detail-refined .detail-purchase-card-v2 .size-options{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:10px
+}
+.product-detail-refined .detail-purchase-card-v2 .size-options button{
+  position:relative;display:flex;align-items:center;justify-content:center;gap:4px;
+  width:auto;min-width:0;height:55px;padding:8px 6px;border:1.5px solid #dce7df;
+  border-radius:12px;background:#fff;color:#344b3b;font-size:17px;font-weight:800;
+  transition:border-color .18s ease,background .18s ease,box-shadow .18s ease,transform .18s ease
+}
+.product-detail-refined .detail-purchase-card-v2 .size-options button:hover:not(:disabled){
+  border-color:#16845a;transform:translateY(-1px)
+}
+.product-detail-refined .detail-purchase-card-v2 .size-options button.selected{
+  border:2px solid #16845a;background:#eaf6ee;color:#126c48;
+  box-shadow:0 0 0 3px rgba(22,132,90,.10),0 5px 12px rgba(22,132,90,.09)
+}
+.product-detail-refined .detail-purchase-card-v2 .size-options button.selected:after{
+  content:"✓";position:absolute;top:-7px;right:-6px;display:grid;place-items:center;
+  width:19px;height:19px;border:2px solid #fff;border-radius:50%;
+  background:#16845a;color:#fff;font:800 11px Manrope,sans-serif
+}
+.product-detail-refined .detail-purchase-card-v2 .size-options button:disabled{
+  position:relative;border:1px dashed #d9dfda;background:#f1f3f1;color:#b1bab4;
+  text-decoration:line-through;cursor:not-allowed
+}
+.product-detail-refined .detail-purchase-card-v2 .color-options{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px
+}
+.product-detail-refined .detail-purchase-card-v2 .color-options button{
+  position:relative;display:flex;align-items:center;justify-content:flex-start;gap:10px;
+  min-width:0;min-height:58px;padding:10px 12px;border:1.5px solid #dfe8e1;
+  border-radius:12px;background:#fff;color:#344b3b;font-size:14px;font-weight:700;
+  text-align:left;transition:border-color .18s ease,background .18s ease,box-shadow .18s ease
+}
+.product-detail-refined .detail-purchase-card-v2 .color-options button:hover:not(:disabled){
+  border-color:#16845a;background:#f7fbf8
+}
+.product-detail-refined .detail-purchase-card-v2 .color-options button.selected{
+  border:2px solid #16845a;background:#eaf6ee;color:#126c48;
+  box-shadow:0 0 0 3px rgba(22,132,90,.09)
+}
+.product-detail-refined .detail-purchase-card-v2 .color-options button i{
+  width:30px;height:30px;flex:0 0 30px;border:1px solid #d2ddd5;border-radius:50%;
+  box-shadow:inset 0 0 0 3px #fff
+}
+.product-detail-refined .detail-purchase-card-v2 .color-options button span{
+  min-width:0;overflow-wrap:anywhere;line-height:1.35
+}
+.product-detail-refined .detail-purchase-card-v2 .color-options button.selected span:after{
+  content:"  ✓ নির্বাচিত";display:block;margin-top:3px;color:#16845a;
+  font-size:10px;font-weight:800;letter-spacing:0
+}
+.product-detail-refined .detail-purchase-card-v2 .color-options button:disabled{
+  border:1px dashed #d9dfda;background:#f1f3f1;color:#aeb7b0;opacity:.72
+}
+@media(max-width:650px){
+ .product-detail-refined .detail-purchase-card-v2 .detail-option-block:not(.detail-quantity-block){
+  padding:14px 12px 15px;margin-bottom:12px
+ }
+ .product-detail-refined .detail-purchase-card-v2 .option-label{margin-bottom:12px}
+ .product-detail-refined .detail-purchase-card-v2 .option-label .detail-option-title{font-size:17px}
+ .product-detail-refined .detail-purchase-card-v2 .option-label .detail-option-hint{font-size:12px}
+ .product-detail-refined .detail-purchase-card-v2 .size-options{grid-template-columns:repeat(auto-fill,minmax(58px,1fr));gap:8px}
+ .product-detail-refined .detail-purchase-card-v2 .size-options button{width:auto;height:51px;font-size:16px}
+ .product-detail-refined .detail-purchase-card-v2 .color-options{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .product-detail-refined .detail-purchase-card-v2 .color-options button{min-height:54px;padding:8px;font-size:12px}
+ .product-detail-refined .detail-purchase-card-v2 .color-options button i{width:26px;height:26px;flex-basis:26px}
+}
+@media(max-width:360px){
+ .product-detail-refined .detail-purchase-card-v2 .color-options{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+ .product-detail-refined .detail-purchase-card-v2 .size-options button,
+ .product-detail-refined .detail-purchase-card-v2 .color-options button{transition:none}
+}
