@@ -7859,6 +7859,18 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 
 
+/* SMART OUTFIT: tablet homepage hero size 768 x 252. */
+@media (min-width: 701px) and (max-width: 900px) {
+  .home-page > .hero.hero-managed {
+    width: min(100%, 768px);
+    height: 252px;
+    min-height: 252px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
+  }
+}
+
 /* SMART OUTFIT: responsive side navigation for homepage hero banners. */
 .home-page > .hero .hero-banner-controls {
   position: absolute;
