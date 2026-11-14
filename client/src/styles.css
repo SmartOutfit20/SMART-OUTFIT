@@ -7752,16 +7752,6 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   }
 }
 
-/* SMART OUTFIT: keep managed hero copy within the banner frame. */
-.home-page > .hero.hero-managed .hero-copy {
-  width: 100%;
-  max-width: 400px;
-  min-width: 0;
-  box-sizing: border-box;
-  overflow-wrap: anywhere;
-  z-index: 1;
-  grid-column: auto;
-}
 
 /* SMART OUTFIT: mobile search opens only after tapping its search icon. */
 .header .mobile-search-toggle {
