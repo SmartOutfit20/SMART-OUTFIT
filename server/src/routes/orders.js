@@ -112,7 +112,7 @@ router.post('/', async (req, res, next) => {
       const advancePaymentEnabled = advanceEnabledSetting?.value !== false
       const deliveryCharge = calculateDeliveryCharge(subtotal, configuredDelivery, freeShippingThreshold)
       const advancePaymentAmount = advancePaymentEnabled ? deliveryCharge : 0
-      if (advancePaymentAmount > 0 && (!['bkash', 'nagad'].includes(advancePaymentMethod) || !/^01[3-9]\\d{8}$/.test(advancePaymentSender) || advancePaymentTransactionId.length < 6 || advancePaymentTransactionId.length > 80)) {
+      if (advancePaymentAmount > 0 && (!['bkash', 'nagad'].includes(advancePaymentMethod) || !/^01[3-9]\d{8}$/.test(advancePaymentSender) || advancePaymentTransactionId.length < 6 || advancePaymentTransactionId.length > 80)) {
         throw httpError('Enter a valid bKash/Nagad sender mobile number and transaction ID for the delivery charge.', 400)
       }
 

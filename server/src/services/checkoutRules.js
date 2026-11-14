@@ -1,4 +1,4 @@
-const bdPhone = /^01[3-9]\\d{8}$/
+const bdPhone = /^01[3-9]\d{8}$/
 const mongoId = /^[a-f0-9]{24}$/i
 
 export function normalizeDeliveryAddress(input = {}) {
