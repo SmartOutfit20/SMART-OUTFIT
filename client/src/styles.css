@@ -10264,3 +10264,36 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     aspect-ratio: 16 / 7;
   }
 }
+
+
+/* Admin dashboard statistic icons: keep each icon centered inside its own tile */
+.admin-content .admin-stat .admin-stat-icon {
+  position: relative !important;
+  inset: auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 38px !important;
+  width: 38px !important;
+  min-width: 38px !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  padding: 0 !important;
+  margin: 0 0 15px !important;
+  box-sizing: border-box !important;
+  overflow: hidden;
+  border-radius: 9px;
+  vertical-align: middle;
+}
+.admin-content .admin-stat .admin-stat-icon svg {
+  position: static !important;
+  inset: auto !important;
+  display: block !important;
+  flex: 0 0 18px !important;
+  width: 18px !important;
+  height: 18px !important;
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0 !important;
+  transform: none !important;
+}
