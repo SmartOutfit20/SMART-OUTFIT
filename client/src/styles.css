@@ -7466,3 +7466,27 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     max-width: min(440px, calc(100vw - 40px));
   }
 }
+
+
+/* SMART OUTFIT: keep search focus and interaction states on the green brand color. */
+.header .header-search-toggle:hover,
+.header .header-search-toggle:focus,
+.header .header-search-toggle:focus-visible,
+.header .header-search-toggle:active {
+  color: #16845a !important;
+}
+.header .header-search-panel input:focus,
+.header .header-search-panel input:focus-visible {
+  border-color: #16845a !important;
+  outline: 2px solid rgba(22, 132, 90, .16) !important;
+  outline-offset: 1px;
+  box-shadow: 0 0 0 3px rgba(22, 132, 90, .10) !important;
+}
+.header .header-search-panel button:hover,
+.header .header-search-panel button:focus,
+.header .header-search-panel button:focus-visible,
+.header .header-search-panel button:active {
+  background: #116b49 !important;
+  border-color: #116b49 !important;
+  box-shadow: 0 5px 14px rgba(22, 132, 90, .18) !important;
+}
