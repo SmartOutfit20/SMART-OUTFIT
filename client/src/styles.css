@@ -9768,3 +9768,416 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+
+/* Store Settings — desktop workspace polish and clear brand asset previews */
+.admin-content .admin-store-settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 1220px;
+}
+.admin-content .admin-store-settings-form > .admin-settings-section {
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 18px 20px;
+  padding: 26px;
+  border: 1px solid #e4ebe5;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #fff 0%, #fcfdfc 100%);
+  box-shadow: 0 8px 26px rgba(25, 52, 35, .045);
+}
+.admin-content .admin-store-settings-form > .admin-settings-section > .admin-settings-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  background: #eaf5ed;
+  color: #16845a;
+}
+.admin-content .admin-store-settings-form > .admin-settings-section > .admin-form-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 46px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e8eee9;
+}
+.admin-content .admin-store-settings-form .admin-form-heading h3 {
+  margin: 3px 0 5px;
+  color: #26392d;
+  font-size: 18px;
+  line-height: 1.35;
+  letter-spacing: -.35px;
+}
+.admin-content .admin-store-settings-form .admin-form-heading p {
+  max-width: 760px;
+  margin: 0;
+  color: #718076;
+  font-size: 12px;
+  line-height: 1.65;
+}
+.admin-content .admin-store-settings-form .admin-form-heading .eyebrow {
+  color: #16845a;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+.admin-content .admin-store-settings-form .admin-settings-grid {
+  gap: 19px 22px;
+}
+.admin-content .admin-store-settings-form .admin-settings-grid > label:not(.admin-check) {
+  gap: 8px;
+  color: #405247;
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.5;
+}
+.admin-content .admin-store-settings-form .admin-settings-grid > label:not(.admin-check) > input,
+.admin-content .admin-store-settings-form .admin-settings-grid > label:not(.admin-check) > select,
+.admin-content .admin-store-settings-form .admin-settings-grid > label:not(.admin-check) > textarea {
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid #dfe8e1;
+  border-radius: 10px;
+  background: #fff;
+  color: #2e4034;
+  font-size: 13px;
+  box-shadow: 0 1px 2px rgba(20, 45, 28, .025);
+}
+.admin-content .admin-store-settings-form .admin-settings-grid > label:not(.admin-check) > textarea {
+  min-height: 112px;
+}
+.admin-content .admin-store-settings-form .admin-settings-grid > label:not(.admin-check) > input:focus,
+.admin-content .admin-store-settings-form .admin-settings-grid > label:not(.admin-check) > select:focus,
+.admin-content .admin-store-settings-form .admin-settings-grid > label:not(.admin-check) > textarea:focus {
+  border-color: #16845a;
+  box-shadow: 0 0 0 3px rgba(22, 132, 90, .1);
+}
+.admin-content .admin-store-settings-form .admin-store-logo-field,
+.admin-content .admin-store-settings-form .admin-brand-asset-grid {
+  grid-column: 1 / -1;
+  width: 100%;
+  min-width: 0;
+}
+.admin-content .admin-store-settings-form .admin-store-logo-field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 11px;
+  padding: 20px;
+  border: 1px solid #e1eae3;
+  border-radius: 14px;
+  background: #f8fbf8;
+}
+.admin-content .admin-store-settings-form .admin-store-logo-field > b,
+.admin-content .admin-store-settings-form .admin-brand-asset-card > b {
+  color: #2f4637;
+  font-size: 13px;
+}
+.admin-content .admin-store-settings-form .admin-store-logo-field > p,
+.admin-content .admin-store-settings-form .admin-brand-asset-card > p {
+  margin: 0;
+  color: #758379;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.admin-content .admin-store-settings-form .admin-store-logo-preview {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  max-width: none;
+  height: 190px;
+  min-height: 190px;
+  padding: 20px;
+  border: 1px dashed #b9cdbd;
+  border-radius: 12px;
+  background: repeating-linear-gradient(45deg, #f8fbf8, #f8fbf8 10px, #f3f8f4 10px, #f3f8f4 20px);
+  box-sizing: border-box;
+}
+.admin-content .admin-store-settings-form .admin-store-logo-preview img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  max-height: 148px;
+  object-fit: contain;
+}
+.admin-content .admin-store-settings-form .admin-store-logo-preview > span {
+  color: #16845a;
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+}
+.admin-content .admin-store-settings-form .admin-brand-asset-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.admin-content .admin-store-settings-form .admin-brand-asset-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid #e2eae4;
+  border-radius: 14px;
+  background: #fff;
+}
+.admin-content .admin-store-settings-form .admin-brand-asset-preview {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 112px;
+  height: 112px;
+  min-height: 112px;
+  border: 1px solid #e1e9e2;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #f7faf7, #edf4ee);
+  overflow: hidden;
+}
+.admin-content .admin-store-settings-form .admin-brand-asset-preview img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  padding: 10px;
+  object-fit: contain;
+  box-sizing: border-box;
+}
+.admin-content .admin-store-settings-form .admin-app-icon-preview {
+  border-radius: 25px;
+  background: #f0f4f1;
+}
+.admin-content .admin-store-settings-form .admin-store-logo-actions,
+.admin-content .admin-store-settings-form .admin-brand-asset-card .admin-store-logo-actions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+}
+.admin-content .admin-store-settings-form .admin-store-logo-actions > *,
+.admin-content .admin-store-settings-form .admin-upload-button {
+  flex: 0 1 auto;
+  width: auto;
+  min-width: 145px;
+  min-height: 42px;
+  justify-content: center;
+  padding: 10px 14px;
+  border-radius: 9px;
+  font-size: 11px;
+  text-align: center;
+}
+.admin-content .admin-store-settings-form .admin-store-logo-field > small,
+.admin-content .admin-store-settings-form .admin-brand-asset-card > small {
+  display: block;
+  color: #78867c;
+  font-size: 10px;
+  line-height: 1.6;
+}
+.admin-content .admin-store-settings-form .admin-settings-grid > .admin-check {
+  align-items: center;
+  min-height: 48px;
+  padding: 12px 14px;
+  border-color: #e2ebe4;
+  background: #f7faf7;
+  color: #425448;
+  font-size: 12px;
+  font-weight: 650;
+}
+.admin-content .admin-store-settings-form .admin-settings-note {
+  padding: 14px 16px;
+  border: 1px solid #e3ede5;
+  border-left: 3px solid #16845a;
+  border-radius: 10px;
+  background: #f6faf6;
+  color: #586a5d;
+  font-size: 11px;
+  line-height: 1.7;
+}
+.admin-content .admin-store-settings-form .admin-announcement-social-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+.admin-content .admin-store-settings-form .admin-announcement-social-options .admin-check {
+  flex: 0 1 auto;
+  min-width: 125px;
+}
+.admin-content .admin-store-settings-form .admin-homepage-banners {
+  display: grid;
+  gap: 16px;
+}
+.admin-content .admin-store-settings-form .admin-homepage-banner-card {
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid #e2eae3;
+  border-radius: 14px;
+  background: #fbfdfb;
+  box-shadow: none;
+}
+.admin-content .admin-store-settings-form .admin-homepage-banner-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.admin-content .admin-store-settings-form .admin-homepage-banner-top > b {
+  color: #314638;
+  font-size: 13px;
+}
+.admin-content .admin-store-settings-form .admin-homepage-banner-top > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.admin-content .admin-store-settings-form .admin-homepage-banner-top > div > button {
+  width: auto;
+  min-width: 96px;
+  min-height: 38px;
+  padding: 8px 12px;
+  font-size: 11px;
+}
+.admin-content .admin-store-settings-form .admin-homepage-banner-preview {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  aspect-ratio: 16 / 5;
+  border: 1px solid #e3ebe4;
+  border-radius: 11px;
+  background: repeating-linear-gradient(45deg, #f7faf7, #f7faf7 10px, #f0f5f1 10px, #f0f5f1 20px);
+}
+.admin-content .admin-store-settings-form .admin-homepage-banner-preview img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.admin-content .admin-store-settings-form .admin-banner-size-guide {
+  display: grid;
+  gap: 7px;
+  padding: 16px 18px;
+  border: 1px solid #e2ebe3;
+  border-radius: 12px;
+  background: #f7faf7;
+  color: #627267;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.admin-content .admin-store-settings-form .admin-banner-size-guide b {
+  color: #304638;
+  font-size: 13px;
+}
+.admin-content .admin-store-settings-form .admin-banner-size-guide strong {
+  color: #16845a;
+  font-size: 12px;
+}
+.admin-content .admin-store-settings-form .admin-settings-save {
+  padding: 20px 24px;
+  border: 1px solid #e1eae3;
+  border-radius: 15px;
+  background: #f7faf7;
+}
+.admin-content .admin-store-settings-form .admin-settings-save b {
+  display: block;
+  color: #2d4234;
+  font-size: 14px;
+}
+.admin-content .admin-store-settings-form .admin-settings-save small {
+  display: block;
+  margin-top: 4px;
+  color: #758278;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.admin-content .admin-store-settings-form .admin-settings-save .admin-action {
+  min-width: 220px;
+  min-height: 48px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 12px;
+  letter-spacing: .3px;
+}
+
+@media (min-width: 651px) and (max-width: 1100px) {
+  .admin-content .admin-store-settings-form > .admin-settings-section {
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 14px;
+    padding: 20px;
+  }
+  .admin-content .admin-store-settings-form .admin-store-logo-preview {
+    height: 165px;
+    min-height: 165px;
+  }
+  .admin-content .admin-store-settings-form .admin-brand-asset-grid {
+    gap: 12px;
+  }
+  .admin-content .admin-store-settings-form .admin-homepage-banner-preview {
+    aspect-ratio: 16 / 6;
+  }
+}
+@media (max-width: 650px) {
+  .admin-content .admin-store-settings-form {
+    gap: 13px;
+  }
+  .admin-content .admin-store-settings-form > .admin-settings-section {
+    gap: 12px;
+    padding: 14px;
+  }
+  .admin-content .admin-store-settings-form > .admin-settings-section > .admin-form-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 12px;
+  }
+  .admin-content .admin-store-settings-form .admin-form-heading h3 {
+    font-size: 16px;
+  }
+  .admin-content .admin-store-settings-form .admin-brand-asset-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 11px;
+  }
+  .admin-content .admin-store-settings-form .admin-brand-asset-card {
+    padding: 14px;
+  }
+  .admin-content .admin-store-settings-form .admin-store-logo-preview {
+    height: 150px;
+    min-height: 150px;
+  }
+  .admin-content .admin-store-settings-form .admin-brand-asset-preview {
+    width: 96px;
+    height: 96px;
+    min-height: 96px;
+  }
+  .admin-content .admin-store-settings-form .admin-store-logo-actions,
+  .admin-content .admin-store-settings-form .admin-brand-asset-card .admin-store-logo-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .admin-content .admin-store-settings-form .admin-store-logo-actions > *,
+  .admin-content .admin-store-settings-form .admin-upload-button {
+    width: 100%;
+    min-width: 0;
+  }
+  .admin-content .admin-store-settings-form .admin-homepage-banner-top {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .admin-content .admin-store-settings-form .admin-homepage-banner-top > div {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+  .admin-content .admin-store-settings-form .admin-homepage-banner-top > div > button {
+    width: 100%;
+    min-width: 0;
+  }
+  .admin-content .admin-store-settings-form .admin-settings-save {
+    padding: 15px;
+  }
+}
