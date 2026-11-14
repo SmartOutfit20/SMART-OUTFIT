@@ -7358,3 +7358,10 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     margin-top: 12px;
   }
 }
+
+/* SMART OUTFIT: mobile footer spacing */
+@media (max-width: 650px) {
+  .footer {
+    padding: 42px 7% 20px;
+  }
+}
