@@ -9098,3 +9098,15 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     padding-right: 16px !important;
   }
 }
+
+
+/* Mobile-only 16px side gutters for Orders, Cart and Account pages */
+@media (max-width: 700px) {
+  .page-wrap.orders-page.orders-page-clean,
+  .page-wrap.cart-page,
+  .account-wrap.account-dashboard {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    box-sizing: border-box;
+  }
+}
