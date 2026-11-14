@@ -1,6 +1,5 @@
 import { Router } from 'express'
 import mongoose from 'mongoose'
-import { randomBytes } from 'node:crypto'
 import { requireAuth, requireRole } from '../middleware/auth.js'
 import { Order, Product, Coupon, Setting } from '../models/index.js'
 import { normalizeDeliveryAddress, deliveryAddressError, normalizeRequestedItems, calculateCouponDiscount, calculateDeliveryCharge } from '../services/checkoutRules.js'
