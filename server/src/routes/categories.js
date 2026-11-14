@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { Category, Product } from '../models/index.js'
+import { Category, Product, ActivityLog } from '../models/index.js'
 import { requireAuth, requireRole } from '../middleware/auth.js'
 const router = Router()
 const adminOnly = [requireAuth, requireRole('super_admin', 'admin', 'editor')]
@@ -30,6 +30,7 @@ router.post('/', ...adminOnly, async (req, res, next) => {
     if (image && !/^https:\/\//i.test(image) && !/^data:image\/webp;base64,[A-Za-z0-9+/=]+$/.test(image)) return res.status(400).json({ message: 'Category image must be a compressed WebP image or HTTPS URL.' })
     if (parent && !await Category.exists({ _id: parent })) return res.status(400).json({ message: 'Selected parent category does not exist.' })
     const category = await Category.create({ name, slug, parent, image, sortOrder, isActive: req.body.isActive !== false })
+    ActivityLog.create({actor:req.user.sub,action:'category.created',resource:'category',resourceId:category._id.toString(),ip:String(req.ip||'').slice(0,80),metadata:{name:category.name}}).catch(()=>{})
     res.status(201).json(category)
   } catch (e) { next(e) }
 })
@@ -63,6 +64,7 @@ router.patch('/:id', ...adminOnly, async (req, res, next) => {
     }
     const item = await Category.findByIdAndUpdate(req.params.id, update, { new: true, runValidators: true }).populate('parent','name')
     if (!item) return res.status(404).json({ message: 'Category not found' })
+    ActivityLog.create({actor:req.user.sub,action:'category.updated',resource:'category',resourceId:item._id.toString(),ip:String(req.ip||'').slice(0,80),metadata:{name:item.name}}).catch(()=>{})
     res.json(item)
   } catch (e) { next(e) }
 })
@@ -70,6 +72,7 @@ router.delete('/:id', ...adminOnly, async (req, res, next) => {
   try {
     const item = await Category.findByIdAndUpdate(req.params.id, { isActive: false }, { new: true })
     if (!item) return res.status(404).json({ message: 'Category not found' })
+    ActivityLog.create({actor:req.user.sub,action:'category.deactivated',resource:'category',resourceId:item._id.toString(),ip:String(req.ip||'').slice(0,80),metadata:{name:item.name}}).catch(()=>{})
     res.json({ message: 'Category deactivated' })
   } catch (e) { next(e) }
 })
