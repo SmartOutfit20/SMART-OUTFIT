@@ -9089,3 +9089,12 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     padding-right: 16px !important;
   }
 }
+
+
+/* Shop page: mobile side gutters for the full page wrapper */
+@media (max-width: 700px) {
+  .page-wrap.shop-page.shop-page-classic {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+}
