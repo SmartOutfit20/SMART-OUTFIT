@@ -6100,3 +6100,152 @@ body{font-size:16px;line-height:1.6}
 @media(max-width:360px){
  .product-detail-refined .detail-purchase-card-v2 .detail-action-buttons{grid-template-columns:1fr!important}
 }
+
+
+/* Refined, page-aligned controls: clearer labels, spacing and restrained motion. */
+.product-detail-refined .detail-purchase-card-v2{
+  border-color:#e9e5ee!important;border-radius:10px!important;
+  background:#fff!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-options-panel{gap:18px!important}
+.product-detail-refined .detail-purchase-card-v2 .detail-option-block:not(.detail-quantity-block){
+  padding-bottom:16px!important;border-bottom:1px solid #eeeaf2!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .option-label{
+  display:flex!important;align-items:center!important;justify-content:flex-start!important;
+  width:100%!important;margin:0 0 11px!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .option-label .detail-option-title{
+  display:block!important;width:100%!important;margin:0!important;
+  color:#26212d!important;font-size:15px!important;font-weight:750!important;
+  line-height:1.55!important;letter-spacing:0!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .size-options{
+  display:flex!important;align-items:center!important;flex-wrap:wrap!important;
+  gap:9px!important;row-gap:9px!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .size-options button{
+  display:inline-flex!important;flex:0 0 46px!important;align-items:center!important;
+  justify-content:center!important;width:46px!important;min-width:46px!important;
+  height:42px!important;margin:0!important;padding:0!important;
+  border:1px solid #ded9e6!important;border-radius:7px!important;
+  background:#fff!important;color:#332d3a!important;
+  font-size:13px!important;font-weight:700!important;line-height:1!important;
+  transition:background .18s ease,border-color .18s ease,color .18s ease,transform .18s ease!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .size-options button:hover:not(:disabled){
+  border-color:#8b5cf6!important;background:#f8f5ff!important;
+  color:#5b21b6!important;transform:translateY(-2px)!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .size-options button.selected{
+  border-color:#6d28d9!important;background:#6d28d9!important;color:#fff!important;
+  box-shadow:0 3px 9px rgba(109,40,217,.18)!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .color-options{
+  display:flex!important;align-items:center!important;flex-wrap:wrap!important;
+  gap:9px!important;row-gap:9px!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .color-options button{
+  display:inline-flex!important;flex:0 0 auto!important;align-items:center!important;
+  justify-content:flex-start!important;gap:8px!important;
+  min-height:41px!important;min-width:0!important;margin:0!important;padding:7px 11px!important;
+  border:1px solid #e3deea!important;border-radius:7px!important;
+  background:#fff!important;color:#302a37!important;
+  font-size:12px!important;font-weight:650!important;line-height:1.35!important;
+  white-space:nowrap!important;
+  transition:background .18s ease,border-color .18s ease,color .18s ease,transform .18s ease!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .color-options button:hover:not(:disabled){
+  border-color:#9b7bd0!important;background:#faf8ff!important;
+  transform:translateY(-1px)!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .color-options button i{
+  display:block!important;flex:0 0 19px!important;width:19px!important;height:19px!important;
+  margin:0!important;border-radius:50%!important;border:1px solid #d8d2df!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .color-options button span{
+  display:inline-block!important;line-height:1.4!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .color-options button.selected{
+  border-color:#6d28d9!important;background:#f7f3ff!important;color:#54229a!important;
+  box-shadow:inset 0 0 0 1px rgba(109,40,217,.08)!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .color-options button.selected span:after{
+  display:inline-block!important;margin-left:6px!important;color:#6d28d9!important;
+  font-weight:800!important;animation:so-check-in .2s ease both;
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-quantity-block{
+  align-items:center!important;padding-bottom:15px!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-quantity-heading .detail-option-title{
+  display:block!important;line-height:1.5!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .qty-control{
+  display:flex!important;align-items:center!important;justify-content:space-between!important;
+  gap:12px!important;min-width:112px!important;height:39px!important;padding:0 7px!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .qty-control button{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  width:27px!important;height:27px!important;border-radius:5px!important;
+  transition:background .18s ease,color .18s ease!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .qty-control b{
+  min-width:18px!important;text-align:center!important;font-size:14px!important;
+  font-variant-numeric:tabular-nums!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-action-buttons{
+  gap:10px!important;margin-top:16px!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-action-buttons .btn{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  gap:9px!important;min-height:47px!important;padding:11px 14px!important;
+  border-radius:7px!important;font-size:13px!important;font-weight:750!important;
+  line-height:1.4!important;white-space:nowrap!important;
+  transition:background .2s ease,border-color .2s ease,box-shadow .2s ease,transform .2s ease!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-action-buttons .btn span{
+  display:inline-block!important;line-height:1.4!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-action-buttons .btn svg{
+  display:block!important;flex:0 0 16px!important;width:16px!important;height:16px!important;
+  margin:0!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-action-buttons .detail-add-btn{
+  background:#29242f!important;border-color:#29242f!important;color:#fff!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-action-buttons .detail-buy-btn{
+  background:#6d28d9!important;border-color:#6d28d9!important;color:#fff!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-action-buttons .btn:hover:not(:disabled){
+  transform:translateY(-2px)!important;
+  box-shadow:0 5px 13px rgba(40,28,55,.12)!important;
+}
+.product-detail-refined .detail-purchase-card-v2 .detail-action-buttons .detail-buy-btn:hover:not(:disabled){
+  background:#5b21b6!important;border-color:#5b21b6!important;
+  box-shadow:0 5px 14px rgba(109,40,217,.2)!important;
+}
+.product-detail-refined .detail-purchase-card-v2 button:focus-visible{
+  outline:2px solid #8b5cf6!important;outline-offset:3px!important;
+}
+@keyframes so-check-in{
+  from{opacity:0;transform:scale(.75)}
+  to{opacity:1;transform:scale(1)}
+}
+@media(max-width:650px){
+ .product-detail-refined .detail-purchase-card-v2 .detail-options-panel{gap:16px!important}
+ .product-detail-refined .detail-purchase-card-v2 .color-options{gap:8px!important}
+ .product-detail-refined .detail-purchase-card-v2 .color-options button{
+   min-height:40px!important;padding:7px 9px!important;font-size:11px!important;
+ }
+ .product-detail-refined .detail-purchase-card-v2 .detail-action-buttons .btn{
+   min-height:45px!important;padding:10px 8px!important;font-size:12px!important;
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ .product-detail-refined .detail-purchase-card-v2 .size-options button,
+ .product-detail-refined .detail-purchase-card-v2 .color-options button,
+ .product-detail-refined .detail-purchase-card-v2 .detail-action-buttons .btn,
+ .product-detail-refined .detail-purchase-card-v2 .qty-control button{
+   transition:none!important;animation:none!important;
+ }
+}
