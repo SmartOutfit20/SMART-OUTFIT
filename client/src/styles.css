@@ -5104,15 +5104,15 @@ button,input,select,textarea{font-family:inherit}
 }
 
 
-/* Match non-home storefront page content gutters to the homepage section gutter.
-   Keep the page canvas centered and leave the homepage/header/footer untouched. */
+/* Keep non-home storefront content at the same 1220px centered canvas
+   as the homepage; remove the extra inner 8% inset that made these pages narrower. */
 @media (min-width: 821px) {
   .site-main > .page-wrap,
   .site-main > .auth-wrap,
   .site-main > .account-wrap,
   .site-main > .orders-page,
   .site-main > .info-page {
-    padding-left: 8% !important;
-    padding-right: 8% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 }
