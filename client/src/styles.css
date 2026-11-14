@@ -9126,12 +9126,49 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 
 /* Tablet and mobile footer social buttons */
-@media (max-width: 900px) {
+@media (min-width: 651px) and (max-width: 900px) {
+  .footer-complete .footer-social-links {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+    max-width: 100%;
+  }
+  .footer-complete .footer-social-links a {
+    display: inline-flex;
+    flex: 0 1 auto;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-width: 0;
+    padding: 5px 5px;
+    border: 1px solid #ffffff35;
+    border-radius: 7px;
+    background: #ffffff0d;
+    color: #f7f3fa;
+    font-size: 8px;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .footer-complete .footer-social-links a svg {
+    display: block;
+    width: 13px;
+    height: 13px;
+    flex: 0 0 13px;
+  }
+  .footer-complete .footer-social-links .social-facebook svg { color: #1877f2; }
+  .footer-complete .footer-social-links .social-instagram { border-color: #e76b9a70; }
+  .footer-complete .footer-social-links .social-youtube { border-color: #ff003355; }
+  .footer-complete .footer-social-links .social-tiktok { border-color: #25f4ee55; }
+}
+@media (max-width: 650px) {
   .footer-complete .footer-social-links {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 8px;
+    gap: 7px;
     width: 100%;
     max-width: 100%;
   }
@@ -9140,48 +9177,28 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     flex: 0 0 auto;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 5px;
     min-width: 0;
-    padding: 8px 10px;
+    padding: 7px 8px;
     border: 1px solid #ffffff35;
-    border-radius: 9px;
+    border-radius: 8px;
     background: #ffffff0d;
     color: #f7f3fa;
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 600;
     line-height: 1;
     white-space: nowrap;
-    box-shadow: 0 2px 8px #00000012;
-    transition: background .2s ease, border-color .2s ease, transform .2s ease;
   }
   .footer-complete .footer-social-links a svg {
     display: block;
-    width: 17px;
-    height: 17px;
-    flex: 0 0 17px;
+    width: 15px;
+    height: 15px;
+    flex: 0 0 15px;
   }
   .footer-complete .footer-social-links .social-facebook svg { color: #1877f2; }
   .footer-complete .footer-social-links .social-instagram { border-color: #e76b9a70; }
   .footer-complete .footer-social-links .social-youtube { border-color: #ff003355; }
   .footer-complete .footer-social-links .social-tiktok { border-color: #25f4ee55; }
-  .footer-complete .footer-social-links a:hover {
-    background: #ffffff1c;
-    border-color: #ffffff85;
-    transform: translateY(-2px);
-  }
-}
-@media (max-width: 420px) {
-  .footer-complete .footer-social-links { gap: 7px; }
-  .footer-complete .footer-social-links a {
-    gap: 5px;
-    padding: 7px 8px;
-    font-size: 9px;
-  }
-  .footer-complete .footer-social-links a svg {
-    width: 15px;
-    height: 15px;
-    flex-basis: 15px;
-  }
 }
 
 /* Desktop footer social links: polished brand-style buttons in one row */
