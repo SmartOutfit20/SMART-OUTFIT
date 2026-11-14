@@ -3578,49 +3578,6 @@ button,input,select,textarea{font-family:inherit}
 @media(prefers-reduced-motion:reduce){.admin-refresh-unique,.admin-refresh-screen{transition:none;animation:none}.admin-refresh-spinner{animation:none}}
 
 
-/* Minimal animated Bangla admin page refresh message */
-.admin-auth-check.admin-refresh-message{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:24px;
-  background:#f7faf7;
-  color:#16845a;
-}
-.admin-auth-check.admin-refresh-message>span{
-  display:inline-block;
-  font-size:clamp(18px,3vw,23px);
-  line-height:1.5;
-  font-weight:750;
-  letter-spacing:.01em;
-  background:linear-gradient(100deg,#116b49 15%,#35a879 38%,#a0d9b6 50%,#16845a 65%,#116b49 85%);
-  background-size:220% auto;
-  background-clip:text;
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  animation:adminRefreshTextShimmer 1.35s ease-in-out infinite,adminRefreshTextFloat 1.8s ease-in-out infinite;
-}
-@keyframes adminRefreshTextShimmer{to{background-position:220% center}}
-@keyframes adminRefreshTextFloat{0%,100%{transform:translateY(0);opacity:.82}50%{transform:translateY(-3px);opacity:1}}
-@media(prefers-reduced-motion:reduce){
-  .admin-auth-check.admin-refresh-message>span{animation:none;background:none;color:#16845a;-webkit-text-fill-color:#16845a}
-}
-
-
-/* Do not show the temporary branded launch splash on storefront reload */
-.app-launch-splash{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
-
-
-/* Admin reload: keep the current page visible beneath a subtle glass veil */
-.admin-refresh-unique{display:none!important}
-.admin-refresh-glass{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(245,250,246,.24);backdrop-filter:blur(9px) saturate(125%);-webkit-backdrop-filter:blur(9px) saturate(125%);pointer-events:all}
-.admin-refresh-glass>span{display:inline-block;padding:0;margin:0;background:transparent;border:0;box-shadow:none;color:#16845a;font-size:clamp(18px,3vw,23px);line-height:1.5;font-weight:750;letter-spacing:.01em;text-align:center;animation:adminRefreshTextShimmer 1.35s ease-in-out infinite,adminRefreshTextFloat 1.8s ease-in-out infinite}
-.admin-auth-check.admin-refresh-message{background:transparent}
-@media(prefers-reduced-motion:reduce){.admin-refresh-glass>span{animation:none}}
-
-
-
 /* Header brand is a button so its action can never trigger document navigation */
 .header .brand-home-button{appearance:none;-webkit-appearance:none;border:0;background:transparent;padding:0;margin:0;font:inherit;color:inherit;text-align:inherit;cursor:pointer}
 .mobile-bottom-nav>button{appearance:none;-webkit-appearance:none;border:0;background:transparent;color:inherit;font:inherit;cursor:pointer}
