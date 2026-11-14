@@ -6378,3 +6378,10 @@ body{font-size:16px;line-height:1.6}
     flex-basis:21px!important;width:21px!important;height:21px!important;min-width:21px!important;min-height:21px!important;
   }
 }
+
+
+/* Product purchase card: square corners, no rounded card treatment. */
+.product-detail-refined section.detail-purchase-card.detail-purchase-card-v2{
+  border-radius:0!important;
+  box-shadow:none!important;
+}
