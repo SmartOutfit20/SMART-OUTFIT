@@ -62,14 +62,38 @@ function validateProduct(p) {
   })
   if (p.variantStocks.length) p.stock = p.variantStocks.reduce((total, variant) => total + variant.stock, 0)
 }
+function compactSlugBase(value) {
+  const words = String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().split(/\s+/).filter(Boolean)
+  return words.slice(0, 2).join('-').slice(0, 14).replace(/-+$/g, '') || 'item'
+}
 async function uniqueProductSlug(base, excludeId) {
-  const root = String(base || 'product').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'product'
+  const root = compactSlugBase(base)
   let candidate = root
   let suffix = 2
   while (await Product.exists({ slug: candidate, ...(excludeId ? { _id: { $ne: excludeId } } : {}) })) {
-    candidate = root + '-' + suffix++
+    candidate = root.slice(0, Math.max(1, 19 - String(suffix).length)) + '-' + suffix++
   }
   return candidate
+}
+let shortSlugMigrationPromise
+async function ensureShortProductSlugs() {
+  if (!shortSlugMigrationPromise) {
+    shortSlugMigrationPromise = (async () => {
+      const products = await Product.find({ slug: { $exists: true, $ne: '' } }).select('_id name slug').sort({ createdAt: 1, _id: 1 }).lean()
+      for (const product of products) {
+        if (String(product.slug || '').length <= 22) continue
+        const shortSlug = await uniqueProductSlug(compactSlugBase(product.name), product._id)
+        await Product.updateOne(
+          { _id: product._id },
+          { $set: { slug: shortSlug }, $addToSet: { legacySlugs: product.slug } }
+        )
+      }
+    })().catch(error => {
+      shortSlugMigrationPromise = null
+      throw error
+    })
+  }
+  return shortSlugMigrationPromise
 }
 function productWriteError(error) {
   if (error?.code === 11000 && error?.keyPattern?.slug) {
@@ -192,8 +216,11 @@ router.patch('/:id', ...adminOnly, async (req, res, next) => {
   try {
     const payload = cleanProduct(req.body); validateProduct(payload)
     payload.slug = await uniqueProductSlug(payload.slug, req.params.id)
-    const product = await Product.findByIdAndUpdate(req.params.id, payload, { new: true, runValidators: true })
+    const product = await Product.findById(req.params.id)
     if (!product) return res.status(404).json({ message: 'Product not found' })
+    if (product.slug && product.slug !== payload.slug) product.legacySlugs.addToSet(product.slug)
+    product.set(payload)
+    await product.save()
     res.json(product)
   } catch (e) { next(productWriteError(e)) }
 })
@@ -260,7 +287,7 @@ router.get('/:id', async (req, res, next) => {
     const identifier = String(req.params.id || '')
     const filter = /^[a-f0-9]{24}$/i.test(identifier)
       ? { _id: identifier, isPublished: true }
-      : { slug: identifier, isPublished: true }
+      : { $or: [{ slug: identifier }, { legacySlugs: identifier }], isPublished: true }
     const item = await Product.findOne(filter).populate('category', 'name slug')
     if (!item) return res.status(404).json({ message: 'Product not found' })
     res.json(item)
