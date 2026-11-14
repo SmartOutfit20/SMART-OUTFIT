@@ -7379,3 +7379,37 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     padding: 42px 7% 20px;
   }
 }
+
+/* SMART OUTFIT homepage hero: touch swipe and slide position indicators. */
+.home-page > .hero.hero-managed {
+  touch-action: pan-y;
+}
+.home-page > .hero-banner-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 24px;
+  margin: 8px auto 12px;
+  padding: 2px 12px;
+}
+.home-page > .hero-banner-dots button {
+  display: block;
+  width: 8px;
+  height: 8px;
+  min-width: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: #c9bfd3;
+  cursor: pointer;
+  transition: width .2s ease, background-color .2s ease;
+}
+.home-page > .hero-banner-dots button.active {
+  width: 22px;
+  background: #563477;
+}
+.home-page > .hero-banner-dots button:focus-visible {
+  outline: 2px solid #563477;
+  outline-offset: 3px;
+}
