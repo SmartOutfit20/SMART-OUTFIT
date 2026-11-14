@@ -7413,3 +7413,18 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   outline: 2px solid #563477;
   outline-offset: 3px;
 }
+
+
+/* SMART OUTFIT: mobile header order — menu toggle first, brand second. */
+@media (max-width: 650px) {
+  .header .mobile-menu-toggle {
+    order: 1;
+    margin-left: 0;
+  }
+  .header .brand {
+    order: 2;
+  }
+  .header .header-actions {
+    order: 3;
+  }
+}
