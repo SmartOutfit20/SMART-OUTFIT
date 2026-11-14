@@ -9398,3 +9398,10 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   .footer-complete .payment-logo { min-width: 45px; height: 25px; padding: 0 6px; font-size: 10px; }
   .footer-complete .payment-visa { font-size: 14px; }
 }
+
+
+/* Footer contact shortcuts: WhatsApp and direct call */
+.footer-complete .footer-social-links .social-whatsapp { background: #25d366; color: #fff; }
+.footer-complete .footer-social-links .social-call { background: #2475b9; color: #fff; }
+.footer-complete .footer-social-links .social-whatsapp svg,
+.footer-complete .footer-social-links .social-call svg { color: #fff; }
