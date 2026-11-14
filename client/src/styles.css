@@ -5102,54 +5102,61 @@ button,input,select,textarea{font-family:inherit}
 }
 
 
-/* Global storefront content gutters — match the footer's left/right inset.
-   Header and footer remain untouched; only the content area is normalized. */
+/* Unified centered site container: announcement, header, every page section,
+   and footer share the same outer left/right edges. */
+.announcement,
+.header,
+.mobile-bottom-nav,
+.site-main,
+.footer.footer-complete{
+  box-sizing:border-box!important;
+  width:83%!important;
+  max-width:1100px!important;
+  min-width:0!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.site-main{
+  padding-left:0!important;
+  padding-right:0!important;
+}
 .site-main > *{
   box-sizing:border-box!important;
   width:100%!important;
-  max-width:none!important;
+  max-width:100%!important;
   min-width:0!important;
   margin-left:0!important;
   margin-right:0!important;
-  padding-left:max(5vw,24px)!important;
-  padding-right:max(5vw,24px)!important;
 }
-.site-main > .page-wrap,
-.site-main > .account-wrap,
-.site-main > .orders-page,
-.site-main > .info-page,
-.site-main > .auth-wrap{
-  max-width:none!important;
-}
+.site-main > .page-wrap.product-detail-refined,
 .site-main > .page-wrap:has(.detail-layout){
   width:100%!important;
-  max-width:none!important;
-  padding-left:max(5vw,24px)!important;
-  padding-right:max(5vw,24px)!important;
+  max-width:100%!important;
+  margin-left:0!important;
+  margin-right:0!important;
 }
 .site-main > .page-wrap:has(.detail-layout) .detail-layout{
   width:100%!important;
-  max-width:none!important;
+  max-width:100%!important;
   margin-left:0!important;
   margin-right:0!important;
 }
 @media(max-width:760px){
-  .site-main > *{
-    padding-left:max(6vw,18px)!important;
-    padding-right:max(6vw,18px)!important;
-  }
-  .site-main > .page-wrap:has(.detail-layout){
-    padding-left:max(6vw,18px)!important;
-    padding-right:max(6vw,18px)!important;
+  .announcement,
+  .header,
+  .mobile-bottom-nav,
+  .site-main,
+  .footer.footer-complete{
+    width:calc(100% - 28px)!important;
+    max-width:1100px!important;
   }
 }
 @media(max-width:420px){
-  .site-main > *{
-    padding-left:18px!important;
-    padding-right:18px!important;
-  }
-  .site-main > .page-wrap:has(.detail-layout){
-    padding-left:18px!important;
-    padding-right:18px!important;
+  .announcement,
+  .header,
+  .mobile-bottom-nav,
+  .site-main,
+  .footer.footer-complete{
+    width:calc(100% - 24px)!important;
   }
 }
