@@ -5102,3 +5102,17 @@ button,input,select,textarea{font-family:inherit}
     min-width: 0;
   }
 }
+
+
+/* Match non-home storefront page content gutters to the homepage section gutter.
+   Keep the page canvas centered and leave the homepage/header/footer untouched. */
+@media (min-width: 821px) {
+  .site-main > .page-wrap,
+  .site-main > .auth-wrap,
+  .site-main > .account-wrap,
+  .site-main > .orders-page,
+  .site-main > .info-page {
+    padding-left: 8% !important;
+    padding-right: 8% !important;
+  }
+}
