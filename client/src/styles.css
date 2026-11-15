@@ -10520,3 +10520,33 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   }
 }
 
+/* Mobile: keep homepage category tiles compact in a single horizontal row; preserve section gutters. */
+@media (max-width:650px){
+  .home-page > .section .category-grid{
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:6px;
+  }
+  .home-page > .section .category-tile{
+    min-width:0;
+    min-height:104px;
+    height:104px;
+    padding:8px 6px;
+  }
+  .home-page > .section .category-tile b{
+    font-size:clamp(9px,2.8vw,12px);
+    line-height:1.15;
+    overflow-wrap:anywhere;
+  }
+  .home-page > .section .category-tile span,
+  .home-page > .section .category-tile small{
+    font-size:6px;
+    letter-spacing:.45px;
+  }
+  .home-page > .section .category-tile:after{
+    width:110px;
+    height:110px;
+    right:-42px;
+    bottom:-48px;
+  }
+}
+
