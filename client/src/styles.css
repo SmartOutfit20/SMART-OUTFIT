@@ -11855,3 +11855,40 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
  .admin-products-page .admin-product-at-a-glance b{font-size:11px}
  .admin-products-page .admin-product-editor-actions>div:last-child{grid-template-columns:1fr}
 }
+
+/* Product publish controls — compact three-column layout on small screens */
+@media(max-width:650px){
+ .admin-products-page .admin-product-publish-section .admin-product-feature-grid{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:6px;
+ }
+ .admin-products-page .admin-product-publish-section .admin-product-publish-toggle{
+  min-width:0;min-height:88px;padding:8px 6px;gap:5px;
+  flex-direction:column;align-items:flex-start;justify-content:center;
+  border-radius:8px;
+ }
+ .admin-products-page .admin-product-publish-section .admin-product-publish-toggle>span:nth-of-type(1){
+  width:100%;min-width:0;gap:3px;
+ }
+ .admin-products-page .admin-product-publish-section .admin-product-publish-toggle b{
+  font-size:9px;line-height:1.25;overflow-wrap:anywhere;
+ }
+ .admin-products-page .admin-product-publish-section .admin-product-publish-toggle small{
+  font-size:8px;line-height:1.25;
+ }
+ .admin-products-page .admin-product-publish-section .admin-product-publish-toggle input{
+  width:13px;height:13px;margin:0;
+ }
+ .admin-products-page .admin-product-publish-section .admin-product-publish-toggle>svg{
+  width:13px;height:13px;
+ }
+ .admin-products-page .admin-product-publish-section .admin-product-publish-toggle .status-published,
+ .admin-products-page .admin-product-publish-section .admin-product-publish-toggle .status-draft{
+  margin:0;font-size:7px;padding:3px 4px;
+ }
+}
+@media(max-width:390px){
+ .admin-products-page .admin-product-publish-section .admin-product-feature-grid{gap:5px}
+ .admin-products-page .admin-product-publish-section .admin-product-publish-toggle{min-height:82px;padding:7px 5px}
+ .admin-products-page .admin-product-publish-section .admin-product-publish-toggle small{display:none}
+}
