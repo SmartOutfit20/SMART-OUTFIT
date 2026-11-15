@@ -10847,3 +10847,21 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
  .recovery-brand{min-height:55px;margin-bottom:15px}
  .recovery-brand img{max-height:58px}
 }
+
+
+/* Uploaded storefront logo in the login and registration form headers. */
+.login-register-brand{
+ display:flex;align-items:center;justify-content:center;
+ width:100%;min-height:66px;margin:0 auto 14px;
+ background:transparent;border:0;box-shadow:none;
+}
+.login-register-brand img{
+ display:block;width:auto;height:auto;max-width:min(220px,72%);
+ max-height:66px;object-fit:contain;object-position:center;
+}
+.login-register-brand-fallback{font-size:34px;line-height:1;font-weight:800;color:#16845a}
+.login-register-brand-fallback span{color:#26352b}
+@media(max-width:600px){
+ .login-register-brand{min-height:56px;margin-bottom:12px}
+ .login-register-brand img{max-height:56px}
+}
