@@ -363,7 +363,7 @@ export function CustomerDashboard(){
  const customerId=String(user?._id||user?.id||'').slice(-8).toUpperCase()
  if(!user)return <Navigate to="/login" replace/>
  return <div className="account-wrap account-dashboard" lang="bn">
-  <div className="account-welcome"><div><span className="eyebrow">SMART OUTFIT · CUSTOMER SPACE</span><h1>My Account</h1><p>Manage your profile, orders and more.</p></div><div className="account-welcome-mark">SMART OUTFIT <span>Dress Smart · Live Better</span></div></div>
+  <div className="account-page-banner"><div><span className="eyebrow">SMART OUTFIT · CUSTOMER SPACE</span><h1>My Account</h1><p>Manage your profile, orders and more.</p></div><div className="account-welcome-mark">SMART OUTFIT <span>Dress Smart · Live Better</span></div></div>
   <div className="account-left-column"><section className="account-profile-summary"><div className="account-summary-avatar">{profile.profileImage?<img src={profile.profileImage} alt="Profile"/>:(profile.name||"C").slice(0,1).toUpperCase()}</div><h2>{profile.name||user?.name||"Customer"}</h2><p>{profile.email||profile.phone}</p><span className="account-verified">✓ Verified Account</span></section><CustomerAccountMenu/></div>
   {accountLoading&&<p className="orders-loading account-loading" role="status">আপনার অ্যাকাউন্টের তথ্য লোড হচ্ছে…</p>}
   {error&&<p className="api-notice" role="alert">{error}</p>}{notice&&<p className="coupon-message">{notice}</p>}
