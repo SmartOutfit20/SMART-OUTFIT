@@ -303,6 +303,7 @@ export function Login(){
  const [storeLogo]=useState(()=>{try{return localStorage.getItem('so-store-logo')||''}catch{return ''}})
  const {login,googleLogin,user,busy}=useAuth(),navigate=useNavigate(),[searchParams]=useSearchParams()
  const [identity,setIdentity]=useState(''),[password,setPassword]=useState(''),[showPassword,setShowPassword]=useState(false),[error,setError]=useState('')
+ if(user)return <Navigate to="/account" replace/>
  const googleSuccess=useCallback(async credential=>{setError('');try{await googleLogin(credential);navigate(searchParams.get('next')||'/account',{replace:true})}catch(e){setError(e.response?.data?.message||'Google sign-in failed. Please try again.')}},[googleLogin,navigate,searchParams])
  const googleError=useCallback(message=>setError(message),[])
  async function submit(e){e.preventDefault();setError('');try{await login(identity,password);navigate(searchParams.get('next')||'/account',{replace:true})}catch(err){setError(err.response?.data?.message||'Login failed. Check your details and try again.')}}
