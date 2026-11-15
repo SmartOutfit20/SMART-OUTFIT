@@ -1072,7 +1072,8 @@ body{padding-bottom:0!important;}
 .pwa-install-dismiss{position:absolute;right:6px;top:6px;display:grid;place-items:center;width:23px;height:23px;padding:0;border:0;border-radius:50%;background:transparent;color:#68766d;cursor:pointer}
 .pwa-install-dismiss:hover{background:#eef5f0}
 @keyframes pwa-notice-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:760px){.pwa-install-notice{right:12px;bottom:calc(82px + env(safe-area-inset-bottom));width:min(360px,calc(100vw - 24px));padding:14px 12px;gap:9px}.pwa-install-copy strong{font-size:12px}.pwa-install-copy small{font-size:10px}.pwa-install-cta{padding:8px 11px}}
+@keyframes pwa-notice-drop{from{opacity:0;transform:translateY(-115%)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:760px){.pwa-install-notice{top:calc(env(safe-area-inset-top) + 12px);right:12px;bottom:auto;width:min(420px,calc(100vw - 24px));padding:14px 12px;gap:9px;animation:pwa-notice-drop .38s cubic-bezier(.2,.8,.2,1) both;touch-action:pan-y}.pwa-install-copy strong{font-size:12px}.pwa-install-copy small{font-size:10px}.pwa-install-cta{padding:8px 11px}}
 @media(prefers-reduced-motion:reduce){.pwa-install-notice{animation:none}}
 
 
