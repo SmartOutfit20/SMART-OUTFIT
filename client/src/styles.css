@@ -12172,3 +12172,29 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     min-width:620px;
   }
 }
+
+
+/* Language settings page — scoped to this admin screen */
+.admin-language-page{width:100%;max-width:1220px;margin:0 auto;min-width:0}
+.admin-language-panel{margin-top:22px}
+.admin-language-panel .admin-panel-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+.admin-language-panel .admin-panel-heading>svg{color:var(--purple);flex:0 0 auto}
+.admin-language-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:24px 0}
+.admin-language-option{display:flex;align-items:center;gap:14px;min-width:0;padding:18px;border:1px solid var(--line);background:#fff;cursor:pointer;transition:border-color .18s,background .18s}
+.admin-language-option.is-selected{border-color:var(--purple);background:#faf7fd;box-shadow:inset 0 0 0 1px var(--purple)}
+.admin-language-option input{accent-color:var(--purple);flex:0 0 auto}
+.admin-language-flag{width:44px;height:40px;display:grid;place-items:center;background:#f0eaf6;color:var(--purple);font-size:13px;font-weight:800;border-radius:5px;flex:0 0 auto}
+.admin-language-option>span:last-child{display:flex;flex-direction:column;gap:4px;min-width:0}
+.admin-language-option b{font-size:13px;color:var(--ink)}
+.admin-language-option small{font-size:10px;color:var(--muted)}
+.admin-language-save-row{display:flex;align-items:center;justify-content:space-between;gap:16px;border-top:1px solid var(--line);padding-top:18px}
+.admin-language-save-row p{margin:0}
+.admin-language-info{margin-top:16px}
+.admin-language-info h3{margin:9px 0}
+.admin-language-info p{max-width:850px}
+@media(max-width:700px){
+ .admin-language-options{grid-template-columns:1fr}
+ .admin-language-save-row{align-items:stretch;flex-direction:column}
+ .admin-language-save-row .admin-action{justify-content:center;width:100%}
+ .admin-language-panel{padding:17px}
+}
