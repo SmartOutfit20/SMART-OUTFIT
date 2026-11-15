@@ -10,9 +10,9 @@ export async function requireAuth(req,res,next){
  try{
   // Read the current role from MongoDB on every authenticated request.
   // This prevents stale JWT role claims after an admin changes a user's role.
-  const user=await User.findById(decoded.sub).select('role isActive').lean()
+  const user=await User.findById(decoded.sub).select('role isActive permissions').lean()
   if(!user||!user.isActive)return res.status(401).json({message:'Account is unavailable. Please sign in again.'})
-  req.user={...decoded,role:user.role}
+  req.user={...decoded,role:user.role,permissions:user.permissions}
   next()
  }catch(error){next(error)}
 }
