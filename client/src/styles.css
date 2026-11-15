@@ -13472,3 +13472,12 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 @media(max-width:1080px){.account-wrap.account-dashboard{grid-template-columns:220px minmax(0,1fr);grid-template-areas:"welcome welcome" "left main" "phone main"}.account-dashboard>.account-phone-column{position:static}.account-dashboard .account-phone{max-width:220px}.account-dashboard>.account-main-column>.account-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.account-wrap.account-dashboard{width:calc(100% - 28px);grid-template-columns:minmax(0,1fr);grid-template-areas:"welcome" "left" "main" "phone";gap:12px}.account-dashboard>.account-welcome{min-height:140px;padding:22px;align-items:flex-start}.account-dashboard .account-welcome-mark{display:none}.account-dashboard>.account-left-column{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}.account-dashboard .account-profile-summary{padding:14px}.account-dashboard .account-summary-avatar{width:76px;height:76px}.account-dashboard .customer-account-menu{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}.account-dashboard .customer-account-menu>a{padding:9px;border:0}.account-dashboard .customer-menu-copy b{font-size:11px}.account-dashboard>.account-main-column>.account-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.account-dashboard>.account-main-column>.account-dashboard-grid{grid-template-columns:minmax(0,1fr)}.account-dashboard>.account-phone-column{display:none}.account-dashboard>.account-main-column>.account-recent-orders{padding:14px}}
 @media(max-width:390px){.account-wrap.account-dashboard{width:calc(100% - 20px)}.account-dashboard .customer-account-menu{grid-template-columns:1fr}.account-dashboard>.account-main-column>.account-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.account-dashboard>.account-welcome h1{font-size:28px}}
+
+
+/* Account page: responsive behavior is expressed by real breakpoints, not a phone mockup */
+.account-wrap.account-dashboard{grid-template-columns:250px minmax(0,1fr);grid-template-areas:"welcome welcome" "left main"}
+.account-dashboard>.account-left-column{grid-area:left}
+.account-dashboard>.account-main-column{grid-area:main}
+.account-dashboard>.account-phone-column{display:none!important}
+@media(max-width:900px){.account-wrap.account-dashboard{grid-template-columns:220px minmax(0,1fr);grid-template-areas:"welcome welcome" "left main"}}
+@media(max-width:760px){.account-wrap.account-dashboard{grid-template-columns:minmax(0,1fr);grid-template-areas:"welcome" "left" "main"}}
