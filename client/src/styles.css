@@ -12863,3 +12863,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   background:linear-gradient(115deg,rgba(35,160,103,.25),rgba(255,255,255,.07));
   border-color:rgba(159,213,179,.48);
 }
+
+
+/* SMART OUTFIT eyebrow labels: replace violet with the brand green palette. */
+.eyebrow{color:#15965f!important}
+.hero .eyebrow{color:#8ce0b2!important}
