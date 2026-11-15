@@ -14,7 +14,7 @@ function normalizeProduct(p) {
 const DEFAULT_HOMEPAGE_LAYOUT={
  sections:[{id:'hero',enabled:true,sortOrder:0},{id:'benefits',enabled:true,sortOrder:1},{id:'categories',enabled:true,sortOrder:2},{id:'collection',enabled:true,sortOrder:3},{id:'promo',enabled:true,sortOrder:4}],
  categories:{eyebrow:'HANDPICKED FOR YOU',title:'পছন্দের ক্যাটাগরি',categoryIds:[]},
- collection:{eyebrow:'THE LATEST EDIT',title:'নতুন কালেকশন',description:'আপনার পছন্দের নতুন স্টাইলগুলো দেখে নিন।'},
+ collection:{eyebrow:'THE LATEST EDIT',title:'নতুন কালেকশন',description:'আপনার পছন্দের নতুন স্টাইলগুলো দেখে নিন।',productMode:'newest'},
  benefits:{items:[{title:'Nationwide Delivery',description:'Across Bangladesh'},{title:'Secure Checkout',description:'Trusted payment options'},{title:'Easy Returns',description:'Simple return support'}]},
  promo:{eyebrow:'YOUR EVERYDAY, ELEVATED',title:'GOOD STYLE.\nGOOD ENERGY.',description:'Find the pieces that feel like you.',buttonText:'SHOP THE EDIT',buttonLink:'/shop'}
 }
@@ -25,10 +25,12 @@ export function Home(){
  const [homepageLayout,setHomepageLayout]=useState(DEFAULT_HOMEPAGE_LAYOUT),[homeCategories,setHomeCategories]=useState([])
  const bannerTouchStartX=useRef(null)
  const changeBanner=useCallback((next,direction=1)=>{if(next===activeBanner)return;setPreviousBanner(banners[activeBanner]||null);setBannerDirection(direction);setActiveBanner(next)},[banners,activeBanner])
- useEffect(()=>{getProducts({limit:4}).then(r=>{if(r.items?.length)setLatest(r.items.map(normalizeProduct))}).catch(()=>{});api.get('/storefront').then(({data})=>{const items=Array.isArray(data.homepageBanners)?data.homepageBanners.filter(x=>x&&x.enabled!==false&&typeof x.image==='string'&&x.image.trim()).sort((x,y)=>(x.sortOrder||0)-(y.sortOrder||0)):[];setBanners(items);setHomeCategories(Array.isArray(data.categories)?data.categories:[]);if(data.homepageLayout?.sections?.length)setHomepageLayout({...DEFAULT_HOMEPAGE_LAYOUT,...data.homepageLayout});try{localStorage.setItem('smart-outfit-home-banners',JSON.stringify(items))}catch{}}).catch(()=>{})},[])
+ useEffect(()=>{api.get('/storefront').then(({data})=>{const items=Array.isArray(data.homepageBanners)?data.homepageBanners.filter(x=>x&&x.enabled!==false&&typeof x.image==='string'&&x.image.trim()).sort((x,y)=>(x.sortOrder||0)-(y.sortOrder||0)):[];setBanners(items);setHomeCategories(Array.isArray(data.categories)?data.categories:[]);if(data.homepageLayout?.sections?.length)setHomepageLayout({...DEFAULT_HOMEPAGE_LAYOUT,...data.homepageLayout});try{localStorage.setItem('smart-outfit-home-banners',JSON.stringify(items))}catch{}}).catch(()=>{})},[])
  useEffect(()=>{if(activeBanner>=banners.length)setActiveBanner(0)},[banners.length,activeBanner])
  useEffect(()=>{if(!previousBanner)return;const timer=window.setTimeout(()=>setPreviousBanner(null),850);return()=>window.clearTimeout(timer)},[previousBanner,activeBanner])
  useEffect(()=>{if(banners.length<2)return;const timer=window.setInterval(()=>changeBanner((activeBanner+1)%banners.length,1),4500);return()=>window.clearInterval(timer)},[banners.length,activeBanner,changeBanner])
+ const productMode=homepageLayout.collection?.productMode||'newest'
+ useEffect(()=>{getProducts({limit:4,sort:productMode}).then(r=>setLatest((r.items||[]).map(normalizeProduct))).catch(()=>{})},[productMode])
  const banner=banners[activeBanner]||null
  const sectionConfig=(homepageLayout.sections||DEFAULT_HOMEPAGE_LAYOUT.sections).slice().sort((a,b)=>(a.sortOrder||0)-(b.sortOrder||0))
  const categoryConfig=homepageLayout.categories||DEFAULT_HOMEPAGE_LAYOUT.categories
