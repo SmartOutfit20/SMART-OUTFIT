@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken'
 import {User} from '../models/index.js'
+import {hasPermission} from '../config/permissions.js'
 
 export async function requireAuth(req,res,next){
  const token=req.headers.authorization?.startsWith('Bearer ')?req.headers.authorization.slice(7):null
@@ -17,5 +18,10 @@ export async function requireAuth(req,res,next){
 }
 export const requireRole=(...roles)=>(req,res,next)=>{
  if(!req.user||!roles.includes(req.user.role))return res.status(403).json({message:'Insufficient permissions'})
+ next()
+}
+
+export const requirePermission=(permission)=>(req,res,next)=>{
+ if(!req.user||!hasPermission(req.user.role,permission))return res.status(403).json({message:'Insufficient permissions'})
  next()
 }

@@ -1,11 +1,13 @@
 import { Router } from 'express'
 import { Product, Category, ActivityLog, Setting } from '../models/index.js'
 import { starterProducts } from '../data/starterProducts.js'
-import { requireAuth, requireRole } from '../middleware/auth.js'
+import { requireAuth, requirePermission } from '../middleware/auth.js'
 import sharp from 'sharp'
 
 const router = Router()
-const adminOnly = [requireAuth, requireRole('super_admin', 'admin', 'editor')]
+const productWrite = [requireAuth, requirePermission('products.write')]
+const productRead = [requireAuth, requirePermission('products.read')]
+const inventoryWrite = [requireAuth, requirePermission('inventory.write')]
 const cleanProduct = body => ({
   name: String(body.name || '').trim(),
   slug: String(body.slug || body.name || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'product',
@@ -159,7 +161,7 @@ function productWriteError(error) {
   return error
 }
 
-router.post('/admin/import-starter', ...adminOnly, async (req, res, next) => {
+router.post('/admin/import-starter', ...productWrite, async (req, res, next) => {
   try {
     const categoryCache = new Map()
     let created = 0, skipped = 0
@@ -205,14 +207,14 @@ router.get('/', async (req, res, next) => {
   } catch (e) { next(e) }
 })
 
-router.get('/admin/all', ...adminOnly, async (req, res, next) => {
+router.get('/admin/all', ...productRead, async (req, res, next) => {
   try { await ensureShortProductSlugs(); await ensureProductSerials(); res.json(await Product.find().populate('category', 'name').sort({ createdAt: -1 }).lean()) }
   catch (e) { next(e) }
 })
 
 
 
-router.patch('/admin/:id/variant-stock', ...adminOnly, async (req, res, next) => {
+router.patch('/admin/:id/variant-stock', ...inventoryWrite, async (req, res, next) => {
   try {
     const size = String(req.body.size || '').trim().slice(0, 30)
     const color = String(req.body.color || '').trim().slice(0, 40)
@@ -236,7 +238,7 @@ router.patch('/admin/:id/variant-stock', ...adminOnly, async (req, res, next) =>
   } catch (e) { next(e) }
 })
 
-router.patch('/admin/:id/stock', ...adminOnly, async (req, res, next) => {
+router.patch('/admin/:id/stock', ...inventoryWrite, async (req, res, next) => {
   try {
     const delta = Number(req.body.delta)
     const note = String(req.body.note || 'Manual inventory adjustment').trim().slice(0, 200)
@@ -255,7 +257,7 @@ router.patch('/admin/:id/stock', ...adminOnly, async (req, res, next) => {
   } catch (e) { next(e) }
 })
 
-router.post('/', ...adminOnly, async (req, res, next) => {
+router.post('/', ...productWrite, async (req, res, next) => {
   try {
     await ensureProductSerials()
     const payload = cleanProduct(req.body); validateProduct(payload)
@@ -267,7 +269,7 @@ router.post('/', ...adminOnly, async (req, res, next) => {
   } catch (e) { next(productWriteError(e)) }
 })
 
-router.patch('/:id', ...adminOnly, async (req, res, next) => {
+router.patch('/:id', ...productWrite, async (req, res, next) => {
   try {
     const payload = cleanProduct(req.body); validateProduct(payload)
     payload.slug = await uniqueProductSlug(payload.slug, req.params.id)
@@ -281,7 +283,7 @@ router.patch('/:id', ...adminOnly, async (req, res, next) => {
   } catch (e) { next(productWriteError(e)) }
 })
 
-router.delete('/:id', ...adminOnly, async (req, res, next) => {
+router.delete('/:id', ...productWrite, async (req, res, next) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id)
     if (!product) return res.status(404).json({ message: 'Product not found' })

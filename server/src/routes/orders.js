@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import mongoose from 'mongoose'
-import { requireAuth, requireRole } from '../middleware/auth.js'
+import { requireAuth, requirePermission } from '../middleware/auth.js'
 import { Order, Product, Coupon, Setting, ActivityLog } from '../models/index.js'
 import { normalizeDeliveryAddress, deliveryAddressError, normalizeRequestedItems, calculateCouponDiscount, calculateDeliveryCharge } from '../services/checkoutRules.js'
 
@@ -201,7 +201,7 @@ router.post('/', async (req, res, next) => {
   finally { if (session) await session.endSession() }
 })
 
-router.patch('/:id/advance-payment-verify', requireRole('super_admin', 'admin'), async (req, res, next) => {
+router.patch('/:id/advance-payment-verify', requirePermission('orders.verify_payment'), async (req, res, next) => {
   let session
   try {
     const decision = String(req.body.decision || '')
@@ -244,12 +244,12 @@ router.get('/mine', async (req, res, next) => {
   catch (error) { next(error) }
 })
 
-router.get('/admin/all', requireRole('super_admin', 'admin', 'support'), async (req, res, next) => {
+router.get('/admin/all', requirePermission('orders.read'), async (req, res, next) => {
   try { await migrateOrderSerials(); res.json(await Order.find().populate('customer', 'name email phone').populate('items.product', 'name sku images').sort({ createdAt: -1 }).limit(200).lean()) }
   catch (error) { next(error) }
 })
 
-router.patch('/:id/status', requireRole('super_admin', 'admin', 'support', 'editor'), async (req, res, next) => {
+router.patch('/:id/status', requirePermission('orders.update'), async (req, res, next) => {
   let session
   try {
     const allowed = ['confirmed', 'processing', 'shipped', 'delivered', 'cancelled', 'returned']

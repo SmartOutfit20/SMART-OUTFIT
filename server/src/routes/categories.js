@@ -1,14 +1,15 @@
 import { Router } from 'express'
 import { Category, Product, ActivityLog } from '../models/index.js'
-import { requireAuth, requireRole } from '../middleware/auth.js'
+import { requireAuth, requirePermission } from '../middleware/auth.js'
 const router = Router()
-const adminOnly = [requireAuth, requireRole('super_admin', 'admin', 'editor')]
+const categoryRead = [requireAuth, requirePermission('categories.read')]
+const categoryWrite = [requireAuth, requirePermission('categories.write')]
 const slugify = value => String(value || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || ('category-' + Date.now().toString(36))
 router.get('/', async (req, res, next) => {
   try { res.json(await Category.find({ isActive: true }).sort({ sortOrder: 1, name: 1 }).lean()) }
   catch (e) { next(e) }
 })
-router.get('/admin/all', ...adminOnly, async (req, res, next) => {
+router.get('/admin/all', ...categoryRead, async (req, res, next) => {
   try {
     const [categories, counts] = await Promise.all([
       Category.find().populate('parent','name').sort({ sortOrder: 1, name: 1 }).lean(),
@@ -18,7 +19,7 @@ router.get('/admin/all', ...adminOnly, async (req, res, next) => {
     res.json(categories.map(category => ({ ...category, productCount: countMap.get(String(category._id)) || 0 })))
   } catch (e) { next(e) }
 })
-router.post('/', ...adminOnly, async (req, res, next) => {
+router.post('/', ...categoryWrite, async (req, res, next) => {
   try {
     const name = String(req.body.name || '').trim().slice(0, 60)
     const slug = slugify(req.body.slug || name).slice(0, 80)
@@ -34,7 +35,7 @@ router.post('/', ...adminOnly, async (req, res, next) => {
     res.status(201).json(category)
   } catch (e) { next(e) }
 })
-router.patch('/:id', ...adminOnly, async (req, res, next) => {
+router.patch('/:id', ...categoryWrite, async (req, res, next) => {
   try {
     const update = {}
     if (req.body.name !== undefined) update.name = String(req.body.name).trim().slice(0, 60)
@@ -68,7 +69,7 @@ router.patch('/:id', ...adminOnly, async (req, res, next) => {
     res.json(item)
   } catch (e) { next(e) }
 })
-router.delete('/:id', ...adminOnly, async (req, res, next) => {
+router.delete('/:id', ...categoryWrite, async (req, res, next) => {
   try {
     const item = await Category.findByIdAndUpdate(req.params.id, { isActive: false }, { new: true })
     if (!item) return res.status(404).json({ message: 'Category not found' })
