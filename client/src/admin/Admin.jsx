@@ -28,6 +28,38 @@ const nav=[
 ]
 function AdminAvatar({user,className='admin-top-avatar'}){return <span className={className}>{user?.profileImage?<img src={user.profileImage} alt="Admin profile"/>:<UserRound size={className.includes('large')?38:17}/>}</span>}
 const staffRoles=['super_admin','admin','support','editor','viewer']
+const DEFAULT_NAV_PERMISSIONS={
+ admin:['products.read','products.write','inventory.read','inventory.write','categories.read','categories.write','coupons.read','coupons.write','orders.read','orders.update','orders.verify_payment','customers.read','customers.manage','reports.read','analytics.read','support.read','support.manage','delivery.read','delivery.manage','settings.read','settings.manage'],
+ editor:['products.read','products.write','inventory.read','categories.read','categories.write','coupons.read','coupons.write'],
+ support:['orders.read','orders.update','customers.read','support.read','support.manage'],
+ viewer:['products.read','inventory.read','categories.read','coupons.read','orders.read','customers.read','reports.read','analytics.read','support.read','delivery.read','settings.read']
+}
+const NAV_REQUIRED_PERMISSIONS={
+ '/admin':['reports.read','analytics.read'],
+ '/admin/products':['products.read'],
+ '/admin/inventory':['inventory.read'],
+ '/admin/orders':['orders.read'],
+ '/admin/customers':['customers.read'],
+ '/admin/categories':['categories.read'],
+ '/admin/coupons':['coupons.read'],
+ '/admin/homepage-builder':['settings.manage'],
+ '/admin/navigation':['settings.manage'],
+ '/admin/seo':['settings.manage'],
+ '/admin/reports':['reports.read'],
+ '/admin/support':['support.read'],
+ '/admin/delivery':['delivery.read'],
+ '/admin/settings':['settings.manage'],
+ '/admin/language':['settings.manage'],
+ '/admin/profile':[],
+ '/admin/roles':['staff.manage'],
+ '/admin/activity-logs':['activity.read']
+}
+function canAccessAdminPath(path,user){
+ if(user?.role==='super_admin')return true
+ const permissions=Array.isArray(user?.permissions)?user.permissions:(DEFAULT_NAV_PERMISSIONS[user?.role]||[])
+ const required=NAV_REQUIRED_PERMISSIONS[path]||[]
+ return required.length===0||required.every(permission=>permissions.includes(permission))
+}
 const STAFF_PERMISSION_GROUPS=[
  {title:'Products & inventory',items:[['products.read','View products'],['products.write','Manage products'],['inventory.read','View inventory'],['inventory.write','Manage inventory']]},
  {title:'Orders',items:[['orders.read','View orders'],['orders.update','Update orders'],['orders.verify_payment','Verify advance payments']]},
@@ -46,7 +78,7 @@ export function AdminLayout(){
  useEffect(()=>{setMenuOpen(false);setSearchText('')},[location.pathname]);
  if(!authChecked&&(!user||!staffRoles.includes(user.role)))return null;
  if(authChecked&&(!user||!staffRoles.includes(user.role)))return <Navigate to="/admin/login" replace/>;
- const visibleNav=nav.filter(item=>!item.superAdmin||user?.role==='super_admin');
+ const visibleNav=nav.map(item=>item.children?{...item,children:item.children.filter(child=>canAccessAdminPath(child.path,user))}:item).filter(item=>(!item.superAdmin||user?.role==='super_admin')&&(!item.children||item.children.length>0)&&(!item.path||canAccessAdminPath(item.path,user)));
  const flatNav=visibleNav.flatMap(item=>item.children?item.children.map(child=>({...child,parent:item.label})): [item]);
  const matches=searchText.trim()?flatNav.filter(item=>(item.label+' '+(item.parent||'')).toLowerCase().includes(searchText.trim().toLowerCase())).slice(0,6):[];
  const isActive=item=>item.path==='/admin'?location.pathname==='/admin':location.pathname===item.path||location.pathname.startsWith(item.path+'/');
