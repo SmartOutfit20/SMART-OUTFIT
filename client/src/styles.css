@@ -8101,7 +8101,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 
 
 /* SMART OUTFIT: Shop hero carousel follows the homepage banner behaviour. */
-.shop-managed-banner-slider{position:relative;display:block;width:calc(100% + 16%);max-width:1220px;margin:0 0 24px -8%;aspect-ratio:1220/400;overflow:hidden;isolation:isolate;background:#f3f4f2;scroll-snap-type:none}
+.shop-managed-banner-slider{position:relative;display:block;width:100%;max-width:1220px;margin:0 0 24px;aspect-ratio:1220/400;overflow:hidden;isolation:isolate;background:#f3f4f2;scroll-snap-type:none}
 .shop-managed-banner-slider .shop-managed-banner-image{position:absolute;inset:0;display:block;width:100%;height:100%;background-color:#f3f4f2;background-position:center;background-repeat:no-repeat;background-size:cover;color:#fff;overflow:hidden}
 .shop-managed-banner-slider .shop-managed-banner-image--outgoing{z-index:1;pointer-events:none}
 .shop-managed-banner-slider .shop-managed-banner-image--incoming{z-index:2}
