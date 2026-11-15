@@ -13565,10 +13565,27 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .so-account-track-title h2{margin-bottom:5px}
 .so-account-track-title p{margin:0 0 7px;color:#626b79}
 .so-account-track-title>div>b{font-size:25px}
-.so-account-progress{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin:30px 0 12px}
-.so-account-progress>div{display:flex;align-items:center;flex-direction:column;gap:8px;text-align:center;font-size:12px;color:#687080}
-.so-account-progress i{width:23px;height:23px;border-radius:50%;background:#e5e7eb;border:4px solid #f4f5f6;box-sizing:content-box}
-.so-account-progress .done i{background:#15965f}
+.so-account-progress-wrap{margin:22px 0 18px;padding:20px;border:1px solid #e5e9ef;border-radius:16px;background:linear-gradient(180deg,#fbfcfd 0%,#fff 100%)}
+.so-account-progress-heading{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:22px}
+.so-account-progress-heading>b{font-size:17px;color:#111}
+.so-account-progress-heading>span{font-size:12px;color:#687080;text-align:right}
+.so-account-progress{--so-progress:0%;position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:0;padding:0}
+.so-account-progress:before,.so-account-progress:after{content:"";position:absolute;top:16px;left:10%;right:10%;height:4px;border-radius:5px;background:#e6e9ed}
+.so-account-progress:after{right:auto;width:calc(var(--so-progress)*.8);background:#15965f;transition:width .35s ease}
+.so-account-progress-step{position:relative;z-index:1;display:flex;align-items:center;flex-direction:column;gap:7px;min-width:0;text-align:center;color:#7b8491}
+.so-account-progress-step i{display:grid;place-items:center;width:34px;height:34px;box-sizing:border-box;border:3px solid #e4e8ed;border-radius:50%;background:#fff;color:#7b8491;font-size:12px;font-style:normal;font-weight:800}
+.so-account-progress-step>b{font-size:12px;line-height:1.35;color:#525b68}
+.so-account-progress-step>span{max-width:130px;font-size:10px;line-height:1.45;color:#89919c}
+.so-account-progress-step>small{min-height:15px;font-size:10px;color:#7b8491}
+.so-account-progress-step.done i{border-color:#15965f;background:#15965f;color:#fff}
+.so-account-progress-step.done>b{color:#10784c}
+.so-account-progress-step.current i{border:4px solid #15965f;background:#fff;color:#10784c;box-shadow:0 0 0 5px #eaf7ef}
+.so-account-progress-step.current>b{color:#10784c;font-weight:800}
+.so-account-progress-step.current>small{color:#10784c;font-weight:700}
+.so-account-progress-stopped{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;background:#fff4e8;color:#9a4a0a}
+.so-account-progress-stopped>b{flex:none;padding:6px 11px;border-radius:20px;background:#ffe5c7}
+.so-account-progress-stopped>span{font-size:13px;line-height:1.5}
+@media(max-width:640px){.so-account-progress-wrap{padding:15px 10px}.so-account-progress-heading{align-items:flex-start;flex-direction:column;gap:4px;margin-bottom:18px}.so-account-progress-heading>span{text-align:left}.so-account-progress{grid-template-columns:1fr;gap:0;padding-left:5px}.so-account-progress:before,.so-account-progress:after{top:17px;bottom:17px;left:16px;right:auto;width:4px;height:auto}.so-account-progress:after{height:calc(var(--so-progress)*.25);width:4px}.so-account-progress-step{display:grid;grid-template-columns:34px minmax(0,1fr);grid-template-rows:auto auto auto;column-gap:12px;row-gap:2px;align-items:center;text-align:left;padding:0 0 17px}.so-account-progress-step i{grid-column:1;grid-row:1/4}.so-account-progress-step>b{grid-column:2;grid-row:1}.so-account-progress-step>span{grid-column:2;grid-row:2;max-width:none}.so-account-progress-step>small{grid-column:2;grid-row:3;min-height:0}.so-account-progress-stopped{align-items:flex-start;flex-direction:column;gap:8px}}
 .so-account-alert,.so-account-success{padding:11px 14px;border-radius:10px;margin:0 0 12px;font-size:14px}
 .so-account-alert{background:#fff0f0;color:#a32323}.so-account-success{background:#eaf7ef;color:#10784c}
 .so-account-loading{padding:35px;text-align:center;color:#687080}
