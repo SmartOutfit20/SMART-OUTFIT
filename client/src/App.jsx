@@ -1,5 +1,5 @@
 import { Component, lazy, Suspense } from 'react'
-import { Routes,Route } from 'react-router-dom'
+import { Routes,Route,Navigate } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { Home,Shop,ProductDetail,Cart,Wishlist,Checkout,Login,Register,CustomerDashboard,CustomerOrders,ForgotPassword,ResetPassword,SimplePage } from './pages/StorePages'
 // Keep the large administration workspace out of the initial storefront bundle.
