@@ -10555,3 +10555,89 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   }
 }
 
+
+
+/* My Account page refinement — scoped to the customer dashboard only. */
+.account-wrap.account-dashboard{
+  width:calc(100% - 40px);
+  max-width:1220px;
+  padding:42px 0 76px;
+}
+.account-dashboard .account-welcome{
+  padding-bottom:22px;
+  border-bottom:1px solid #e9eee9;
+}
+.account-dashboard .account-welcome h1{letter-spacing:-.35px}
+.account-dashboard .account-logout{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:42px;padding:10px 18px;border-radius:10px;
+  font-weight:700;box-shadow:0 3px 10px rgba(28,45,32,.04);
+}
+.account-dashboard .customer-account-menu{
+  width:100%;padding:7px;margin:0 0 22px;border-radius:12px;
+  background:#fff;box-shadow:0 7px 22px rgba(30,48,36,.045);
+}
+.account-dashboard .customer-account-menu a{padding:11px 18px}
+.account-dashboard .account-hero-card{
+  min-height:176px;padding:30px 34px;border-radius:18px;
+  background:linear-gradient(112deg,#171d19 0%,#25372b 57%,#16845a 125%);
+  box-shadow:0 18px 38px rgba(22,62,39,.14);
+}
+.account-dashboard .account-hero-card:before{
+  content:"SO";position:absolute;right:9%;bottom:-58px;
+  color:#ffffff0b;font:800 190px/1 'Manrope',sans-serif;
+  letter-spacing:-12px;pointer-events:none;
+}
+.account-dashboard .account-hero-identity{gap:20px}
+.account-dashboard .account-hero-card .account-avatar{
+  width:88px;height:88px;flex-basis:88px;
+  box-shadow:0 5px 18px #0002;
+}
+.account-dashboard .account-metrics-modern>div{
+  min-height:126px;padding:20px 23px;border-radius:14px;
+  transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
+}
+.account-dashboard .account-metrics-modern>div:hover{
+  transform:translateY(-3px);border-color:#cbdccd;
+  box-shadow:0 12px 25px rgba(29,47,34,.08);
+}
+.account-dashboard .account-dashboard-grid{gap:22px}
+.account-dashboard .account-panel{
+  border-color:#e3eae4;border-radius:16px;
+  box-shadow:0 8px 26px rgba(29,47,34,.045);
+}
+.account-dashboard .account-profile-panel,
+.account-dashboard .account-password-panel{background:#fff}
+.account-dashboard .account-section-heading>svg{
+  border-radius:13px;background:#edf5ef;
+}
+.account-dashboard .account-form input,
+.account-dashboard .account-form textarea,
+.account-dashboard .account-password-form input{
+  border-radius:10px;background:#fbfcfb;
+}
+.account-dashboard .account-form input:hover,
+.account-dashboard .account-form textarea:hover,
+.account-dashboard .account-password-form input:hover{border-color:#c5d5c8}
+.account-dashboard .account-help-card{
+  border-radius:15px;padding:24px;
+  box-shadow:0 8px 22px rgba(29,47,34,.035);
+}
+@media(max-width:900px) and (min-width:701px){
+  .account-wrap.account-dashboard{width:calc(100% - 48px);padding-top:34px}
+  .account-dashboard .account-dashboard-grid{grid-template-columns:minmax(0,1.35fr) minmax(250px,.8fr)}
+}
+@media(max-width:700px){
+  .account-wrap.account-dashboard{
+    width:100%;max-width:100%;padding:25px 16px 55px!important;
+  }
+  .account-dashboard .account-welcome{padding-bottom:17px}
+  .account-dashboard .customer-account-menu{margin-bottom:16px}
+  .account-dashboard .account-hero-card{padding:19px;border-radius:14px}
+  .account-dashboard .account-hero-card:before{font-size:125px;right:4%;bottom:-36px}
+  .account-dashboard .account-metrics-modern>div{min-height:112px}
+  .account-dashboard .account-dashboard-grid{grid-template-columns:minmax(0,1fr)}
+}
+@media(max-width:390px){
+  .account-wrap.account-dashboard{padding-left:12px!important;padding-right:12px!important}
+}
