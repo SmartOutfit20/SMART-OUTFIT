@@ -2,7 +2,7 @@ import {Router} from 'express'
 import bcrypt from 'bcryptjs'
 import {requireAuth,requirePermission} from '../middleware/auth.js'
 import {getRolePermissions} from '../config/permissions.js'
-import {User,Order,SupportTicket,Setting,Product,VisitorDaily,ActivityLog} from '../models/index.js'
+import {User,Order,SupportTicket,Setting,Product,Review,VisitorDaily,ActivityLog} from '../models/index.js'
 const router=Router()
 router.use(requireAuth)
 
@@ -13,6 +13,9 @@ async function recordAdminActivity(req,action,resource,resourceId='',metadata={}
   console.error('Admin activity log could not be saved:',error.message)
  }
 }
+router.get('/product-reviews',requirePermission('products.read'),async(req,res,next)=>{try{const filter=req.query.status==='approved'?{isApproved:true}:req.query.status==='pending'?{isApproved:false}:{};const reviews=await Review.find(filter).populate('product','name images slug').populate('customer','name email').sort({createdAt:-1}).limit(500).lean();res.json(reviews)}catch(e){next(e)}})
+router.patch('/product-reviews/:id',requirePermission('products.write'),async(req,res,next)=>{try{if(typeof req.body.isApproved!=='boolean')return res.status(400).json({message:'Choose whether to approve or hide this review.'});const review=await Review.findByIdAndUpdate(req.params.id,{$set:{isApproved:req.body.isApproved}},{new:true}).populate('product','name images slug').populate('customer','name email').lean();if(!review)return res.status(404).json({message:'Review not found'});await recordAdminActivity(req,review.isApproved?'product_review.approved':'product_review.hidden','product_review',review._id,{rating:review.rating,product:review.product?.name});res.json(review)}catch(e){next(e)}})
+router.delete('/product-reviews/:id',requirePermission('products.write'),async(req,res,next)=>{try{const review=await Review.findByIdAndDelete(req.params.id);if(!review)return res.status(404).json({message:'Review not found'});await recordAdminActivity(req,'product_review.deleted','product_review',review._id,{rating:review.rating});res.json({success:true})}catch(e){next(e)}})
 router.get('/customers',requirePermission('customers.read'),async(req,res,next)=>{try{const users=await User.find({role:'customer'}).select('name email phone profileImage isActive createdAt').sort({createdAt:-1}).limit(500).lean();res.json(users)}catch(e){next(e)}})
 router.patch('/customers/:id/status',requirePermission('customers.manage'),async(req,res,next)=>{try{const user=await User.findOneAndUpdate({_id:req.params.id,role:'customer'},{$set:{isActive:!!req.body.isActive}},{new:true}).select('name email phone isActive');if(!user)return res.status(404).json({message:'Customer not found'});res.json(user);await recordAdminActivity(req,'customer.status.updated','customer',user._id,{isActive:user.isActive})}catch(e){next(e)}})
 router.patch('/customers/:id/role',requirePermission('staff.manage'),async(req,res,next)=>{try{const role=String(req.body.role||'');if(!['admin','support','editor','viewer','customer'].includes(role))return res.status(400).json({message:'Invalid role'});const user=await User.findById(req.params.id);if(!user||user.role==='super_admin')return res.status(404).json({message:'User not found or protected'});user.role=role;await user.save();res.json({id:user._id,name:user.name,role:user.role});await recordAdminActivity(req,'staff.role.updated','user',user._id,{role:user.role})}catch(e){next(e)}})
