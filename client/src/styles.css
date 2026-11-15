@@ -13092,12 +13092,18 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .admin-shell .admin-products-page .admin-product-card-meta .is-stock{color:var(--product-green-dark);font-weight:700}
 .admin-shell .admin-products-page .admin-product-card-meta .is-low{color:#a56b12;font-weight:700}
 .admin-shell .admin-products-page .admin-product-card-meta .is-out{color:#b34d4d;font-weight:700}
-.admin-shell .admin-products-page .admin-product-card-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:5px;padding-top:10px;border-top:1px solid #edf3ee}
+.admin-shell .admin-products-page .admin-product-card-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:8px;padding-top:11px;border-top:1px solid #edf3ee}
 .admin-shell .admin-products-page .admin-product-card-actions button,
-.admin-shell .admin-products-page .admin-product-card-actions a{display:flex;align-items:center;justify-content:center;gap:4px;min-width:0;min-height:35px;padding:6px 5px;border:0;border-radius:8px;font-size:10px;font-weight:700;text-decoration:none;cursor:pointer}
+.admin-shell .admin-products-page .admin-product-card-actions a{display:inline-flex;align-items:center;justify-content:center;gap:5px;width:100%;min-width:0;min-height:38px;padding:7px 5px;border:0;border-radius:8px;font-size:11px;line-height:1.2;font-weight:750;text-decoration:none;white-space:nowrap;cursor:pointer;box-sizing:border-box;transition:filter .16s ease,transform .16s ease}
 .admin-shell .admin-products-page .admin-product-card-actions .admin-edit{background:var(--product-green);color:#fff}
 .admin-shell .admin-products-page .admin-product-card-actions .admin-product-view{background:#111;color:#fff}
 .admin-shell .admin-products-page .admin-product-card-actions .admin-delete{background:#d83b42;color:#fff}
+
+.admin-shell .admin-products-page .admin-product-card-actions .admin-edit{background:#15965f;color:#fff}
+.admin-shell .admin-products-page .admin-product-card-actions .admin-product-view{background:#111;color:#fff}
+.admin-shell .admin-products-page .admin-product-card-actions .admin-delete{background:#d83b42;color:#fff}
+.admin-shell .admin-products-page .admin-product-card-actions button:hover,.admin-shell .admin-products-page .admin-product-card-actions a:hover{filter:brightness(.93);transform:translateY(-1px)}
+.admin-shell .admin-products-page .admin-product-card-actions button:focus-visible,.admin-shell .admin-products-page .admin-product-card-actions a:focus-visible{outline:2px solid #15965f;outline-offset:2px}
 .admin-shell .admin-products-page .admin-product-card-actions button:disabled{opacity:.45;cursor:not-allowed}
 .admin-shell .admin-products-page .admin-product-preview-backdrop{position:fixed;z-index:1000;inset:0;display:grid;place-items:center;padding:20px;background:#101812a8}
 .admin-shell .admin-products-page .admin-product-preview-dialog{width:min(780px,100%);max-height:min(88vh,820px);overflow:auto;border:1px solid var(--product-line);border-radius:18px;background:#fff;box-shadow:0 25px 80px #0003}
@@ -13140,9 +13146,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .admin-shell .admin-products-page .admin-table-tools{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
 .admin-shell .admin-products-page .admin-product-card-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
 .admin-shell .admin-products-page .admin-product-card-media{border-radius:11px}
-.admin-shell .admin-products-page .admin-product-card-wishlist{position:absolute;top:10px;right:51px;display:grid;place-items:center;width:32px;height:32px;border:1px solid #dce8df;border-radius:50%;background:#ffffffed;color:#111;cursor:pointer}
-.admin-shell .admin-products-page .admin-product-select{position:absolute;top:13px;left:13px;z-index:1;display:grid;place-items:center;width:25px;height:25px;border-radius:7px;background:#ffffffed}
-.admin-shell .admin-products-page .admin-product-select input{width:15px;height:15px;accent-color:#15965f}
+.admin-shell .admin-products-page .admin-product-card-wishlist{position:absolute;top:10px;right:10px;z-index:2;display:grid;place-items:center;width:36px;height:36px;border:1px solid #dce8df;border-radius:50%;background:#ffffffed;color:#111;box-shadow:0 2px 8px #102b1c18;cursor:pointer}
 .admin-shell .admin-products-page .admin-product-pagination{display:flex;align-items:center;justify-content:space-between;gap:15px;margin:24px 0 8px;color:#344239;font-size:12px}
 .admin-shell .admin-products-page .admin-product-pagination>div{display:flex;align-items:center;gap:5px}
 .admin-shell .admin-products-page .admin-product-pagination button{display:grid;place-items:center;min-width:34px;height:34px;padding:0 8px;border:1px solid #dce8df;border-radius:8px;background:#fff;color:#111;cursor:pointer}
