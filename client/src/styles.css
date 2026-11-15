@@ -11327,3 +11327,36 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 @media(prefers-reduced-motion:reduce){
  .admin-shell .admin-sidebar>a{transition:none}
 }
+
+
+/* SMART OUTFIT dashboard: live order summary */
+.admin-content .admin-order-summary-panel{margin:0 0 22px;min-width:0}
+.admin-content .admin-order-summary-panel .admin-panel-heading{align-items:center}
+.admin-content .admin-summary-status-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin:18px 0 22px}
+.admin-content .admin-summary-status{display:flex;flex-direction:column;gap:8px;min-width:0;padding:13px 14px;border:1px solid #e4ece5;border-radius:10px;background:#fbfdfb}
+.admin-content .admin-summary-status span{font-size:11px;color:#718075;font-weight:650}
+.admin-content .admin-summary-status b{font-size:24px;line-height:1.1;color:#1d2b22;font-variant-numeric:tabular-nums}
+.admin-content .admin-summary-status.status-pending{border-color:#f1dfb9;background:#fffaf0}
+.admin-content .admin-summary-status.status-pending b{color:#a56b12}
+.admin-content .admin-summary-status.status-processing,.admin-content .admin-summary-status.status-confirmed{border-color:#dce6fa;background:#f6f9ff}
+.admin-content .admin-summary-status.status-processing b,.admin-content .admin-summary-status.status-confirmed b{color:#4168a7}
+.admin-content .admin-summary-status.status-shipped{border-color:#e5defa;background:#faf8ff}
+.admin-content .admin-summary-status.status-shipped b{color:#7054a8}
+.admin-content .admin-summary-status.status-delivered{border-color:#d7eadc;background:#f3faf5}
+.admin-content .admin-summary-status.status-delivered b{color:#16845a}
+.admin-content .admin-summary-status.status-cancelled{border-color:#f1dada;background:#fff7f7}
+.admin-content .admin-summary-status.status-cancelled b{color:#b34d4d}
+.admin-content .admin-summary-recent-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 10px}
+.admin-content .admin-summary-recent-head h4{margin:0;font-size:14px;color:#1d2b22}
+.admin-content .admin-summary-recent-head>span{font-size:11px;color:#849187}
+.admin-content .admin-summary-recent-list{display:flex;flex-direction:column;border:1px solid #e7eee8;border-radius:10px;overflow:hidden}
+.admin-content .admin-summary-order-row{display:grid;grid-template-columns:minmax(140px,1.1fr) minmax(120px,1fr) minmax(90px,.7fr) auto;align-items:center;gap:14px;padding:13px 15px;border-bottom:1px solid #edf2ed;min-width:0}
+.admin-content .admin-summary-order-row:last-child{border-bottom:0}
+.admin-content .admin-summary-order-id,.admin-content .admin-summary-customer{display:flex;flex-direction:column;gap:4px;min-width:0}
+.admin-content .admin-summary-order-id b,.admin-content .admin-summary-customer b{font-size:12px;color:#25352a;overflow-wrap:anywhere}
+.admin-content .admin-summary-order-id small,.admin-content .admin-summary-customer small{font-size:10px;color:#849187}
+.admin-content .admin-summary-total{font-size:13px;color:#1c3325;white-space:nowrap}
+.admin-content .admin-summary-order-row .admin-order-status-pill{justify-self:start;white-space:nowrap}
+.admin-content .admin-summary-empty{padding:24px 12px;text-align:center;color:#7a887d;font-size:12px;background:#f8fbf8;border-radius:9px}
+@media(max-width:1050px){.admin-content .admin-summary-status-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.admin-content .admin-summary-order-row{grid-template-columns:minmax(120px,1fr) minmax(100px,1fr) auto;gap:10px}.admin-content .admin-summary-total{grid-column:2;grid-row:2}.admin-content .admin-summary-order-row .admin-order-status-pill{grid-column:3;grid-row:1/3}}
+@media(max-width:600px){.admin-content .admin-summary-status-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:14px 0 18px}.admin-content .admin-summary-status{padding:11px}.admin-content .admin-summary-status b{font-size:21px}.admin-content .admin-order-summary-panel .admin-panel-heading{align-items:flex-start;flex-direction:column}.admin-content .admin-summary-order-row{grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:12px}.admin-content .admin-summary-customer{grid-column:1;grid-row:2}.admin-content .admin-summary-total{grid-column:2;grid-row:1;align-self:center}.admin-content .admin-summary-order-row .admin-order-status-pill{grid-column:2;grid-row:2;justify-self:end;font-size:9px}.admin-content .admin-summary-order-id small{font-size:9px}}
