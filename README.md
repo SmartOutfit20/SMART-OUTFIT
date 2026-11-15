@@ -93,3 +93,11 @@ The starter deliberately does not create a default administrator or expose a pub
 - Cancellation and advance-payment verification now update order status, inventory and coupon usage in the same transaction. Shipped/delivered orders must use the return workflow; verified advance delivery payments cannot be cancelled until a refund is resolved.
 - The delivery workspace no longer exposes a cancellation path that bypasses inventory restoration.
 - These transactions require MongoDB Atlas or another replica-set/sharded MongoDB deployment. Unit tests cover checkout validation and calculations; live database concurrency tests remain outstanding.
+
+
+## Granular staff access increment (2026-11-15)
+- Added a server-side permission matrix for Super Admin, Admin, Editor, Support and Viewer roles.
+- Product/category/coupon writes, inventory adjustments, order access and status updates, advance-payment verification, customer management, support, delivery, reports, analytics and store settings now use separate permission checks.
+- Admin cannot change staff roles or read the Super Admin activity log. Editor can manage catalogue/coupons but cannot adjust inventory or orders. Support can work with support tickets and order updates but cannot verify advance payments. Viewer is read-only.
+- The admin sidebar hides Roles & Access and Activity Log from non-Super-Admin accounts.
+- Automated tests cover the permission matrix; authenticated route integration and staging database tests are still required.
