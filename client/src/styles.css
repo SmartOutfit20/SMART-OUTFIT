@@ -13287,3 +13287,25 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .admin-shell .admin-products-page .admin-product-card-actions button:hover,.admin-shell .admin-products-page .admin-product-card-actions a:hover{filter:brightness(.96);transform:translateY(-1px)}
 @media(max-width:680px){.admin-shell .admin-products-page .admin-product-card-actions{gap:5px}.admin-shell .admin-products-page .admin-product-card-actions button,.admin-shell .admin-products-page .admin-product-card-actions a{min-height:34px;font-size:10px}}
 @media(max-width:380px){.admin-shell .admin-products-page .admin-product-card-actions{grid-template-columns:1fr}.admin-shell .admin-products-page .admin-product-card-actions button,.admin-shell .admin-products-page .admin-product-card-actions a{min-height:38px}}
+
+
+/* SMART OUTFIT — visual homepage builder workspace */
+.admin-shell .admin-home-builder{display:grid;grid-template-columns:minmax(245px, .78fr) minmax(390px,1.5fr) minmax(290px,.9fr);grid-template-areas:"sections preview banners" "sections preview content" "publish publish publish";align-items:start;gap:14px}
+.admin-shell .admin-home-builder>.admin-home-builder-order{grid-area:sections;min-width:0}
+.admin-shell .admin-home-builder>.admin-home-builder-preview{grid-area:preview;min-width:0;position:sticky;top:14px}
+.admin-shell .admin-home-builder>.admin-home-builder-banners{grid-area:banners;min-width:0}
+.admin-shell .admin-home-builder>.admin-home-builder-content{grid-area:content;min-width:0}
+.admin-shell .admin-home-builder>.admin-settings-save{grid-area:publish}
+.admin-shell .admin-home-builder-preview .admin-panel-heading{display:flex;flex-direction:column;align-items:stretch;gap:12px}
+.admin-shell .admin-home-preview-modes{display:flex;gap:5px;padding:4px;border:1px solid #dce8df;border-radius:10px;background:#f4faf6}
+.admin-shell .admin-home-preview-modes button{flex:1;min-height:34px;padding:6px 8px;border:0;border-radius:7px;background:transparent;color:#34443a;font-size:11px;font-weight:700;cursor:pointer}
+.admin-shell .admin-home-preview-modes button.is-active{background:#15965f;color:#fff;box-shadow:0 2px 7px #15965f35}
+.admin-shell .admin-home-preview-frame{display:flex;justify-content:center;min-height:560px;max-height:calc(100vh - 230px);overflow:auto;padding:10px;border:1px solid #dce8df;border-radius:12px;background:#eaf7ef}
+.admin-shell .admin-home-preview-frame iframe{display:block;width:100%;height:720px;border:1px solid #dce8df;border-radius:7px;background:#fff;transition:width .2s ease}
+.admin-shell .admin-home-preview-frame.is-tablet iframe{width:768px;max-width:100%}
+.admin-shell .admin-home-preview-frame.is-mobile iframe{width:390px;max-width:100%}
+.admin-shell .admin-home-builder .admin-panel{border-color:#dce8df;border-radius:13px;box-shadow:0 5px 18px #102b1c0a}
+.admin-shell .admin-home-builder .admin-panel-heading .eyebrow{color:#10784c}
+.admin-shell .admin-home-builder-order .admin-home-builder-row{border-color:#e4eee7}
+@media(max-width:1180px){.admin-shell .admin-home-builder{grid-template-columns:minmax(230px,.8fr) minmax(0,1.2fr);grid-template-areas:"sections preview" "banners preview" "content content" "publish publish"}.admin-shell .admin-home-builder-preview{position:static}}
+@media(max-width:760px){.admin-shell .admin-home-builder{grid-template-columns:minmax(0,1fr);grid-template-areas:"preview" "sections" "banners" "content" "publish"}.admin-shell .admin-home-preview-frame{min-height:480px;max-height:65vh}.admin-shell .admin-home-preview-frame iframe{height:620px}}
