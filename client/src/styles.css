@@ -10403,3 +10403,15 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 @media (min-width:651px) and (max-width:820px){
   .header .nav.nav-open{padding-left:35px;padding-right:35px}
 }
+
+
+/* Tablet: consistent 35px side spacing for homepage content sections. */
+@media (min-width:651px) and (max-width:820px){
+  .benefits,
+  .section,
+  .section.section-tint.home-new-collection,
+  .promo{
+    padding-left:35px;
+    padding-right:35px;
+  }
+}
