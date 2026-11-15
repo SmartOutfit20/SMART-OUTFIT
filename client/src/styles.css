@@ -13198,3 +13198,78 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .admin-shell .admin-product-reviews-page .admin-review-actions .admin-delete{min-height:34px;padding:0 10px;border:1px solid #f0d2d2;border-radius:8px;background:#fff;color:#b42318;font-size:11px}
 @media(max-width:1000px){.admin-shell .admin-product-reviews-page .admin-review-card{grid-template-columns:1fr 1.3fr}.admin-shell .admin-product-reviews-page .admin-review-actions{grid-column:1/-1;justify-content:flex-start}}
 @media(max-width:680px){.admin-shell .admin-product-reviews-page .admin-review-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-shell .admin-product-reviews-page .admin-welcome{align-items:flex-start;flex-direction:column}.admin-shell .admin-product-reviews-page .admin-review-toolbar{flex-direction:column}.admin-shell .admin-product-reviews-page .admin-review-card{grid-template-columns:1fr;gap:12px}.admin-shell .admin-product-reviews-page .admin-review-actions{grid-column:auto}}
+
+/* SMART OUTFIT — Admin dashboard refresh (feature-scoped; preserves shell/header/footer) */
+.admin-shell .admin-dashboard-v2{width:100%;max-width:1220px;margin:0 auto;min-width:0;color:#111}
+.admin-shell .admin-dashboard-v2 .admin-dash-heading{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 0 20px}
+.admin-shell .admin-dashboard-v2 .admin-dash-heading h1{margin:4px 0 3px;font-size:30px;line-height:1.2;font-weight:850;letter-spacing:-.8px;color:#111}
+.admin-shell .admin-dashboard-v2 .admin-dash-heading p{margin:0;color:#536158;font-size:13px}
+.admin-shell .admin-dashboard-v2 .admin-dash-heading-actions{display:flex;align-items:center;gap:10px}
+.admin-shell .admin-dashboard-v2 .admin-dash-refresh,.admin-shell .admin-dashboard-v2 .admin-dash-range{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 12px;border:1px solid #dce8df;border-radius:10px;background:#fff;color:#1b2c21;font-size:11px;font-weight:700}
+.admin-shell .admin-dashboard-v2 .admin-dash-refresh{cursor:pointer}
+.admin-shell .admin-dashboard-v2 .admin-dash-refresh:disabled{opacity:.6;cursor:wait}
+.admin-shell .admin-dashboard-v2 .admin-dash-range select{border:0;background:transparent;color:#111;font:inherit;outline:none;cursor:pointer}
+.admin-shell .admin-dashboard-v2 .admin-dash-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin:18px 0}
+.admin-shell .admin-dashboard-v2 .admin-dash-stat{min-width:0;padding:17px 18px;border:1px solid #e1eae4;border-radius:13px;background:linear-gradient(145deg,#fff,#f5fbf7);box-shadow:0 5px 18px #102b1c09}
+.admin-shell .admin-dashboard-v2 .admin-dash-stat-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.admin-shell .admin-dashboard-v2 .admin-dash-stat-icon{display:grid;place-items:center;width:43px;height:43px;border-radius:50%;background:#eaf7ef;color:#15965f}
+.admin-shell .admin-dashboard-v2 .admin-dash-stat-caption{color:#738078;font-size:10px}
+.admin-shell .admin-dashboard-v2 .admin-dash-stat h3{margin:9px 0 2px;color:#111;font-size:25px;font-weight:850;letter-spacing:-.5px;overflow-wrap:anywhere}
+.admin-shell .admin-dashboard-v2 .admin-dash-stat p{margin:0;color:#56635a;font-size:12px;font-weight:650}
+.admin-shell .admin-dashboard-v2 .admin-dash-stat.orders .admin-dash-stat-icon{background:#eaf7ef}
+.admin-shell .admin-dashboard-v2 .admin-dash-stat.customers .admin-dash-stat-icon{background:#e8f5ee}
+.admin-shell .admin-dashboard-v2 .admin-dash-stat.revenue .admin-dash-stat-icon{background:#fff3df;color:#c27b16}
+.admin-shell .admin-dashboard-v2 .admin-dash-stat.products .admin-dash-stat-icon{background:#fceef2;color:#c64b71}
+.admin-shell .admin-dashboard-v2 .admin-dash-middle{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(300px,.95fr);gap:14px;margin-bottom:14px}
+.admin-shell .admin-dashboard-v2 .admin-dash-card{min-width:0;padding:18px;border:1px solid #e0e9e3;border-radius:13px;background:#fff;box-shadow:0 5px 18px #102b1c08}
+.admin-shell .admin-dashboard-v2 .admin-dash-card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px}
+.admin-shell .admin-dashboard-v2 .admin-dash-card-head h2{margin:4px 0 2px;color:#111;font-size:16px;font-weight:800;letter-spacing:-.2px}
+.admin-shell .admin-dashboard-v2 .admin-dash-card-head p{margin:0;color:#77827a;font-size:10px}
+.admin-shell .admin-dashboard-v2 .admin-dash-card-icon{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;background:#eaf7ef;color:#15965f}
+.admin-shell .admin-dashboard-v2 .eyebrow{color:#15965f;font-size:9px;font-weight:800;letter-spacing:1.1px}
+.admin-shell .admin-dashboard-v2 .admin-dash-chart{display:grid;grid-template-columns:38px minmax(0,1fr);height:205px;padding-top:8px}
+.admin-shell .admin-dashboard-v2 .admin-dash-ylabels{display:flex;flex-direction:column;justify-content:space-between;padding:0 7px 21px 0;color:#758078;font-size:9px;text-align:right}
+.admin-shell .admin-dashboard-v2 .admin-dash-chart-bars{position:relative;display:flex;align-items:flex-end;justify-content:space-around;gap:4px;min-width:0;border-bottom:1px solid #cddbd1;background:repeating-linear-gradient(to bottom,transparent 0,transparent calc(33.333% - 1px),#eaf0ec calc(33.333% - 1px),#eaf0ec 33.333%)}
+.admin-shell .admin-dashboard-v2 .admin-dash-bar-wrap{position:relative;display:flex;align-items:center;justify-content:flex-end;flex:1;max-width:34px;height:100%;min-width:0;flex-direction:column;gap:5px}
+.admin-shell .admin-dashboard-v2 .admin-dash-bar{width:min(72%,20px);min-height:3px;border-radius:5px 5px 0 0;background:linear-gradient(180deg,#15965f,#8dd6ad);box-shadow:0 2px 5px #15965f20}
+.admin-shell .admin-dashboard-v2 .admin-dash-bar-wrap small{height:15px;color:#718078;font-size:8px;white-space:nowrap}
+.admin-shell .admin-dashboard-v2 .admin-dash-traffic-totals{display:flex;gap:22px;margin-top:12px;padding-top:11px;border-top:1px solid #edf2ee;color:#758078;font-size:10px}
+.admin-shell .admin-dashboard-v2 .admin-dash-traffic-totals b{margin-right:5px;color:#17231b;font-size:13px}
+.admin-shell .admin-dashboard-v2 .admin-dash-status-body{display:flex;align-items:center;justify-content:center;gap:20px;min-height:205px}
+.admin-shell .admin-dashboard-v2 .admin-dash-donut{display:grid;place-items:center;width:164px;height:164px;flex:0 0 164px;border-radius:50%;position:relative}
+.admin-shell .admin-dashboard-v2 .admin-dash-donut:before{content:"";position:absolute;inset:22px;border-radius:50%;background:#fff}
+.admin-shell .admin-dashboard-v2 .admin-dash-donut>div{position:relative;display:grid;gap:3px;text-align:center}
+.admin-shell .admin-dashboard-v2 .admin-dash-donut b{color:#111;font-size:23px;font-weight:850}
+.admin-shell .admin-dashboard-v2 .admin-dash-donut small{color:#66736a;font-size:10px}
+.admin-shell .admin-dashboard-v2 .admin-dash-legend{display:grid;gap:13px;min-width:115px}
+.admin-shell .admin-dashboard-v2 .admin-dash-legend>div{display:grid;grid-template-columns:9px 1fr auto;align-items:center;gap:8px;font-size:10px}
+.admin-shell .admin-dashboard-v2 .admin-dash-legend i{width:9px;height:9px;border-radius:50%}
+.admin-shell .admin-dashboard-v2 .admin-dash-legend span{color:#47534b}
+.admin-shell .admin-dashboard-v2 .admin-dash-legend b{color:#17231b;font-size:11px}
+.admin-shell .admin-dashboard-v2 .admin-dash-bottom{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(290px,.95fr);gap:14px}
+.admin-shell .admin-dashboard-v2 .admin-dash-viewall{display:inline-flex;align-items:center;gap:3px;padding:7px 10px;border:1px solid #dce8df;border-radius:9px;color:#10784c;font-size:10px;font-weight:750;white-space:nowrap}
+.admin-shell .admin-dashboard-v2 .admin-dash-viewall:hover{background:#eaf7ef}
+.admin-shell .admin-dashboard-v2 .admin-dash-order-table-wrap{width:100%;overflow-x:auto}
+.admin-shell .admin-dashboard-v2 .admin-dash-order-table{width:100%;border-collapse:collapse;white-space:nowrap}
+.admin-shell .admin-dashboard-v2 .admin-dash-order-table th{padding:10px 8px;background:#f5faf6;color:#58655c;text-align:left;font-size:9px;font-weight:800}
+.admin-shell .admin-dashboard-v2 .admin-dash-order-table td{padding:11px 8px;border-bottom:1px solid #edf2ee;color:#354239;font-size:10px}
+.admin-shell .admin-dashboard-v2 .admin-dash-order-table td b{color:#17231b}
+.admin-shell .admin-dashboard-v2 .admin-dash-order-table td:last-child a{display:grid;place-items:center;width:29px;height:29px;border-radius:8px;background:#eaf7ef;color:#10784c}
+.admin-shell .admin-dashboard-v2 .admin-dash-order-pill{display:inline-block;padding:5px 8px;border-radius:20px;background:#f0f3f1;color:#46534a;font-size:9px;font-weight:750}
+.admin-shell .admin-dashboard-v2 .admin-dash-order-pill.pending{background:#eaf2ff;color:#2563a8}
+.admin-shell .admin-dashboard-v2 .admin-dash-order-pill.processing{background:#fff3dc;color:#a56408}
+.admin-shell .admin-dashboard-v2 .admin-dash-order-pill.shipped,.admin-shell .admin-dashboard-v2 .admin-dash-order-pill.delivered{background:#eaf7ef;color:#10784c}
+.admin-shell .admin-dashboard-v2 .admin-dash-order-pill.cancelled,.admin-shell .admin-dashboard-v2 .admin-dash-order-pill.returned{background:#fceeee;color:#a83c3c}
+.admin-shell .admin-dashboard-v2 .admin-dash-product{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid #edf2ee}
+.admin-shell .admin-dashboard-v2 .admin-dash-product-image{display:grid;place-items:center;width:52px;height:58px;flex:0 0 52px;overflow:hidden;border-radius:9px;background:#f2f7f3;color:#15965f}
+.admin-shell .admin-dashboard-v2 .admin-dash-product-image img{width:100%;height:100%;object-fit:cover}
+.admin-shell .admin-dashboard-v2 .admin-dash-product-info{display:grid;gap:5px;flex:1;min-width:0}
+.admin-shell .admin-dashboard-v2 .admin-dash-product-info b{overflow:hidden;color:#17231b;font-size:11px;text-overflow:ellipsis;white-space:nowrap}
+.admin-shell .admin-dashboard-v2 .admin-dash-product-info span{color:#77827a;font-size:9px}
+.admin-shell .admin-dashboard-v2 .admin-dash-product-info>div{height:5px;overflow:hidden;border-radius:10px;background:#eaf0ec}
+.admin-shell .admin-dashboard-v2 .admin-dash-product-info>div i{display:block;height:100%;border-radius:10px;background:#15965f}
+.admin-shell .admin-dashboard-v2 .admin-dash-no-data{display:grid;place-items:center;min-height:115px;padding:18px;color:#758078;font-size:11px;text-align:center;line-height:1.6}
+.admin-shell .admin-dashboard-v2 .admin-dash-footer-note{padding:13px 0 0;color:#879188;font-size:9px;text-align:right}
+@media(max-width:1100px){.admin-shell .admin-dashboard-v2 .admin-dash-middle,.admin-shell .admin-dashboard-v2 .admin-dash-bottom{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:760px){.admin-shell .admin-dashboard-v2 .admin-dash-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.admin-shell .admin-dashboard-v2 .admin-dash-stat{padding:13px}.admin-shell .admin-dashboard-v2 .admin-dash-stat h3{font-size:21px}.admin-shell .admin-dashboard-v2 .admin-dash-heading{align-items:flex-start;flex-direction:column}.admin-shell .admin-dashboard-v2 .admin-dash-heading-actions{width:100%;justify-content:space-between}.admin-shell .admin-dashboard-v2 .admin-dash-status-body{gap:12px}.admin-shell .admin-dashboard-v2 .admin-dash-donut{width:135px;height:135px;flex-basis:135px}.admin-shell .admin-dashboard-v2 .admin-dash-donut:before{inset:19px}.admin-shell .admin-dashboard-v2 .admin-dash-legend{gap:10px}}
+@media(max-width:480px){.admin-shell .admin-dashboard-v2 .admin-dash-card{padding:13px}.admin-shell .admin-dashboard-v2 .admin-dash-status-body{flex-direction:column;padding:8px 0}.admin-shell .admin-dashboard-v2 .admin-dash-legend{width:100%;grid-template-columns:repeat(2,minmax(0,1fr))}.admin-shell .admin-dashboard-v2 .admin-dash-traffic-totals{justify-content:space-between;gap:8px}.admin-shell .admin-dashboard-v2 .admin-dash-heading h1{font-size:26px}}
