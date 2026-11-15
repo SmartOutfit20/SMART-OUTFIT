@@ -13309,3 +13309,63 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .admin-shell .admin-home-builder-order .admin-home-builder-row{border-color:#e4eee7}
 @media(max-width:1180px){.admin-shell .admin-home-builder{grid-template-columns:minmax(230px,.8fr) minmax(0,1.2fr);grid-template-areas:"sections preview" "banners preview" "content content" "publish publish"}.admin-shell .admin-home-builder-preview{position:static}}
 @media(max-width:760px){.admin-shell .admin-home-builder{grid-template-columns:minmax(0,1fr);grid-template-areas:"preview" "sections" "banners" "content" "publish"}.admin-shell .admin-home-preview-frame{min-height:480px;max-height:65vh}.admin-shell .admin-home-preview-frame iframe{height:620px}}
+
+
+/* SMART OUTFIT — homepage builder layout correction from admin screenshot */
+.admin-shell .admin-content .admin-home-builder{
+  width:100%;max-width:1220px;margin-inline:auto;
+  grid-template-columns:minmax(245px,.92fr) minmax(0,1.65fr) minmax(275px,1fr);
+  gap:14px;align-items:start;
+}
+.admin-shell .admin-home-builder>.admin-home-builder-order,
+.admin-shell .admin-home-builder>.admin-home-builder-preview,
+.admin-shell .admin-home-builder>.admin-home-builder-banners,
+.admin-shell .admin-home-builder>.admin-home-builder-content{min-width:0;width:100%;box-sizing:border-box}
+.admin-shell .admin-home-builder-order{display:flex;flex-direction:column;gap:10px}
+.admin-shell .admin-home-builder-order .admin-home-builder-row{
+  display:grid;grid-template-columns:34px minmax(0,1fr);grid-template-areas:"index name" "toggle actions";
+  align-items:center;gap:9px 10px;padding:12px;min-width:0;
+}
+.admin-shell .admin-home-builder-order .admin-home-builder-index{grid-area:index}
+.admin-shell .admin-home-builder-order .admin-home-builder-name{grid-area:name;min-width:0;width:100%}
+.admin-shell .admin-home-builder-order .admin-home-builder-name b,
+.admin-shell .admin-home-builder-order .admin-home-builder-name small{
+  display:block;max-width:100%;white-space:normal;overflow-wrap:anywhere;word-break:normal;line-height:1.4
+}
+.admin-shell .admin-home-builder-order .admin-home-builder-toggle{grid-area:toggle;justify-self:start;min-width:0}
+.admin-shell .admin-home-builder-order .admin-home-builder-order-actions{grid-area:actions;justify-self:end;min-width:0}
+.admin-shell .admin-home-builder-order .admin-home-builder-order-actions button{min-width:34px}
+.admin-shell .admin-home-builder .admin-panel{min-width:0;box-sizing:border-box;border-color:#dce8df}
+.admin-shell .admin-home-builder .admin-panel-heading h3{color:#111}
+.admin-shell .admin-home-builder .admin-panel-heading p{color:#66756b}
+.admin-shell .admin-home-builder-order .admin-home-builder-row,
+.admin-shell .admin-home-builder-order .admin-home-builder-row.is-enabled{border-color:#dce8df;background:#fbfdfb}
+.admin-shell .admin-home-builder-order .admin-home-builder-index{background:#eaf7ef;color:#10784c}
+.admin-shell .admin-home-builder-order .admin-home-builder-toggle{border-color:#dce8df;color:#263b2e}
+.admin-shell .admin-home-builder-order .admin-home-builder-toggle input{accent-color:#15965f}
+.admin-shell .admin-home-builder-order .admin-home-builder-order-actions button{border-color:#dce8df;color:#10784c;background:#fff}
+.admin-shell .admin-home-builder .admin-cancel{border-color:#dce8df;color:#10784c;background:#fff}
+.admin-shell .admin-home-builder .admin-delete{border-color:#f0d1d1;color:#b42318;background:#fff5f5}
+.admin-shell .admin-home-builder .admin-action{background:#15965f;border-color:#15965f;color:#fff}
+.admin-shell .admin-home-builder .admin-homepage-banner-card{min-width:0;border-color:#dce8df;background:#fff}
+.admin-shell .admin-home-builder .admin-homepage-banner-image-controls{min-width:0}
+.admin-shell .admin-home-builder-preview .admin-home-preview-frame{width:100%;min-width:0;box-sizing:border-box}
+.admin-shell .admin-home-builder-preview .admin-home-preview-frame iframe{width:100%;min-width:0;max-width:100%;box-sizing:border-box}
+.admin-shell .admin-home-builder-preview .admin-home-preview-frame.is-tablet iframe{width:768px;max-width:100%}
+.admin-shell .admin-home-builder-preview .admin-home-preview-frame.is-mobile iframe{width:390px;max-width:100%}
+@media(max-width:1120px){
+ .admin-shell .admin-content .admin-home-builder{grid-template-columns:minmax(220px,.85fr) minmax(0,1.35fr);grid-template-areas:"sections preview" "banners preview" "content content" "publish publish"}
+ .admin-shell .admin-home-builder-preview{position:static}
+}
+@media(max-width:760px){
+ .admin-shell .admin-content .admin-home-builder{grid-template-columns:minmax(0,1fr);grid-template-areas:"preview" "sections" "banners" "content" "publish";gap:12px}
+ .admin-shell .admin-home-builder-order .admin-home-builder-row{grid-template-columns:34px minmax(0,1fr);padding:12px}
+ .admin-shell .admin-home-builder-order .admin-home-builder-toggle{grid-column:1 / 2;grid-row:2}
+ .admin-shell .admin-home-builder-order .admin-home-builder-order-actions{grid-column:2;grid-row:2}
+ .admin-shell .admin-home-builder-preview .admin-home-preview-frame{min-height:420px;max-height:65vh}
+}
+@media(max-width:420px){
+ .admin-shell .admin-home-builder-order .admin-home-builder-row{grid-template-columns:30px minmax(0,1fr);gap:8px;padding:10px}
+ .admin-shell .admin-home-builder-order .admin-home-builder-toggle{font-size:10px}
+ .admin-shell .admin-home-builder-order .admin-home-builder-order-actions button{min-width:32px}
+}
