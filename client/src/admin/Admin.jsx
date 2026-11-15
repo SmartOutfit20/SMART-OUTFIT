@@ -97,7 +97,7 @@ export function AdminLayout(){
    <div className="admin-label">MAIN MENU</div>
    <nav className="admin-nav-list" aria-label="Admin navigation">
     {visibleNav.map(item=>item.children?<section className={'admin-nav-group '+(item.children.some(child=>isActive(child))?'is-current':'')} key={item.label}>
-      <button type="button" className="admin-nav-group-toggle" aria-expanded={!!openGroups[item.label]} onClick={()=>setOpenGroups(v=>({...v,[item.label]:!v}))}><item.icon size={17}/><span>{item.label}</span><ChevronDown size={15} className={openGroups[item.label]?'is-open':''}/></button>
+      <button type="button" className="admin-nav-group-toggle" aria-expanded={!!openGroups[item.label]} onClick={()=>{setOpenGroups(v=>({...v,[item.label]:true}));if(item.label==='Products')navigate('/admin/products')}}><item.icon size={17}/><span>{item.label}</span><ChevronDown size={15} className={openGroups[item.label]?'is-open':''}/></button>
       {openGroups[item.label]&&<div className="admin-nav-submenu">{item.children.map(child=><NavLink key={child.path} end to={child.path} className={({isActive:a})=>a?'active':''} onClick={()=>setMenuOpen(false)}><i/><span>{child.label}</span></NavLink>)}</div>}
      </section>:<NavLink end={item.path==='/admin'} to={item.path} key={item.path} className={({isActive:a})=>a?'active':''} onClick={()=>setMenuOpen(false)}><item.icon size={17}/><span>{item.label}</span></NavLink>)}
    </nav>
