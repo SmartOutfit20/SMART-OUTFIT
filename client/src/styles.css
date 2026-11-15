@@ -12456,3 +12456,49 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .header .store-search-suggestions>button>strong{flex:0 0 auto;color:#15965f;font-size:10px;font-weight:800}
 .header .store-search-message{padding:13px 11px;color:#68766d;font-size:11px}
 @media(max-width:650px){.header .store-header-actions.mobile-search-open .store-header-search{z-index:80}.header .store-search-suggestions{top:calc(100% + 6px);max-height:55vh}.header .store-search-suggestions>button{padding:10px}}
+
+
+/* Tablet header alignment: hamburger and logo stay left; search and account actions sit at the far right. */
+@media (min-width: 651px) and (max-width: 900px) {
+  .header {
+    padding: 9px 35px !important;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    column-gap: 0;
+  }
+  .header .mobile-menu-toggle {
+    order: 1;
+    flex: 0 0 38px;
+    width: 38px;
+    margin: 0 12px 0 0;
+  }
+  .header .brand {
+    order: 2;
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 30%;
+    margin: 0 35px 0 0;
+  }
+  .header .nav {
+    order: 3;
+  }
+  .header .store-header-actions {
+    order: 4;
+    flex: 0 1 auto;
+    width: auto;
+    min-width: 0;
+    margin-left: auto;
+    justify-content: flex-end;
+    gap: 9px;
+  }
+  .header .store-header-search {
+    flex: 0 1 clamp(160px, 22vw, 230px);
+    width: clamp(160px, 22vw, 230px);
+    min-width: 130px;
+  }
+  .header .store-mobile-search-toggle {
+    display: none;
+  }
+}
