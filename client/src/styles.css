@@ -10809,3 +10809,41 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 .auth-password-toggle:hover{color:#16845a;background:#16845a0d}
 .auth-password-toggle:focus-visible{outline:2px solid #16845a;outline-offset:1px}
+
+
+/* Password recovery screens — centered brand, clear hierarchy and focused form. */
+.recovery-page.auth-premium{
+ min-height:calc(100vh - 150px);padding:42px 18px 56px!important;
+ display:grid;place-items:center;
+ background:radial-gradient(ellipse at 50% 0%,#e5f2e9 0,transparent 48%),linear-gradient(145deg,#f8faf7 0%,#f0f5f0 100%);
+}
+.recovery-card.auth-card-premium{
+ width:min(100%,520px)!important;padding:clamp(28px,5vw,48px)!important;
+ border-radius:22px!important;text-align:center;
+ box-shadow:0 22px 65px rgba(30,58,39,.12)!important;
+}
+.recovery-brand{display:flex;justify-content:center;align-items:center;min-height:64px;margin:0 auto 20px}
+.recovery-brand img{display:block;width:auto;height:auto;max-width:min(220px,70%);max-height:68px;object-fit:contain;object-position:center}
+.recovery-brand .auth-brand-mark{margin:0;font-size:34px}
+.recovery-card .recovery-eyebrow{display:block;text-align:center;font:700 10px 'Manrope','Hind Siliguri',sans-serif;letter-spacing:1.5px;color:#16845a}
+.recovery-card h1{margin:12px 0 9px;text-align:center;font:700 clamp(25px,4vw,32px)/1.4 'Hind Siliguri',sans-serif;color:#26352b}
+.recovery-card .recovery-intro{margin:0 auto 24px;max-width:410px;text-align:center;font:400 13px/1.9 'Hind Siliguri',sans-serif;color:#758077}
+.recovery-card form{text-align:left;gap:16px}
+.recovery-card label{font-size:13px}
+.recovery-card .auth-primary-button{width:100%;margin-top:8px}
+.recovery-card .api-notice,.recovery-card .coupon-message{margin:0 0 17px;text-align:left}
+.recovery-success{display:grid;gap:6px}
+.recovery-success small{display:block;font:400 11px/1.7 'Hind Siliguri',sans-serif;color:#52715e}
+.recovery-divider{display:flex;align-items:center;gap:12px;margin:23px 0 14px;color:#9aa49c;font:500 11px 'Hind Siliguri',sans-serif}
+.recovery-divider:before,.recovery-divider:after{content:"";height:1px;flex:1;background:#e8ede8}
+.recovery-back-link{display:inline-flex;align-items:center;justify-content:center;gap:8px;color:#16845a;font:700 13px 'Hind Siliguri',sans-serif;text-decoration:none}
+.recovery-back-link:hover,.recovery-help a:hover{text-decoration:underline}
+.recovery-help{margin:22px 0 0!important;text-align:center;font:400 11px/1.8 'Hind Siliguri',sans-serif!important;color:#8a948c!important}
+.recovery-help a{color:#16845a;font-weight:700}
+.recovery-login-button{display:flex;align-items:center;justify-content:center;text-decoration:none}
+@media(max-width:600px){
+ .recovery-page.auth-premium{min-height:0;padding:28px 15px 42px!important}
+ .recovery-card.auth-card-premium{padding:28px 21px!important;border-radius:17px!important}
+ .recovery-brand{min-height:55px;margin-bottom:15px}
+ .recovery-brand img{max-height:58px}
+}
