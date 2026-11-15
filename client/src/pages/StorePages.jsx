@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, Navigate, useParams, useSearchParams, useNavigate, useLocation } from 'react-router-dom'
 import { ArrowRight, ArrowLeft, ShoppingBag, Trash2, LockKeyhole, SlidersHorizontal, Minus, Plus, ShieldCheck, Truck, RotateCcw, UserRound, Heart, Facebook, Instagram, Youtube, Music2, Mail, Phone, MapPin, Clock, PackageCheck, RefreshCw, HelpCircle, Eye, EyeOff } from 'lucide-react'
 import ProductCard from '../components/ProductCard'
