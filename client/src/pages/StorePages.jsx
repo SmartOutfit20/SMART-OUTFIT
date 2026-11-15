@@ -361,11 +361,6 @@ export function CustomerDashboard(){
     <div className="account-loggedout-float account-float-bottom"><Heart size={18}/><span><b>Your wishlist</b><small>পছন্দের কালেকশন</small></span></div>
    </div>
   </div>
-  <section className="account-loggedout-benefits" aria-label="Account benefits">
-   <article><span><PackageCheck size={20}/></span><div><b>অর্ডার ট্র্যাক করুন</b><small>অর্ডারের অগ্রগতি এক নজরে দেখুন</small></div></article>
-   <article><span><Heart size={20}/></span><div><b>পছন্দের পণ্য রাখুন</b><small>আপনার Wishlist এক জায়গায় সাজিয়ে রাখুন</small></div></article>
-   <article><span><UserRound size={20}/></span><div><b>তথ্য সংরক্ষণ করুন</b><small>প্রোফাইল ও ডেলিভারি তথ্য সহজে পরিচালনা করুন</small></div></article>
-  </section>
   <p className="account-loggedout-footnote">নতুন এখানে? <Link to="/register">আজই আপনার SMART OUTFIT অ্যাকাউন্ট খুলুন <ArrowRight size={13}/></Link></p>
  </main>
  return <div className="account-wrap account-dashboard" lang="bn">
