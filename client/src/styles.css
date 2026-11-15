@@ -10405,9 +10405,10 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 
 
-/* Tablet: 35px left and right spacing only for standard sections. */
+/* Tablet: enforce 35px side gutters, including the more-specific homepage section rule. */
 @media (min-width:651px) and (max-width:1024px){
-  .section{
+  .section,
+  .home-page > .section{
     padding-left:35px;
     padding-right:35px;
   }
