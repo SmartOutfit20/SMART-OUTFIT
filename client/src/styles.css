@@ -11894,6 +11894,15 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 
 
+/* Customer directory alignment: keep the table/card container centered in admin content */
+.admin-customers-page{display:block;width:100%;max-width:1220px;margin-left:auto!important;margin-right:auto!important;justify-self:stretch;align-self:stretch}
+.admin-customers-page .admin-customers-table-wrap{display:block;width:100%;max-width:100%;min-width:0;margin:0 auto;justify-self:stretch;align-self:stretch;box-sizing:border-box}
+@media(max-width:760px){
+ .admin-customers-page{width:100%;max-width:100%;margin-inline:auto!important}
+ .admin-customers-page .admin-customers-table-wrap{width:100%;max-width:100%;margin-inline:auto!important;padding:0;box-sizing:border-box}
+ .admin-customers-page .admin-customers-table tbody{width:100%;margin:0}
+ .admin-customers-page .admin-customers-table tbody tr{width:100%;box-sizing:border-box}
+}
 /* SMART OUTFIT — customer directory workspace */
 .admin-customers-page{width:100%;max-width:1220px;margin:0 auto;min-width:0}
 .admin-customers-page *{box-sizing:border-box}
