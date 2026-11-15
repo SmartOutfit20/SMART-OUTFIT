@@ -14030,3 +14030,10 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   .admin-products-page.is-add-product-page .admin-product-editor-actions>div{width:100%}
   .admin-products-page.is-add-product-page .admin-product-editor-actions>div button{flex:1;justify-content:center}
 }
+
+
+/* Keep the admin content canvas transparent; preserve the surrounding admin shell. */
+.admin-shell .admin-content{
+  background-color:transparent;
+  background-image:none;
+}
