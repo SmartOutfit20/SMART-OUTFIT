@@ -10796,3 +10796,16 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   .register-welcome-panel{min-height:0}
   .register-form-card.auth-card-premium{max-width:none;padding:25px 21px!important}
 }
+
+
+/* Password visibility controls on login and registration forms only. */
+.auth-password-control{position:relative;display:flex;align-items:center;width:100%}
+.auth-password-control input{width:100%;padding-right:48px!important}
+.auth-password-toggle{
+ position:absolute;right:5px;top:50%;transform:translateY(-50%);
+ display:grid;place-items:center;width:38px;height:38px;padding:0;
+ border:0;border-radius:8px;background:transparent;color:#738078;cursor:pointer;
+ transition:color .18s ease,background .18s ease;
+}
+.auth-password-toggle:hover{color:#16845a;background:#16845a0d}
+.auth-password-toggle:focus-visible{outline:2px solid #16845a;outline-offset:1px}
