@@ -32,7 +32,7 @@ export function Home(){
  const banner=banners[activeBanner]||null
  const sectionConfig=(homepageLayout.sections||DEFAULT_HOMEPAGE_LAYOUT.sections).slice().sort((a,b)=>(a.sortOrder||0)-(b.sortOrder||0))
  const categoryConfig=homepageLayout.categories||DEFAULT_HOMEPAGE_LAYOUT.categories
- const availableCategories=homeCategories.length?homeCategories:demoCategories.map(name=>({_id:name,name}))
+ const availableCategories=homeCategories.length?homeCategories:demoCategories.filter(name=>name!=='All').map(name=>({_id:name,name}))
  const chosenCategories=(categoryConfig.categoryIds?.length?availableCategories.filter(c=>categoryConfig.categoryIds.includes(c._id)):availableCategories.filter(c=>c.isActive!==false).slice(0,4)).slice(0,8)
  const benefitItems=homepageLayout.benefits?.items||DEFAULT_HOMEPAGE_LAYOUT.benefits.items
  const collection=homepageLayout.collection||DEFAULT_HOMEPAGE_LAYOUT.collection
