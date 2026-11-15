@@ -13497,7 +13497,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 
 
 /* SMART OUTFIT customer account workspace — scoped styles only */
-.so-account-shell{max-width:1220px;margin:34px auto 64px;display:grid;grid-template-columns:252px minmax(0,1fr);gap:18px;align-items:start;color:#111}
+.so-account-shell{max-width:1220px;margin:34px auto 64px;padding-top:14px;padding-bottom:14px;display:grid;grid-template-columns:252px minmax(0,1fr);gap:18px;align-items:start;color:#111}
 .so-account-sidebar,.so-account-panel,.so-account-heading{background:#fff;border:1px solid #e4e7ef;border-radius:19px}
 .so-account-sidebar{padding:18px 12px;position:sticky;top:104px}
 .so-account-user{display:flex;align-items:center;flex-direction:column;text-align:center;padding:8px 8px 20px;border-bottom:1px solid #edf0f4;margin-bottom:12px;min-width:0}
