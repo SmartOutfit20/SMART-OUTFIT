@@ -16,7 +16,7 @@ const DEFAULT_HOMEPAGE_LAYOUT={
  categories:{eyebrow:'HANDPICKED FOR YOU',title:'পছন্দের ক্যাটাগরি',categoryIds:[]},
  collection:{eyebrow:'THE LATEST EDIT',title:'নতুন কালেকশন',description:'আপনার পছন্দের নতুন স্টাইলগুলো দেখে নিন।'},
  benefits:{items:[{title:'Nationwide Delivery',description:'Across Bangladesh'},{title:'Secure Checkout',description:'Trusted payment options'},{title:'Easy Returns',description:'Simple return support'}]},
- promo:{eyebrow:'YOUR EVERYDAY, ELEVATED',title:'GOOD STYLE.\\nGOOD ENERGY.',description:'Find the pieces that feel like you.',buttonText:'SHOP THE EDIT',buttonLink:'/shop'}
+ promo:{eyebrow:'YOUR EVERYDAY, ELEVATED',title:'GOOD STYLE.\nGOOD ENERGY.',description:'Find the pieces that feel like you.',buttonText:'SHOP THE EDIT',buttonLink:'/shop'}
 }
 export function Home(){
  const [latest,setLatest]=useState(demoProducts.slice(0,4))
