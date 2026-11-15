@@ -197,6 +197,8 @@ router.get('/', async (req, res, next) => {
     const filter = { isPublished: true }
     if (q) filter.name = { $regex: String(q).slice(0, 80), $options: 'i' }
     if (category) filter.category = category
+    if (sort === 'featured') filter.isFeatured = true
+    if (sort === 'best-seller') filter.isBestSeller = true
     const p = Math.max(1, Number(page) || 1), l = Math.min(48, Math.max(1, Number(limit) || 12))
     const sortBy = sort === 'price-low' ? { price: 1 } : sort === 'price-high' ? { price: -1 } : { createdAt: -1 }
     const [items, total] = await Promise.all([
