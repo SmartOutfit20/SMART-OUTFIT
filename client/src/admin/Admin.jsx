@@ -81,7 +81,9 @@ export function AdminLayout(){
  const {user,logout,setProfile}=useAuth(),location=useLocation(),navigate=useNavigate();
  const [menuOpen,setMenuOpen]=useState(false),[authChecked,setAuthChecked]=useState(false),[profileOpen,setProfileOpen]=useState(false),[searchText,setSearchText]=useState('');
  const [openGroups,setOpenGroups]=useState(()=>({Products:location.pathname.startsWith('/admin/products')||location.pathname.startsWith('/admin/inventory'),Marketing:location.pathname.includes('homepage-builder'),Appearance:location.pathname.includes('homepage-builder')||location.pathname.includes('/seo'),Settings:location.pathname.includes('/settings')}));
+ const [brandLogo,setBrandLogo]=useState(()=>{try{return localStorage.getItem('so-footer-logo')||''}catch{return ''}});
  useEffect(()=>{let active=true;if(!user||!staffRoles.includes(user.role)){setAuthChecked(true);return()=>{active=false}}api.get('/auth/me').then(({data})=>{if(active){setProfile?.(data);setAuthChecked(true)}}).catch(()=>{if(active){logout();setAuthChecked(true)}});return()=>{active=false}},[]);
+ useEffect(()=>{let active=true;api.get('/storefront').then(({data})=>{if(!active)return;const logo=String(data?.footerLogo||'');setBrandLogo(logo);try{if(logo)localStorage.setItem('so-footer-logo',logo);else localStorage.removeItem('so-footer-logo')}catch{}}).catch(()=>{});return()=>{active=false}},[]);
  useEffect(()=>{setMenuOpen(false);setSearchText('');setOpenGroups(v=>({...v,Products:location.pathname.startsWith('/admin/products')||location.pathname.startsWith('/admin/inventory'),Marketing:location.pathname.includes('homepage-builder'),Appearance:location.pathname.includes('/navigation')||location.pathname.includes('/seo'),Settings:location.pathname.includes('/settings')||location.pathname.includes('/language')||location.pathname.includes('/profile')}))},[location.pathname]);
  const visibleNav=nav.map(item=>item.children?{...item,children:item.children.filter(child=>canAccessAdminPath(child.path,user))}:item).filter(item=>(!item.superAdmin||user?.role==='super_admin')&&(!item.children||item.children.length>0)&&(!item.path||canAccessAdminPath(item.path,user)));
  const flatNav=visibleNav.flatMap(item=>item.children?item.children.map(child=>({...child,parent:item.label})): [item]);
@@ -93,11 +95,11 @@ export function AdminLayout(){
  return <div className="admin-shell">
   {menuOpen&&<button type="button" className="admin-sidebar-backdrop" aria-label="Close navigation" onClick={()=>setMenuOpen(false)}/>}
   <aside className={menuOpen?'admin-sidebar is-open':'admin-sidebar'}>
-   <Link to="/admin" className="admin-brand"><span className="admin-brand-mark">SO</span><span>SMART <b>OUTFIT</b><small>ADMIN CONTROL CENTER</small></span></Link>
+   <Link to="/admin" className="admin-brand"><img className="admin-brand-logo" src={brandLogo||undefined} alt="SMART OUTFIT" onError={e=>{e.currentTarget.style.display="none"}}/><span className="admin-brand-caption"><small>ADMIN CONTROL CENTER</small></span></Link>
    <div className="admin-label">MAIN MENU</div>
    <nav className="admin-nav-list" aria-label="Admin navigation">
     {visibleNav.map(item=>item.children?<section className={'admin-nav-group '+(item.children.some(child=>isActive(child))?'is-current':'')} key={item.label}>
-      <button type="button" className="admin-nav-group-toggle" aria-expanded={!!openGroups[item.label]} onClick={()=>{setOpenGroups(v=>({...v,[item.label]:true}));if(item.label==='Products')navigate('/admin/products')}}><item.icon size={17}/><span>{item.label}</span><ChevronDown size={15} className={openGroups[item.label]?'is-open':''}/></button>
+      <button type="button" className="admin-nav-group-toggle" aria-expanded={!!openGroups[item.label]} onClick={()=>setOpenGroups(v=>({...v,[item.label]:!v[item.label]}))}><item.icon size={17}/><span>{item.label}</span><ChevronDown size={15} className={openGroups[item.label]?'is-open':''}/></button>
       {openGroups[item.label]&&<div className="admin-nav-submenu">{item.children.map(child=><NavLink key={child.path} end to={child.path} className={({isActive:a})=>a?'active':''} onClick={()=>setMenuOpen(false)}><i/><span>{child.label}</span></NavLink>)}</div>}
      </section>:<NavLink end={item.path==='/admin'} to={item.path} key={item.path} className={({isActive:a})=>a?'active':''} onClick={()=>setMenuOpen(false)}><item.icon size={17}/><span>{item.label}</span></NavLink>)}
    </nav>
