@@ -10520,12 +10520,12 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   }
 }
 
-/* Mobile: set section top padding to 16px while preserving bottom spacing. */
+/* Mobile: set section top and bottom padding to 16px. */
 @media (max-width:650px){
   .home-page > .section,
   .section{
     padding-top:16px;
-    padding-bottom:35px;
+    padding-bottom:16px;
   }
   .home-page > .section .category-grid{
     grid-template-columns:repeat(4,minmax(0,1fr));
