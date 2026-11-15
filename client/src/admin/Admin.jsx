@@ -241,7 +241,7 @@ export function AdminOrders(){
    <div className={advancePending?'is-attention':''}><span>Payment verification</span><b>{advancePending}</b><small>Advance payment awaiting check</small></div>
   </div>
   <section className="admin-order-workspace">
-   <div className="admin-order-toolbar"><div><span className="eyebrow">CUSTOMER PURCHASES</span><h2>Orders <small>{list.length} shown</small></h2></div><div className="admin-order-search"><Search size={16}/><input aria-label="Search orders" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search order, customer, phone…"/>{activitySearch&&<button type="button" onClick={()=>setActivitySearch('')} aria-label="Clear search">×</button>}</div></div>
+   <div className="admin-order-toolbar"><div><span className="eyebrow">CUSTOMER PURCHASES</span><h2>Orders <small>{list.length} shown</small></h2></div><div className="admin-order-search"><Search size={16}/><input aria-label="Search orders" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search order, customer, phone…"/>{query&&<button type="button" onClick={()=>setQuery('')} aria-label="Clear search">×</button>}</div></div>
    <div className="admin-order-filter-chips">
     {[['all','All orders'],['advance_pending','Payment review'],['pending','Pending'],['confirmed','Confirmed'],['processing','Processing'],['shipped','Shipped'],['delivered','Delivered'],['cancelled','Cancelled'],['returned','Returned']].map(([value,label])=><button type="button" key={value} className={filter===value?'active':''} onClick={()=>setFilter(value)}>{label}{value==='advance_pending'&&advancePending>0?<b>{advancePending}</b>:null}</button>)}
    </div>
