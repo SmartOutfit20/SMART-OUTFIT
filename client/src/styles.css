@@ -10676,11 +10676,6 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .account-loggedout-float span{display:grid;gap:2px;color:#28362d}
 .account-loggedout-float b{font:700 11px 'Manrope',sans-serif}.account-loggedout-float small{font-size:10px;color:#7a857d}
 .account-float-top{top:14%;right:-2%}.account-float-bottom{bottom:12%;left:-2%}
-.account-loggedout-benefits{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:20px}
-.account-loggedout-benefits article{display:flex;align-items:center;gap:13px;min-width:0;padding:20px 18px;border:1px solid #e8ece9;border-radius:13px;background:#fff}
-.account-loggedout-benefits article>span{display:grid;place-items:center;flex:0 0 42px;width:42px;height:42px;border-radius:11px;background:#edf6ef;color:#16845a}
-.account-loggedout-benefits article div{display:grid;gap:4px;min-width:0}
-.account-loggedout-benefits article b{font-size:13px;color:#29372e}.account-loggedout-benefits article small{font-size:10px;line-height:1.6;color:#7b857e}
 .account-loggedout-footnote{text-align:center;margin:25px 0 0;color:#788279;font-size:12px}
 .account-loggedout-footnote a{display:inline-flex;align-items:center;gap:5px;color:#16845a;font-weight:700}
 @media(max-width:760px){
