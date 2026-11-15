@@ -14037,3 +14037,12 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   background-color:transparent;
   background-image:none;
 }
+
+
+/* Add Product form canvas: remove the form-level fill only; keep its inner cards intact. */
+.admin-products-page.is-add-product-page .admin-product-form.admin-product-editor{
+  background:transparent;
+  background-color:transparent;
+  background-image:none;
+  box-shadow:none;
+}
