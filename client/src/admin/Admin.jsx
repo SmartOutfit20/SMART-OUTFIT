@@ -58,8 +58,9 @@ const NAV_REQUIRED_PERMISSIONS={
 }
 function canAccessAdminPath(path,user){
  if(user?.role==='super_admin')return true
+ const normalizedPath=String(path||'').split('?')[0]
  const permissions=Array.isArray(user?.permissions)?user.permissions:(DEFAULT_NAV_PERMISSIONS[user?.role]||[])
- const required=NAV_REQUIRED_PERMISSIONS[path]||[]
+ const required=NAV_REQUIRED_PERMISSIONS[normalizedPath]||[]
  return required.length===0||required.every(permission=>permissions.includes(permission))
 }
 const STAFF_PERMISSION_GROUPS=[
@@ -77,7 +78,7 @@ export function AdminLayout(){
  const [menuOpen,setMenuOpen]=useState(false),[authChecked,setAuthChecked]=useState(false),[profileOpen,setProfileOpen]=useState(false),[searchText,setSearchText]=useState('');
  const [openGroups,setOpenGroups]=useState(()=>({Products:location.pathname.startsWith('/admin/products')||location.pathname.startsWith('/admin/inventory'),Marketing:location.pathname.includes('homepage-builder'),Appearance:location.pathname.includes('homepage-builder')||location.pathname.includes('/seo'),Settings:location.pathname.includes('/settings')}));
  useEffect(()=>{let active=true;if(!user||!staffRoles.includes(user.role)){setAuthChecked(true);return()=>{active=false}}api.get('/auth/me').then(({data})=>{if(active){setProfile?.(data);setAuthChecked(true)}}).catch(()=>{if(active){logout();setAuthChecked(true)}});return()=>{active=false}},[]);
- useEffect(()=>{setMenuOpen(false);setSearchText('')},[location.pathname]);
+ useEffect(()=>{setMenuOpen(false);setSearchText('');setOpenGroups(v=>({...v,Products:location.pathname.startsWith('/admin/products')||location.pathname.startsWith('/admin/inventory'),Marketing:location.pathname.includes('homepage-builder'),Appearance:location.pathname.includes('/navigation')||location.pathname.includes('/seo'),Settings:location.pathname.includes('/settings')||location.pathname.includes('/language')||location.pathname.includes('/profile')}))},[location.pathname]);
  const visibleNav=nav.map(item=>item.children?{...item,children:item.children.filter(child=>canAccessAdminPath(child.path,user))}:item).filter(item=>(!item.superAdmin||user?.role==='super_admin')&&(!item.children||item.children.length>0)&&(!item.path||canAccessAdminPath(item.path,user)));
  const flatNav=visibleNav.flatMap(item=>item.children?item.children.map(child=>({...child,parent:item.label})): [item]);
  const matches=searchText.trim()?flatNav.filter(item=>(item.label+' '+(item.parent||'')).toLowerCase().includes(searchText.trim().toLowerCase())).slice(0,6):[];
@@ -104,7 +105,7 @@ export function AdminLayout(){
     <div className="admin-top-search"><Search size={17}/><input value={searchText} onChange={e=>setSearchText(e.target.value)} placeholder="Search admin pages..." aria-label="Search admin pages"/>{matches.length>0&&<div className="admin-top-search-results">{matches.map(item=><button type="button" key={item.path} onClick={()=>{navigate(item.path);setSearchText('')}}><span>{item.label}</span><small>{item.parent||'Workspace'}</small></button>)}</div>}</div>
     <div className="admin-top-actions"><Link className="admin-top-notification" to="/admin/activity-logs" aria-label="Open activity log" title="Activity log"><Bell size={19}/></Link><div className="admin-profile-menu-wrap"><button type="button" className="admin-top-user" onClick={()=>setProfileOpen(v=>!v)} aria-expanded={profileOpen}><AdminAvatar user={user}/><span><b>{user?.name||'Admin'}</b><small>{user?.role==='super_admin'?'Super Admin':user?.role||'Staff'}</small></span><ChevronDown size={14}/></button>{profileOpen&&<div className="admin-profile-dropdown"><Link to="/admin/profile" onClick={()=>setProfileOpen(false)}>My profile</Link>{user?.role==='super_admin'&&<Link to="/admin/roles" onClick={()=>setProfileOpen(false)}>Staff access</Link>}<button type="button" onClick={logout}>Sign out</button></div>}</div></div>
    </header>
-   <main className="admin-content"><RouteErrorBoundary><Outlet/></RouteErrorBoundary><footer className="admin-footer"><span>© 2026 SMART OUTFIT. All rights reserved.</span><span>Made with <b>♥</b> in Bangladesh</span></footer></main>
+   <main className="admin-content"><RouteErrorBoundary key={location.pathname}><Outlet/></RouteErrorBoundary><footer className="admin-footer"><span>© 2026 SMART OUTFIT. All rights reserved.</span><span>Made with <b>♥</b> in Bangladesh</span></footer></main>
   </div>
  </div>
 }
