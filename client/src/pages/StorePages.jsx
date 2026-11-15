@@ -405,57 +405,6 @@ export function CustomerDashboard(){
  </main>
 }
 
-export function CustomerOrders(){
- const {user}=useAuth()
- const [orders,setOrders]=useState([]),[error,setError]=useState(''),[loading,setLoading]=useState(true),[filter,setFilter]=useState('all'),[query,setQuery]=useState('')
- const load=useCallback(async()=>{if(!user){setLoading(false);return}setLoading(true);setError('');try{const {data}=await api.get('/orders/mine');setOrders(data||[])}catch(e){setError(e.response?.data?.message||'আপনার অর্ডারগুলো লোড করা যায়নি। আবার চেষ্টা করুন।')}finally{setLoading(false)}},[user])
- useEffect(()=>{load()},[load])
- const stages=['pending','confirmed','processing','shipped','delivered']
- const statusLabels={pending:'অপেক্ষমাণ',confirmed:'নিশ্চিত',processing:'প্রস্তুত হচ্ছে',shipped:'পাঠানো হয়েছে',delivered:'ডেলিভারি সম্পন্ন',cancelled:'বাতিল',returned:'রিটার্ন'}
- const activeCount=orders.filter(o=>!['delivered','cancelled','returned'].includes(o.status)).length
- const deliveredCount=orders.filter(o=>o.status==='delivered').length
- const visible=orders.filter(o=>{
-  const matchesStatus=filter==='all'||o.status===filter
-  const term=query.trim().toLowerCase()
-  const matchesQuery=!term||[o.orderNumber,...(o.items||[]).map(item=>item.name||item.product?.name||item.productName)].some(value=>String(value||'').toLowerCase().includes(term))
-  return matchesStatus&&matchesQuery
- })
- if(!user)return <div className="auth-wrap"><div className="auth-card"><h1>MY ORDERS</h1><p>আপনার কেনাকাটা ও ডেলিভারির আপডেট দেখতে অ্যাকাউন্টে প্রবেশ করুন।</p><Link className="btn btn-dark full-btn" to="/login?next=%2Forders">অ্যাকাউন্টে প্রবেশ করুন</Link><p className="auth-switch">নতুন কাস্টমার? <Link to="/register?next=%2Forders">অ্যাকাউন্ট তৈরি করুন</Link></p></div></div>
- return <div className="page-wrap orders-page orders-page-clean" lang="bn">
-  <div className="breadcrumb"><Link to="/">হোম</Link> / আমার অর্ডার</div>
-  <div className="orders-page-heading"><div><span className="eyebrow">SMART OUTFIT · YOUR PURCHASES</span><h1>আমার অর্ডার</h1><p>আপনার কেনাকাটা, পেমেন্ট এবং ডেলিভারির আপডেট এক জায়গায় দেখুন।</p></div><div className="orders-heading-actions"><Link to="/shop" className="orders-continue-link"><ShoppingBag size={16}/> কেনাকাটা চালিয়ে যান</Link><button type="button" className="orders-refresh-button" onClick={load} disabled={loading}><RefreshCw size={15}/> {loading?'লোড হচ্ছে…':'রিফ্রেশ'}</button></div></div>
-  <div className="orders-customer-stats"><div><small>মোট অর্ডার</small><b>{orders.length}</b></div><div><small>চলমান অর্ডার</small><b>{activeCount}</b></div><div><small>ডেলিভারি সম্পন্ন</small><b>{deliveredCount}</b></div></div>
-  <div className="orders-toolbar orders-toolbar-enhanced"><div><b>আপনার অর্ডারসমূহ</b><span>{visible.length}টি দেখানো হচ্ছে</span></div><div className="orders-filter-controls"><input aria-label="অর্ডার খুঁজুন" value={query} onChange={e=>setQuery(e.target.value)} placeholder="অর্ডার আইডি বা পণ্যের নাম খুঁজুন"/><select aria-label="অর্ডারের অবস্থা" value={filter} onChange={e=>setFilter(e.target.value)}><option value="all">সব অর্ডার</option>{Object.entries(statusLabels).map(([value,label])=><option key={value} value={value}>{label}</option>)}</select></div></div>
-  {error&&<div className="orders-error-state"><p>{error}</p><button type="button" onClick={load} disabled={loading}>আবার চেষ্টা করুন</button></div>}
-  {loading?<div className="orders-loading" role="status">আপনার অর্ডারগুলো লোড হচ্ছে…</div>:error&&!orders.length?null:!orders.length?<div className="empty-state orders-empty"><ShoppingBag size={34}/><h2>এখনো কোনো অর্ডার নেই</h2><p>আপনার প্রথম পছন্দের পণ্যটি বেছে নিয়ে অর্ডার করুন। অর্ডার করলে সব তথ্য এখানে দেখা যাবে।</p><Link to="/shop" className="btn btn-dark">পণ্য দেখুন <ArrowRight size={16}/></Link></div>:!visible.length?<div className="empty-state orders-empty orders-filter-empty"><Package size={30}/><h2>কোনো অর্ডার মেলেনি</h2><p>অন্য শব্দ বা অর্ডারের অবস্থা দিয়ে খুঁজে দেখুন।</p><button type="button" className="btn btn-dark" onClick={()=>{setQuery('');setFilter('all')}}>ফিল্টার মুছুন</button></div>:<div className="orders-list">{visible.map(o=>{
-   const ix=stages.indexOf(o.status)
-   const cancelled=['cancelled','returned'].includes(o.status)
-   const date=new Date(o.createdAt)
-   return <article className="order-track-card order-track-card-clean" key={o._id}>
-    <header className="order-track-heading order-track-heading-clean">
-     <div className="order-track-title"><span className="eyebrow">আপনার অর্ডার আইডি</span><h2><span className="order-number-chip">{o.orderNumber||'—'}</span></h2><small>{Number.isNaN(date.getTime())?'':date.toLocaleString('bn-BD',{dateStyle:'medium',timeStyle:'short'})}</small></div>
-     <span className={'account-status status-'+o.status}>{statusLabels[o.status]||o.status}</span>
-    </header>
-    <div className="order-track-overview">
-     <div><small>মোট পণ্য</small><b>{o.items?.reduce((n,item)=>n+Number(item.quantity||1),0)||0}টি</b></div>
-     <div><small>অর্ডারের মোট</small><b className="order-total-strong">৳{Number(o.total||0).toLocaleString('en-BD')}</b></div>
-     <div><small>পেমেন্ট</small><b>{o.advancePaymentAmount>0?'অগ্রিম + COD':'Cash on Delivery'}</b></div>
-    </div>
-    <section className="order-clean-section"><div className="order-clean-section-heading"><h3>অর্ডার করা পণ্য</h3><span>{o.items?.length||0}টি পণ্য</span></div>
-     <div className="order-clean-products">{(o.items||[]).map((item,i)=>{const productName=item.name||item.productName||item.title||item.product?.name||item.product?.title||item.productSnapshot?.name||item.snapshot?.name||'পণ্যের নাম পাওয়া যায়নি';const productImage=item.image||item.productImage||item.product?.image||item.product?.images?.[0]||item.images?.[0]||item.productSnapshot?.image||item.snapshot?.image;return <div className="order-clean-product" key={item._id||i}><div className="order-clean-product-image">{productImage?<img src={productImage} alt={productName} loading="lazy"/>:<ShoppingBag size={20}/>}</div><div className="order-clean-product-copy"><b>{productName}</b><small>{[item.size&&'সাইজ: '+item.size,item.color&&'রং: '+item.color,item.sku&&'SKU: '+item.sku].filter(Boolean).join(' · ')||'সাধারণ ভ্যারিয়েন্ট'} · পরিমাণ {item.quantity||1}</small></div><strong>৳{(Number(item.unitPrice||item.price||0)*Number(item.quantity||1)).toLocaleString('en-BD')}</strong></div>})}</div>
-    </section>
-    <div className="order-clean-info-grid">
-     <section><h3>ডেলিভারি ঠিকানা</h3><b>{o.deliveryAddress?.name||'—'}</b><span>{o.deliveryAddress?.phone||'—'}</span><p>{[o.deliveryAddress?.address,o.deliveryAddress?.upazila,o.deliveryAddress?.district,o.deliveryAddress?.division].filter(Boolean).join(', ')||'ঠিকানা দেওয়া নেই'}</p></section>
-     <section><h3>পেমেন্ট ও মূল্য</h3><div><span>পণ্যের মূল্য</span><b>৳{Number(o.subtotal||0).toLocaleString('en-BD')}</b></div>{Number(o.discount)>0&&<div><span>ছাড়</span><b>− ৳{Number(o.discount).toLocaleString('en-BD')}</b></div>}<div><span>ডেলিভারি চার্জ</span><b>৳{Number(o.deliveryCharge||0).toLocaleString('en-BD')}</b></div>{Number(o.advancePaymentAmount)>0&&<div><span>অগ্রিম ডেলিভারি পেমেন্ট</span><b>৳{Number(o.advancePaymentAmount).toLocaleString('en-BD')}</b></div>}<div className="order-clean-total"><span>সর্বমোট</span><b>৳{Number(o.total||0).toLocaleString('en-BD')}</b></div><small>{o.paymentStatus==='pending'?'পেমেন্ট যাচাই অপেক্ষমাণ':o.paymentStatus||'পেমেন্টের অবস্থা আপডেট হয়নি'}</small></section>
-    </div>
-    {!cancelled&&<section className="order-clean-progress"><h3>অর্ডারের অগ্রগতি</h3><div className="order-progress">{stages.map((x,i)=><div key={x} className={ix>=i?'done':''}><i/><span>{statusLabels[x]}</span></div>)}</div></section>}
-    {(o.courier||o.trackingNumber)&&<div className="courier-track"><b>ডেলিভারি ট্র্যাকিং</b><span>কুরিয়ার: {o.courier||'নির্ধারিত হয়নি'}</span><span>ট্র্যাকিং নম্বর: {o.trackingNumber||'অপেক্ষমাণ'}</span></div>}
-    {cancelled&&<div className="order-cancel-notice"><b>{o.status==='returned'?'রিটার্ন আপডেট':'অর্ডার বাতিলের তথ্য'}</b><p>{o.cancellationReason||statusLabels[o.status]}</p></div>}
-    {o.statusHistory?.length>0&&<details className="order-history-details"><summary>অর্ডারের আপডেট দেখুন <span>{o.statusHistory.length}টি আপডেট</span></summary>{o.statusHistory.map((h,i)=><p key={i}><b>{statusLabels[h.status]||h.status}</b> · {new Date(h.createdAt).toLocaleString('bn-BD')}<br/>{h.note}</p>)}</details>}
-   </article>
-  })}</div>}
- </div>
-}
 export function SimplePage({title}){
  const [form,setForm]=useState({name:'',email:'',phone:'',subject:'',message:''}),[notice,setNotice]=useState(''),[error,setError]=useState(''),[busy,setBusy]=useState(false),[store,setStore]=useState({storeName:'SMART OUTFIT',supportEmail:'',supportPhone:'',storeAddress:'',aboutText:'',shippingPolicy:'',returnPolicy:''})
  useEffect(()=>{api.get('/storefront').then(({data})=>setStore(s=>({...s,...data}))).catch(()=>{})},[])
