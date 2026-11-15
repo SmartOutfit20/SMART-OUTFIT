@@ -23,8 +23,10 @@ const ROLE_PERMISSIONS = Object.freeze({
   ])
 });
 
-export function hasPermission(role, permission) {
+export function hasPermission(role, permission, customPermissions) {
   if (typeof permission !== 'string' || !permission.trim()) return false;
+  if (role === 'super_admin') return true;
+  if (Array.isArray(customPermissions)) return customPermissions.includes(permission);
   const granted = ROLE_PERMISSIONS[role];
   return Boolean(granted && (granted.includes('*') || granted.includes(permission)));
 }
