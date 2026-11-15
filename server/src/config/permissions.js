@@ -7,7 +7,7 @@ const ROLE_PERMISSIONS = Object.freeze({
     'orders.read','orders.update','orders.verify_payment',
     'customers.read','customers.manage','reports.read','analytics.read',
     'support.read','support.manage','delivery.read','delivery.manage',
-    'settings.read','settings.manage'
+    'settings.read','settings.manage','returns.read','returns.manage'
   ]),
   editor: Object.freeze([
     'products.read','products.write','inventory.read',
