@@ -12436,3 +12436,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 @media(max-width:900px){.header .store-header-actions{gap:9px}.header .store-header-search{width:clamp(170px,29vw,250px);height:42px;padding:0 11px;gap:8px}}
 @media(max-width:650px){.header .store-header-actions{gap:8px}.header .store-header-search{display:none}.header .store-header-actions.mobile-search-open .store-header-search{display:flex;order:4;flex:0 0 100%;width:100%;height:42px;margin-top:2px}.header .store-header-actions .icon-btn{order:3;flex:0 0 28px;width:28px;min-width:28px;justify-content:center}.header .store-header-search input{font-size:12px}}
 @media(max-width:370px){.header .store-header-search{padding:0 9px}}
+
+.header .store-mobile-search-toggle{display:none}
+@media(max-width:650px){
+ .header .store-mobile-search-toggle{display:inline-flex;order:2;flex:0 0 28px;width:28px;min-width:28px;height:32px;align-items:center;justify-content:center;padding:0;border:0;background:transparent;color:inherit}
+}
