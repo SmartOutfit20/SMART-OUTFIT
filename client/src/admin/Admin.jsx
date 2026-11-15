@@ -103,7 +103,7 @@ export function AdminLayout(){
       {openGroups[item.label]&&<div className="admin-nav-submenu">{item.children.map(child=><NavLink key={child.path} end to={child.path} className={({isActive:a})=>a?'active':''} onClick={()=>setMenuOpen(false)}><i/><span>{child.label}</span></NavLink>)}</div>}
      </section>:<NavLink end={item.path==='/admin'} to={item.path} key={item.path} className={({isActive:a})=>a?'active':''} onClick={()=>setMenuOpen(false)}><item.icon size={17}/><span>{item.label}</span></NavLink>)}
    </nav>
-   <div className="admin-sidebar-bottom"><Link className="admin-sidebar-profile" to="/admin/profile" aria-label="Admin profile" onClick={()=>setMenuOpen(false)}><AdminAvatar user={user} className="admin-profile-avatar"/><span><b>{user?.name||'Admin account'}</b><small>{user?.role==='super_admin'?'Super Admin':user?.role||'Admin'}</small></span></Link><button className="admin-signout" onClick={logout}><LogOut size={15}/> Sign out</button></div>
+   <div className="admin-sidebar-bottom"><Link className="admin-sidebar-profile" to="/admin/profile" aria-label="Admin profile" onClick={()=>setMenuOpen(false)}><AdminAvatar user={user} className="admin-profile-avatar"/></Link><button className="admin-signout" onClick={logout}><LogOut size={15}/> Sign out</button></div>
   </aside>
   <div className="admin-main">
    <header className="admin-top">
