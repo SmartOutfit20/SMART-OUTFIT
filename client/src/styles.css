@@ -12441,3 +12441,18 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 @media(max-width:650px){
  .header .store-mobile-search-toggle{display:inline-flex;order:2;flex:0 0 28px;width:28px;min-width:28px;height:32px;align-items:center;justify-content:center;padding:0;border:0;background:transparent;color:inherit}
 }
+
+
+/* Storefront live product suggestions — same interaction pattern as Admin search. */
+.header .store-header-search{z-index:40}
+.header .store-search-suggestions{position:absolute;top:calc(100% + 8px);left:0;right:0;z-index:1800;display:grid;gap:2px;padding:6px;border:1px solid #e1ebe4;border-radius:12px;background:#fff;box-shadow:0 14px 35px #18221d20;max-height:min(420px,65vh);overflow-y:auto}
+.header .store-search-suggestions>button{display:flex;align-items:center;gap:10px;width:100%;min-width:0;padding:9px;border:0;border-radius:8px;background:#fff;color:#18221d;text-align:left;cursor:pointer}
+.header .store-search-suggestions>button:hover,.header .store-search-suggestions>button:focus-visible{background:#f1f8f3;outline:0}
+.header .store-search-product-thumb{display:grid;place-items:center;flex:0 0 38px;width:38px;height:42px;overflow:hidden;border-radius:7px;background:#f1f6f2;color:#718276}
+.header .store-search-product-thumb img{width:100%;height:100%;object-fit:cover}
+.header .store-search-product-copy{display:grid;gap:3px;flex:1;min-width:0}
+.header .store-search-product-copy b{overflow:hidden;color:#18221d;font-size:11px;font-weight:700;text-overflow:ellipsis;white-space:nowrap}
+.header .store-search-product-copy small{overflow:hidden;color:#758278;font-size:9px;text-overflow:ellipsis;white-space:nowrap}
+.header .store-search-suggestions>button>strong{flex:0 0 auto;color:#15965f;font-size:10px;font-weight:800}
+.header .store-search-message{padding:13px 11px;color:#68766d;font-size:11px}
+@media(max-width:650px){.header .store-header-actions.mobile-search-open .store-header-search{z-index:80}.header .store-search-suggestions{top:calc(100% + 6px);max-height:55vh}.header .store-search-suggestions>button{padding:10px}}
