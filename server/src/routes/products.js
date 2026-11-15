@@ -2,11 +2,13 @@ import { Router } from 'express'
 import { Product, Category, ActivityLog, Setting } from '../models/index.js'
 import { starterProducts } from '../data/starterProducts.js'
 import { requireAuth, requirePermission } from '../middleware/auth.js'
+import { hasPermission } from '../config/permissions.js'
 import sharp from 'sharp'
 
 const router = Router()
 const productWrite = [requireAuth, requirePermission('products.write')]
 const productRead = [requireAuth, requirePermission('products.read')]
+const productOrInventoryRead = [requireAuth, (req,res,next) => { if (!hasPermission(req.user?.role,'products.read',req.user?.permissions) && !hasPermission(req.user?.role,'inventory.read',req.user?.permissions)) return res.status(403).json({message:'Insufficient permissions'}); next() }]
 const inventoryWrite = [requireAuth, requirePermission('inventory.write')]
 const cleanProduct = body => ({
   name: String(body.name || '').trim(),
@@ -209,7 +211,7 @@ router.get('/', async (req, res, next) => {
   } catch (e) { next(e) }
 })
 
-router.get('/admin/all', ...productRead, async (req, res, next) => {
+router.get('/admin/all', ...productOrInventoryRead, async (req, res, next) => {
   try { await ensureShortProductSlugs(); await ensureProductSerials(); res.json(await Product.find().populate('category', 'name').sort({ createdAt: -1 }).lean()) }
   catch (e) { next(e) }
 })
