@@ -96,6 +96,7 @@ export function AdminLayout(){
   {menuOpen&&<button type="button" className="admin-sidebar-backdrop" aria-label="Close navigation" onClick={()=>setMenuOpen(false)}/>}
   <aside className={menuOpen?'admin-sidebar is-open':'admin-sidebar'}>
    <Link to="/admin" className="admin-brand"><img className="admin-brand-logo" src={brandLogo||undefined} alt="SMART OUTFIT" onError={e=>{e.currentTarget.style.display="none"}}/><span className="admin-brand-caption"><small>ADMIN CONTROL CENTER</small></span></Link>
+   <button type="button" className="admin-sidebar-close" aria-label="Close navigation menu" onClick={()=>setMenuOpen(false)}><X size={19}/></button>
    <div className="admin-label">MAIN MENU</div>
    <nav className="admin-nav-list" aria-label="Admin navigation">
     {visibleNav.map(item=>item.children?<section className={'admin-nav-group '+(item.children.some(child=>isActive(child))?'is-current':'')} key={item.label}>
