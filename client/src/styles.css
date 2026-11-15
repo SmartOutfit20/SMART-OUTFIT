@@ -12458,7 +12458,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 @media(max-width:650px){.header .store-header-actions.mobile-search-open .store-header-search{z-index:80}.header .store-search-suggestions{top:calc(100% + 6px);max-height:55vh}.header .store-search-suggestions>button{padding:10px}}
 
 
-/* Tablet header alignment: hamburger and logo stay left; search and account actions sit at the far right. */
+/* Tablet header: menu, logo, expandable search, then account actions. */
 @media (min-width: 651px) and (max-width: 900px) {
   .header {
     padding: 9px 35px !important;
@@ -12476,27 +12476,37 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   }
   .header .brand {
     order: 2;
-    flex: 0 1 auto;
+    flex: 0 0 auto;
     min-width: 0;
-    max-width: 30%;
-    margin: 0 35px 0 0;
+    max-width: none;
+    margin: 0 24px 0 0;
   }
   .header .nav {
-    order: 3;
+    order: 4;
   }
   .header .store-header-actions {
-    order: 4;
-    flex: 0 1 auto;
+    order: 3;
+    display: flex;
+    flex: 1 1 auto;
     width: auto;
     min-width: 0;
-    margin-left: auto;
+    margin-left: 0;
     justify-content: flex-end;
     gap: 9px;
   }
   .header .store-header-search {
-    flex: 0 1 clamp(160px, 22vw, 230px);
-    width: clamp(160px, 22vw, 230px);
-    min-width: 130px;
+    order: 1;
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
+    max-width: none;
+  }
+  .header .store-header-actions .icon-btn {
+    order: 2;
+    flex: 0 0 28px;
+    width: 28px;
+    min-width: 28px;
+    justify-content: center;
   }
   .header .store-mobile-search-toggle {
     display: none;
