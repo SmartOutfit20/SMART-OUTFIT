@@ -12104,3 +12104,71 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   .admin-customers-page .admin-customers-table-wrap{width:100%;max-width:100%;margin:0;overflow:visible}
   .admin-customers-page .admin-customers-table{display:block;width:100%;min-width:0;table-layout:auto}
 }
+
+
+/* Admin data tables: keep every table card inside the 1220px content boundary */
+.admin-shell .admin-content .admin-table-wrap{
+  display:block;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  box-sizing:border-box;
+  margin-left:0;
+  margin-right:0;
+  overflow-x:auto;
+  overflow-y:hidden;
+  overscroll-behavior-x:contain;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-gutter:stable;
+}
+.admin-shell .admin-content .admin-table-wrap>*{
+  box-sizing:border-box;
+}
+.admin-shell .admin-content .admin-table-wrap>.admin-table{
+  width:max-content;
+  min-width:100%;
+  max-width:none;
+  margin:0;
+}
+.admin-shell .admin-content .admin-table-wrap>.admin-empty{
+  width:100%;
+  max-width:100%;
+  white-space:normal;
+  overflow-wrap:anywhere;
+}
+.admin-shell .admin-content .admin-table-wrap .admin-table th,
+.admin-shell .admin-content .admin-table-wrap .admin-table td{
+  box-sizing:border-box;
+  vertical-align:middle;
+}
+.admin-shell .admin-content .admin-table-head,
+.admin-shell .admin-content .admin-table-tools,
+.admin-shell .admin-content .admin-order-filters{
+  min-width:0;
+  max-width:100%;
+  flex-wrap:wrap;
+}
+.admin-shell .admin-content .admin-table-tools>*{
+  min-width:0;
+  max-width:100%;
+}
+.admin-shell .admin-content .admin-table-tools input{
+  flex:1 1 180px;
+}
+@media(max-width:820px){
+  .admin-shell .admin-content .admin-table-wrap{
+    width:100%;
+    max-width:100%;
+    border-radius:12px;
+  }
+}
+@media(max-width:600px){
+  .admin-shell .admin-content .admin-table-wrap{
+    width:100%;
+    max-width:100%;
+    margin:0;
+  }
+  .admin-shell .admin-content .admin-table-wrap>.admin-table{
+    min-width:620px;
+  }
+}
