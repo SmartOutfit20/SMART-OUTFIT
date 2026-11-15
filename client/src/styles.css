@@ -12868,3 +12868,175 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 /* SMART OUTFIT eyebrow labels: replace violet with the brand green palette. */
 .eyebrow{color:#15965f!important}
 .hero .eyebrow{color:#8ce0b2!important}
+
+
+/* SMART OUTFIT Admin palette refresh — scoped to Admin only; storefront styles remain untouched. */
+.admin-shell{
+  --purple:#15965f;
+  --admin-accent:#15965f;
+  --admin-accent-dark:#10784c;
+  --admin-soft:#eaf7ef;
+  --admin-ink:#17251d;
+  --admin-muted:#718078;
+  --admin-border:#e1ebe4;
+  background:#f7faf8!important;
+}
+.admin-shell .admin-sidebar{
+  background:linear-gradient(180deg,#111d17 0%,#143525 54%,#102a1d 100%)!important;
+  color:#f4fff7;
+}
+.admin-shell .admin-label{color:#9bc5aa!important}
+.admin-shell .admin-nav-group-toggle,
+.admin-shell .admin-nav-list>a,
+.admin-shell .admin-nav-submenu>a{
+  color:#d2e3d7!important;
+}
+.admin-shell .admin-nav-group-toggle:hover,
+.admin-shell .admin-nav-list>a:hover,
+.admin-shell .admin-nav-submenu>a:hover{
+  color:#fff!important;
+  background:rgba(21,150,95,.20)!important;
+}
+.admin-shell .admin-nav-list>a.active,
+.admin-shell .admin-nav-submenu>a.active{
+  color:#fff!important;
+  background:linear-gradient(100deg,#15965f,#10784c)!important;
+  box-shadow:0 7px 18px rgba(4,20,12,.25)!important;
+}
+.admin-shell .admin-nav-group.is-current>.admin-nav-group-toggle{
+  color:#b9edce!important;
+}
+.admin-shell .admin-sidebar-bottom{
+  background:#102a1d!important;
+  border-color:rgba(190,230,202,.18)!important;
+}
+.admin-shell .admin-sidebar-bottom .admin-sidebar-profile{
+  border-color:rgba(177,224,190,.25)!important;
+  background:linear-gradient(115deg,rgba(21,150,95,.22),rgba(255,255,255,.045))!important;
+}
+.admin-shell .admin-sidebar-bottom .admin-signout{
+  border-color:rgba(177,224,190,.25)!important;
+  background:rgba(255,255,255,.07)!important;
+}
+.admin-shell .admin-main{background:#f7faf8!important}
+.admin-shell .admin-top{
+  background:#fff!important;
+  border-bottom-color:#e1ebe4!important;
+  box-shadow:0 3px 14px rgba(20,53,37,.045)!important;
+}
+.admin-shell .admin-top-title,
+.admin-shell .admin-top-title b,
+.admin-shell .admin-content h1,
+.admin-shell .admin-content h2,
+.admin-shell .admin-content h3{color:#17251d!important}
+.admin-shell .admin-top-search{
+  border-color:#e1ebe4!important;
+  background:#f6faf7!important;
+}
+.admin-shell .admin-top-search:focus-within{
+  border-color:#15965f!important;
+  box-shadow:0 0 0 3px rgba(21,150,95,.10)!important;
+}
+.admin-shell .admin-top-search>svg,
+.admin-shell .admin-top-notification{color:#527462!important}
+.admin-shell .admin-top-notification:hover{color:#15965f!important;background:#eaf7ef!important}
+.admin-shell .admin-top-user{color:#244332!important}
+.admin-shell .admin-profile-dropdown{
+  border-color:#e1ebe4!important;
+  box-shadow:0 14px 32px rgba(20,53,37,.13)!important;
+}
+.admin-shell .admin-profile-dropdown a:hover,
+.admin-shell .admin-profile-dropdown button:hover{background:#eaf7ef!important;color:#10784c!important}
+.admin-shell .admin-content .eyebrow{color:#15965f!important}
+.admin-shell .admin-panel,
+.admin-shell .admin-stat,
+.admin-shell .admin-product-section,
+.admin-shell .admin-settings-section{
+  border-color:#e1ebe4!important;
+  background:#fff!important;
+  box-shadow:0 6px 20px rgba(20,53,37,.055)!important;
+}
+.admin-shell .admin-stat-icon{
+  background:#eaf7ef!important;
+  color:#10784c!important;
+}
+.admin-shell .admin-quick-links a{
+  background:#f8fcf9!important;
+  border-color:#e1ebe4!important;
+}
+.admin-shell .admin-quick-links a svg{color:#15965f!important}
+.admin-shell .admin-action,
+.admin-shell .admin-login-submit{
+  background:linear-gradient(105deg,#15965f,#10784c)!important;
+  color:#fff!important;
+  box-shadow:0 6px 15px rgba(21,150,95,.18)!important;
+}
+.admin-shell .admin-action:hover,
+.admin-shell .admin-login-submit:hover{
+  background:linear-gradient(105deg,#10784c,#0c633e)!important;
+  box-shadow:0 9px 20px rgba(21,150,95,.25)!important;
+}
+.admin-shell .admin-edit{
+  background:#eaf7ef!important;
+  color:#10784c!important;
+}
+.admin-shell .admin-success,
+.admin-shell .status-published,
+.admin-shell .admin-status{
+  background:#eaf7ef!important;
+  color:#176b43!important;
+  border-color:#bfe4cb!important;
+}
+.admin-shell .admin-progress{background:#eaf7ef!important}
+.admin-shell .admin-progress span{background:linear-gradient(90deg,#15965f,#10784c)!important}
+.admin-shell .admin-table-wrap{border-color:#e1ebe4!important}
+.admin-shell .admin-table th{background:#f1f8f3!important;color:#587263!important}
+.admin-shell .admin-table td{border-color:#edf3ee!important}
+.admin-shell .admin-product-form,
+.admin-shell .admin-image-uploader,
+.admin-shell .profile-photo-control{
+  border-color:#e1ebe4!important;
+  background:#fff!important;
+}
+.admin-shell .admin-product-form input:focus,
+.admin-shell .admin-product-form select:focus,
+.admin-shell .admin-product-form textarea:focus,
+.admin-shell .admin-table-tools input:focus,
+.admin-shell input:focus,
+.admin-shell select:focus,
+.admin-shell textarea:focus{
+  border-color:#15965f!important;
+  outline-color:rgba(21,150,95,.18)!important;
+}
+.admin-shell .admin-sidebar-close,
+.admin-shell .admin-mobile-menu{
+  color:#eafff0!important;
+}
+.admin-shell .admin-sidebar-close:hover{background:rgba(21,150,95,.25)!important}
+.admin-shell .admin-sidebar-backdrop{background:rgba(8,24,15,.64)!important}
+
+/* Admin sign-in screen follows the same green brand identity. */
+.admin-login-page .admin-login-visual{
+  background:linear-gradient(145deg,#102a1d 0%,#143f2b 55%,#10784c 100%)!important;
+}
+.admin-login-page .admin-login-brand,
+.admin-login-page .admin-login-mobile-brand{color:#fff!important}
+.admin-login-page .admin-login-brand b,
+.admin-login-page .admin-login-kicker{color:#15965f!important}
+.admin-login-page .admin-login-orbit{border-color:rgba(159,224,181,.28)!important}
+.admin-login-page .admin-login-shield{
+  background:linear-gradient(145deg,#15965f,#10784c)!important;
+  color:#fff!important;
+  box-shadow:0 20px 65px rgba(5,24,14,.35)!important;
+}
+.admin-login-page .admin-login-glow{background:rgba(21,150,95,.22)!important}
+.admin-login-page .admin-login-submit{
+  background:linear-gradient(105deg,#15965f,#10784c)!important;
+  color:#fff!important;
+}
+.admin-login-page .admin-login-submit:hover{background:#10784c!important}
+.admin-login-page input:focus{
+  border-color:#15965f!important;
+  outline:2px solid rgba(21,150,95,.13)!important;
+}
+.admin-login-page .admin-login-security svg{color:#15965f!important}
