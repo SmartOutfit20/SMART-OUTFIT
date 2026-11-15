@@ -10442,3 +10442,25 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     padding-right:35px;
   }
 }
+
+
+/* Tablet: compact homepage category tiles into one four-column row. */
+@media (min-width:651px) and (max-width:820px){
+  .home-page > .section:not(.home-new-collection) .category-grid{
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:10px;
+  }
+  .home-page > .section:not(.home-new-collection) .category-tile{
+    min-width:0;
+    height:160px;
+    padding:12px;
+  }
+  .home-page > .section:not(.home-new-collection) .category-tile b{
+    font-size:clamp(14px,2vw,18px);
+  }
+  .home-page > .section:not(.home-new-collection) .category-tile span,
+  .home-page > .section:not(.home-new-collection) .category-tile small{
+    font-size:7px;
+    letter-spacing:1px;
+  }
+}
