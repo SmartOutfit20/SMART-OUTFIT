@@ -13574,3 +13574,24 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .so-account-loading{padding:35px;text-align:center;color:#687080}
 @media(max-width:900px){.so-account-shell{grid-template-columns:210px minmax(0,1fr);gap:12px;margin-top:24px}.so-account-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.so-account-profile-top{grid-template-columns:1fr}.so-account-photo{max-width:none}.so-account-photo h2{align-self:center}}
 @media(max-width:640px){.so-account-shell{display:flex;flex-direction:column;margin:16px auto 38px;padding:0 14px;gap:12px}.so-account-sidebar{position:static;width:100%;box-sizing:border-box;padding:12px}.so-account-user{flex-direction:row;text-align:left;gap:10px;padding:4px 4px 12px}.so-account-avatar{width:54px;height:54px;font-size:22px;margin:0}.so-account-user>b{font-size:14px}.so-account-user>span{display:none}.so-account-user>small{margin-left:auto;font-size:10px;padding:5px 7px}.so-account-sidebar nav{display:flex;overflow-x:auto;gap:5px;padding-top:9px}.so-account-sidebar nav button{flex:0 0 auto;white-space:nowrap;padding:9px 10px;font-size:12px;gap:6px}.so-account-sidebar nav button svg{width:16px;height:16px}.so-account-content{width:100%}.so-account-heading{padding:16px;border-radius:14px}.so-account-heading h1{font-size:23px}.so-account-heading p{font-size:13px}.so-account-stats{gap:8px}.so-account-stats article{padding:14px 8px}.so-account-stats article b{font-size:20px}.so-account-panel{padding:14px;border-radius:14px}.so-account-panel-title{align-items:flex-start;flex-direction:column}.so-account-quick-links{grid-template-columns:1fr}.so-account-form-grid{grid-template-columns:1fr}.so-account-form-grid .so-account-full{grid-column:auto}.so-account-form-actions{align-items:stretch;flex-direction:column}.so-account-form-actions>button{width:100%}.so-account-track-search{flex-direction:column}.so-account-track-search button{min-height:46px}.so-account-track-title{flex-direction:column}.so-account-progress{gap:2px}.so-account-progress>div{font-size:10px}.so-account-progress i{width:15px;height:15px}.so-account-sidebar nav::-webkit-scrollbar{height:3px}}
+
+
+/* Account dashboard: in-place wishlist and order controls */
+.so-account-order-tools{display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:10px;margin:12px 0 16px}
+.so-account-order-tools input,.so-account-order-tools select{box-sizing:border-box;width:100%;min-width:0;border:1px solid #d9deea;border-radius:12px;background:#fafbfc;padding:12px 14px;font:inherit;color:#111}
+.so-account-order-tools input:focus,.so-account-order-tools select:focus{outline:2px solid #15965f;outline-offset:1px}
+.so-account-wishlist-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.so-account-wishlist-card{min-width:0;overflow:hidden;border:1px solid #e4e7ef;border-radius:15px;background:#fff}
+.so-account-wishlist-image{display:grid;place-items:center;aspect-ratio:1/1;background:#f5f6f7;overflow:hidden}
+.so-account-wishlist-image img{width:100%;height:100%;object-fit:cover}
+.so-account-wishlist-card>div{display:grid;gap:8px;padding:12px}
+.so-account-wishlist-card>div>b{font-size:14px;line-height:1.4}
+.so-account-wishlist-card>div>strong{font-size:17px}
+.so-account-wishlist-actions{display:flex;gap:7px;flex-wrap:wrap}
+.so-account-wishlist-actions button{flex:1;min-width:0;border:1px solid #111;border-radius:22px;background:#111;color:#fff;padding:9px 10px;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.so-account-wishlist-actions button+button{background:#fff;color:#111}
+.so-account-tracking-card>button{border:0;background:transparent;color:#10784c;font:inherit;font-weight:700;cursor:pointer}
+.so-account-content button:focus-visible,.so-account-sidebar button:focus-visible,.so-account-content a:focus-visible{outline:2px solid #15965f;outline-offset:3px}
+@media(max-width:900px){.so-account-wishlist-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.so-account-order-tools{grid-template-columns:1fr}.so-account-wishlist-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.so-account-wishlist-actions{flex-direction:column}.so-account-wishlist-actions button{width:100%}}
+@media(max-width:380px){.so-account-wishlist-grid{grid-template-columns:1fr}}
