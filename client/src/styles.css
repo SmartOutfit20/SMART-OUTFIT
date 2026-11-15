@@ -10405,10 +10405,11 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 
 
-/* Tablet: 35px side spacing only for standard sections. */
+/* Tablet: 35px left and right spacing only for standard sections. */
 @media (min-width:651px) and (max-width:1024px){
   .section{
-    padding: 35px 35px;
+    padding-left:35px;
+    padding-right:35px;
   }
 }
 
