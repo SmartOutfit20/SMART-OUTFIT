@@ -12347,7 +12347,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .admin-shell .admin-signout{display:flex;align-items:center;justify-content:center;gap:8px;min-height:36px;border:1px solid #ffffff25;border-radius:8px;background:#ffffff0a;color:#d7d7e2;font-size:10px;font-weight:700}
 .admin-shell .admin-main{width:auto;min-width:0;margin-left:237px;background:var(--admin-bg)}
 .admin-shell .admin-top{
- position:sticky;top:0;z-index:1400;height:88px;padding:0 28px;background:#fff;border-bottom:1px solid var(--admin-border);
+ position:sticky;top:0;z-index:1400;height:88px;padding:0 max(28px,calc((100% - 1220px)/2 + 28px));background:#fff;border-bottom:1px solid var(--admin-border);
  display:grid;grid-template-columns:minmax(160px,1fr) minmax(220px,440px) auto;align-items:center;gap:24px;
  box-shadow:0 3px 16px #25204408;
 }
@@ -12371,7 +12371,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .admin-shell .admin-profile-dropdown{position:absolute;top:calc(100% + 10px);right:0;z-index:1600;display:grid;min-width:160px;padding:6px;border:1px solid var(--admin-border);border-radius:11px;background:#fff;box-shadow:0 12px 28px #211b3a1a}
 .admin-shell .admin-profile-dropdown a,.admin-shell .admin-profile-dropdown button{padding:10px;border:0;border-radius:7px;background:transparent;color:var(--admin-ink);text-align:left;font-size:11px}
 .admin-shell .admin-profile-dropdown a:hover,.admin-shell .admin-profile-dropdown button:hover{background:#f6f2ff}
-.admin-shell .admin-content{width:100%;max-width:1280px;margin:0 auto;padding:27px 28px 0!important;min-width:0;overflow-x:clip}
+.admin-shell .admin-content{width:100%;max-width:1220px;margin:0 auto;padding:27px 28px 0!important;min-width:0;overflow-x:clip}
 .admin-shell .admin-content h1{font-size:clamp(24px,2.3vw,30px);letter-spacing:-.8px;color:var(--admin-ink)}
 .admin-shell .admin-content .eyebrow{color:var(--purple);letter-spacing:1.5px}
 .admin-shell .admin-welcome{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 0 22px}
