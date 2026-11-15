@@ -342,7 +342,32 @@ export function CustomerDashboard(){
  async function changePassword(e){e.preventDefault();setPasswordError('');setPasswordNotice('');if(newPassword.length<8){setPasswordError('পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে।');return}if(newPassword!==confirmPassword){setPasswordError('নতুন পাসওয়ার্ড দুটি মিলছে না।');return}setPasswordBusy(true);try{const {data}=await api.post('/auth/change-password',{currentPassword,newPassword});setPasswordNotice(data.message||'Password updated.');setCurrentPassword('');setNewPassword('');setConfirmPassword('')}catch(e){setPasswordError(e.response?.data?.message||'Password could not be changed.')}finally{setPasswordBusy(false)}}
  const totalValue=orders.filter(o=>!['cancelled','returned'].includes(o.status)).reduce((n,o)=>n+Number(o.total||0),0)
  const customerId=String(user?._id||user?.id||'').slice(-8).toUpperCase()
- if(!user)return <div className="auth-wrap"><div className="auth-card"><h1>MY ACCOUNT</h1><p>Sign in to view your customer profile, order history and tracking.</p><Link className="btn btn-dark full-btn" to="/login">SIGN IN</Link><p className="auth-switch">New customer? <Link to="/register">Create an account</Link></p></div></div>
+ if(!user)return <main className="account-loggedout">
+  <div className="account-loggedout-inner">
+   <div className="account-loggedout-copy">
+    <span className="account-loggedout-eyebrow"><LockKeyhole size={14}/> SMART OUTFIT · MY ACCOUNT</span>
+    <h1>আপনার স্টাইলের<br/><em>নিজস্ব ঠিকানা।</em></h1>
+    <p>আপনার অ্যাকাউন্টে সাইন ইন করে অর্ডার, ডেলিভারি এবং পছন্দের পণ্য—সবকিছু এক জায়গায় সহজে দেখুন।</p>
+    <div className="account-loggedout-actions">
+     <Link className="account-loggedout-primary" to="/login">সাইন ইন করুন <ArrowRight size={17}/></Link>
+     <Link className="account-loggedout-secondary" to="/register">নতুন অ্যাকাউন্ট তৈরি করুন</Link>
+    </div>
+    <div className="account-loggedout-trust"><span><ShieldCheck size={16}/> নিরাপদ অ্যাকাউন্ট</span><span><ShoppingBag size={16}/> সহজ অর্ডার ম্যানেজমেন্ট</span></div>
+   </div>
+   <div className="account-loggedout-visual">
+    <div className="account-loggedout-orbit account-orbit-one"></div><div className="account-loggedout-orbit account-orbit-two"></div>
+    <div className="account-loggedout-bag"><ShoppingBag size={48} strokeWidth={1.35}/><span>SMART<br/>OUTFIT</span></div>
+    <div className="account-loggedout-float account-float-top"><PackageCheck size={18}/><span><b>Order updates</b><small>আপনার অর্ডারের খবর</small></span></div>
+    <div className="account-loggedout-float account-float-bottom"><Heart size={18}/><span><b>Your wishlist</b><small>পছন্দের কালেকশন</small></span></div>
+   </div>
+  </div>
+  <section className="account-loggedout-benefits" aria-label="Account benefits">
+   <article><span><PackageCheck size={20}/></span><div><b>অর্ডার ট্র্যাক করুন</b><small>অর্ডারের অগ্রগতি এক নজরে দেখুন</small></div></article>
+   <article><span><Heart size={20}/></span><div><b>পছন্দের পণ্য রাখুন</b><small>আপনার Wishlist এক জায়গায় সাজিয়ে রাখুন</small></div></article>
+   <article><span><UserRound size={20}/></span><div><b>তথ্য সংরক্ষণ করুন</b><small>প্রোফাইল ও ডেলিভারি তথ্য সহজে পরিচালনা করুন</small></div></article>
+  </section>
+  <p className="account-loggedout-footnote">নতুন এখানে? <Link to="/register">আজই আপনার SMART OUTFIT অ্যাকাউন্ট খুলুন <ArrowRight size={13}/></Link></p>
+ </main>
  return <div className="account-wrap account-dashboard" lang="bn">
   <div className="account-welcome"><div><span className="eyebrow">SMART OUTFIT · CUSTOMER SPACE</span><h1>আপনার অ্যাকাউন্ট</h1><p>আপনার প্রোফাইল, অর্ডার এবং ডেলিভারির তথ্য এক জায়গায় পরিচালনা করুন।</p></div><button className="account-logout" onClick={logout}>Sign out</button></div>
   <CustomerAccountMenu/>
