@@ -1067,7 +1067,7 @@ body{padding-bottom:0!important;}
 .pwa-install-copy{display:flex;flex:1;min-width:0;flex-direction:column;gap:3px}
 .pwa-install-copy strong{font-size:13px;font-weight:800;line-height:1.25}
 .pwa-install-copy small{font-size:11px;color:#68766d;line-height:1.35}
-.pwa-install-cta{flex:0 0 auto;border:0;border-radius:9px;padding:9px 13px;background:linear-gradient(135deg,#15965f,#10784c);color:#fff;font:700 12px inherit;cursor:pointer}
+.pwa-install-cta{flex:0 0 auto;border:0;border-radius:9px;padding:9px 13px;background:linear-gradient(135deg,#15965f,#10784c);color:#fff;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer}
 .pwa-install-cta:hover{filter:brightness(.95)}
 .pwa-install-dismiss{position:absolute;right:6px;top:6px;display:grid;place-items:center;width:23px;height:23px;padding:0;border:0;border-radius:50%;background:transparent;color:#68766d;cursor:pointer}
 .pwa-install-dismiss:hover{background:#eef5f0}
