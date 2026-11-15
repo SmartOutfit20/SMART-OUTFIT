@@ -10467,3 +10467,56 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     letter-spacing:1px;
   }
 }
+
+/* Benefits layout: center each item on tablet and keep all items in one compact mobile row. */
+@media (min-width:651px) and (max-width:1024px){
+  .home-page > .benefits,
+  .benefits{
+    justify-items:center;
+  }
+  .home-page > .benefits > div,
+  .benefits > div{
+    grid-template-columns:minmax(0,1fr);
+    justify-items:center;
+    text-align:center;
+    row-gap:5px;
+  }
+  .home-page > .benefits svg,
+  .benefits svg{
+    grid-row:auto;
+  }
+}
+@media (max-width:650px){
+  .home-page > .benefits,
+  .benefits{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    column-gap:6px;
+    row-gap:0;
+  }
+  .home-page > .benefits > div,
+  .benefits > div{
+    grid-template-columns:minmax(0,1fr);
+    justify-items:center;
+    text-align:center;
+    column-gap:0;
+    row-gap:4px;
+    min-width:0;
+  }
+  .home-page > .benefits svg,
+  .benefits svg{
+    grid-row:auto;
+    width:16px;
+    height:16px;
+  }
+  .home-page > .benefits b,
+  .benefits b{
+    font-size:9px;
+    line-height:1.25;
+  }
+  .home-page > .benefits small,
+  .benefits small{
+    font-size:8px;
+    line-height:1.25;
+  }
+}
+
