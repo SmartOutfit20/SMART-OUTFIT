@@ -10520,8 +10520,13 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   }
 }
 
-/* Mobile: keep homepage category tiles compact in a single horizontal row; preserve section gutters. */
+/* Mobile: keep homepage section side gutters and set 35px vertical spacing. */
 @media (max-width:650px){
+  .home-page > .section,
+  .section{
+    padding-top:35px;
+    padding-bottom:35px;
+  }
   .home-page > .section .category-grid{
     grid-template-columns:repeat(4,minmax(0,1fr));
     gap:6px;
