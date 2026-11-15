@@ -11425,3 +11425,9 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
  .admin-products-page .admin-product-overview b{font-size:20px}
  .admin-products-page .admin-product-editor-actions>div:last-child{grid-template-columns:minmax(0,1fr)}
 }
+
+
+/* Footer brand mark: preserve transparent logo artwork without a white tile */
+.footer-complete .footer-brand .brand-logo{background:transparent;padding:0;border-radius:0;box-shadow:none;}
+.admin-store-logo-preview.admin-footer-logo-preview{background:#21113c;border-color:#51435f;}
+.admin-store-logo-preview.admin-footer-logo-preview span{color:#fff;}
