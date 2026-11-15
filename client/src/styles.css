@@ -12547,3 +12547,22 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     max-height: min(55vh, 360px);
   }
 }
+
+
+/* Storefront search: suppress the inherited purple keyboard/focus ring. */
+.header .store-header-search:focus-within {
+  border-color: #e1ebe4 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+.header .store-header-search input:focus,
+.header .store-header-search input:focus-visible {
+  border-color: transparent !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+.header .store-header-search .store-header-search-icon:focus,
+.header .store-header-search .store-header-search-icon:focus-visible {
+  outline: 0 !important;
+  box-shadow: none !important;
+}
