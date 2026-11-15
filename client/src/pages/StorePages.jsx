@@ -224,22 +224,6 @@ export function Cart(){
   </div>}
  </div>
 }
-export function Wishlist(){
- const {wishlist}=useShop(),[items,setItems]=useState([]),[loading,setLoading]=useState(false),[error,setError]=useState(''),[retryCount,setRetryCount]=useState(0)
- useEffect(()=>{
-  let live=true
-  setError('')
-  if(!wishlist.length){setItems([]);setLoading(false);return()=>{live=false}}
-  setLoading(true)
-  Promise.allSettled(wishlist.map(id=>api.get('/products/'+id).then(({data})=>normalizeProduct(data)))).then(results=>{
-   if(!live)return
-   setItems(results.filter(result=>result.status==='fulfilled').map(result=>result.value))
-   if(results.some(result=>result.status==='rejected'&&![404,410].includes(result.reason?.response?.status)))setError('কিছু সংরক্ষিত পণ্য লোড করা যায়নি। আবার চেষ্টা করুন।')
-  }).finally(()=>{if(live)setLoading(false)})
-  return()=>{live=false}
- },[wishlist,retryCount])
- return <div className="page-wrap account-subpage wishlist-subpage"><CustomerAccountMenu/><span className="eyebrow">SAVED FOR LATER</span><h1>YOUR WISHLIST</h1>{loading&&<p className="muted" role="status">আপনার সংরক্ষিত পণ্যগুলো লোড হচ্ছে…</p>}{error&&<div className="orders-error-state" role="alert"><p>{error}</p><button type="button" onClick={()=>setRetryCount(value=>value+1)}>আবার চেষ্টা করুন</button></div>}<div className="product-grid" aria-busy={loading}>{items.map(p=><ProductCard key={p.id} product={p}/>)}</div>{!loading&&!error&&!items.length&&<div className="empty-state"><h2>{wishlist.length?'Some saved products are no longer available.':'Save the styles you love.'}</h2><p>Your wishlist stays saved on this device.</p><Link to="/shop" className="btn btn-dark">EXPLORE PRODUCTS</Link></div>}</div>
-}
 export function Checkout(){
  const {cart,clearCart}=useShop(),{user}=useAuth()
  const [form,setForm]=useState({name:user?.name||'',phone:user?.phone||'',email:user?.email||'',division:'',district:'',upazila:'',address:''})
