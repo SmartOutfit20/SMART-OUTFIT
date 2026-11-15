@@ -12502,3 +12502,38 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     display: none;
   }
 }
+
+
+/* Mobile search opens as an overlay below the header; it must not reflow header contents. */
+@media (max-width: 650px) {
+  .header {
+    position: sticky;
+    isolation: isolate;
+  }
+  .header .store-header-actions {
+    position: static;
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 0;
+    margin-left: auto;
+  }
+  .header .store-header-actions.mobile-search-open .store-header-search {
+    position: absolute;
+    top: calc(100% + 7px);
+    left: 12px;
+    right: 12px;
+    z-index: 1800;
+    display: flex;
+    order: initial;
+    flex: none;
+    width: auto;
+    max-width: none;
+    height: 44px;
+    margin: 0;
+    box-shadow: 0 10px 28px rgba(24, 34, 29, .14);
+  }
+  .header .store-header-actions.mobile-search-open .store-search-suggestions {
+    top: calc(100% + 6px);
+    max-height: min(55vh, 360px);
+  }
+}
