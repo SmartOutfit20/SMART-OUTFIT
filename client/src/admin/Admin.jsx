@@ -272,8 +272,8 @@ export function AdminOrders(){
 export function AdminCategories(){
  const {user}=useAuth(),canWrite=hasAdminPermission(user,'categories.write');
  const empty=()=>({name:'',slug:'',parent:'',sortOrder:'0',image:'',isActive:true})
- const [cats,setCats]=useState([]),[products,setProducts]=useState([]),[form,setForm]=useState(empty()),[editing,setEditing]=useState(null),[query,setQuery]=useState(''),[error,setError]=useState(''),[notice,setNotice]=useState(''),[busy,setBusy]=useState(false),[uploading,setUploading]=useState(false),[showInactive,setShowInactive]=useState(true)
- async function load(){setBusy(true);setError('');try{const [c,p]=await Promise.all([getAdminCategories(),api.get('/products/admin/all')]);setCats(c||[]);setProducts(p.data||[])}catch(e){setError(e.response?.data?.message||'Category list unavailable.')}finally{setBusy(false)}}
+ const [cats,setCats]=useState([]),[form,setForm]=useState(empty()),[editing,setEditing]=useState(null),[query,setQuery]=useState(''),[error,setError]=useState(''),[notice,setNotice]=useState(''),[busy,setBusy]=useState(false),[uploading,setUploading]=useState(false),[showInactive,setShowInactive]=useState(true)
+ async function load(){setBusy(true);setError('');try{const c=await getAdminCategories();setCats(c||[])}catch(e){setError(e.response?.data?.message||'Category list unavailable.')}finally{setBusy(false)}}
  useEffect(()=>{load()},[])
  function slugify(value){return String(value||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'').slice(0,80)}
  function startEdit(category){setEditing(category._id);setForm({name:category.name||'',slug:category.slug||'',parent:category.parent?._id||category.parent||'',sortOrder:String(category.sortOrder??0),image:category.image||'',isActive:category.isActive!==false});setNotice('');setError('')}
@@ -285,8 +285,8 @@ export function AdminCategories(){
  async function move(category,direction){const ordered=[...cats].sort((a,b)=>(a.sortOrder||0)-(b.sortOrder||0));const i=ordered.findIndex(x=>x._id===category._id),j=i+direction;if(j<0||j>=ordered.length)return;[ordered[i],ordered[j]]=[ordered[j],ordered[i]];setBusy(true);setError('');try{await Promise.all(ordered.map((item,index)=>api.patch('/categories/'+item._id,{sortOrder:index})));setNotice('Category display order updated.');await load()}catch(e){setError(e.response?.data?.message||'Could not reorder categories.')}finally{setBusy(false)}}
  const visible=cats.filter(x=>(showInactive||x.isActive!==false)&&(x.name+' '+(x.slug||'')).toLowerCase().includes(query.toLowerCase()))
  const activeCount=cats.filter(x=>x.isActive!==false).length
- const totalProducts=products.length
- const countFor=id=>products.filter(p=>String(p.category?._id||p.category||'')===String(id)).length
+ const totalProducts=cats.reduce((total,category)=>total+Number(category.productCount||0),0)
+ const countFor=id=>Number(cats.find(category=>String(category._id)===String(id))?.productCount||0)
  return <div className="admin-categories-page">
   <div className="admin-welcome"><div><span className="eyebrow">CATALOGUE STRUCTURE</span><h1>Categories</h1><p>Build a clear store catalogue. Manage category names, images, parent groups and storefront visibility.</p></div><button className="admin-refresh" type="button" onClick={load} disabled={busy}><RefreshCw size={14}/> Refresh</button></div>
   {error&&<p className="api-notice">{error}</p>}{notice&&<p className="admin-success">{notice}</p>}
