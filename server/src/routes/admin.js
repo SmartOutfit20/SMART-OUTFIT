@@ -41,10 +41,10 @@ router.get('/roles',requirePermission('roles.read'),async(req,res,next)=>{try{
 router.post('/roles',requirePermission('staff.manage'),async(req,res,next)=>{try{
  const name=String(req.body.name||'').trim(),email=String(req.body.email||'').trim().toLowerCase(),phone=String(req.body.phone||'').trim(),password=String(req.body.password||''),role=String(req.body.role||'viewer')
  if(name.length<2||name.length>80)return res.status(400).json({message:'Staff name must be 2–80 characters'})
- if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email))return res.status(400).json({message:'Enter a valid staff email address'})
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return res.status(400).json({message:'Enter a valid staff email address'})
  if(password.length<10||password.length>128)return res.status(400).json({message:'Staff password must be 10–128 characters'})
  if(!STAFF_ROLES.includes(role))return res.status(400).json({message:'Select a valid staff role'})
- if(phone&&!/^01[3-9]\\d{8}$/.test(phone))return res.status(400).json({message:'Enter a valid Bangladesh mobile number'})
+ if(phone&&!/^01[3-9]\d{8}$/.test(phone))return res.status(400).json({message:'Enter a valid Bangladesh mobile number'})
  const exists=await User.findOne({$or:[{email},...(phone?[{phone}]:[])]})
  if(exists)return res.status(409).json({message:'An account already exists with this email or phone number'})
  const user=await User.create({name,email,phone:phone||undefined,passwordHash:await bcrypt.hash(password,12),role,isActive:true})
