@@ -12680,3 +12680,48 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .admin-shell .admin-brand-caption{display:block;min-height:9px}
 .admin-shell .admin-brand-caption small{display:block;margin:0;color:#a9b8ad;font:700 8px 'DM Sans',sans-serif;letter-spacing:1.7px}
 .admin-shell .admin-brand-logo[src=""]{display:none}
+
+
+/* Keep Admin sidebar chrome fixed; only the navigation list scrolls. */
+.admin-shell .admin-sidebar{
+  display:flex;
+  flex-direction:column;
+  height:100vh;
+  min-height:0;
+  overflow:hidden;
+  overscroll-behavior:contain;
+}
+.admin-shell .admin-nav-list{
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+  overflow-x:hidden;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+  scrollbar-color:#527b63 transparent;
+  padding-right:3px;
+}
+.admin-shell .admin-nav-list::-webkit-scrollbar{width:5px}
+.admin-shell .admin-nav-list::-webkit-scrollbar-thumb{border-radius:8px;background:#527b63}
+.admin-shell .admin-sidebar-bottom{
+  position:sticky;
+  bottom:0;
+  z-index:2;
+  flex:0 0 auto;
+  margin-top:0;
+  padding:13px 5px 2px;
+  background:#143525;
+  box-shadow:0 -9px 18px rgba(10,32,22,.22);
+}
+@media(max-width:820px){
+  .admin-shell .admin-sidebar{
+    height:100dvh;
+    min-height:0;
+    overflow:hidden;
+  }
+  .admin-shell .admin-nav-list{
+    min-height:0;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+}
