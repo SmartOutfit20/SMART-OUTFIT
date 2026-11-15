@@ -12,7 +12,7 @@ async function compressBrandIcon(file){const raw=await new Promise((resolve,reje
 async function compressStoreLogo(file){const raw=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(new Error('Could not read image'));reader.readAsDataURL(file)});const img=await new Promise((resolve,reject)=>{const el=new Image();el.onload=()=>resolve(el);el.onerror=()=>reject(new Error('Invalid image file'));el.src=raw});const scale=Math.min(1,900/Math.max(img.width,img.height));const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Image processing is unavailable.');ctx.clearRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0,canvas.width,canvas.height);let output=canvas.toDataURL('image/webp',0.78);if(output.length>900000)output=canvas.toDataURL('image/webp',0.58);if(output.length>1200000)throw new Error('Logo file is too large after compression. Choose a smaller image.');return output}
 const nav=[
  {label:'Dashboard',path:'/admin',icon:LayoutDashboard},
- {label:'Products',icon:Package,children:[{label:'Manage Products',path:'/admin/products',icon:Package},{label:'Add Product',path:'/admin/products?new=1',icon:Plus},{label:'Inventory',path:'/admin/inventory',icon:Boxes}]},
+ {label:'Products',icon:Package,children:[{label:'Manage Products',path:'/admin/products',icon:Package},{label:'Add Product',path:'/admin/products?new=1',icon:Plus},{label:'Product Reviews',path:'/admin/product-reviews',icon:Star}]},
  {label:'Orders',path:'/admin/orders',icon:ShoppingCart},
  {label:'Returns & Refunds',path:'/admin/returns',icon:RefreshCw},
  {label:'Customers',path:'/admin/customers',icon:Users},
@@ -39,6 +39,7 @@ const NAV_REQUIRED_PERMISSIONS={
  '/admin':['reports.read','analytics.read'],
  '/admin/products':['products.read'],
  '/admin/inventory':['inventory.read'],
+ '/admin/product-reviews':['products.read'],
  '/admin/orders':['orders.read'],
  '/admin/returns':['returns.read'],
  '/admin/customers':['customers.read'],
@@ -80,7 +81,7 @@ export function AdminLogin(){const {adminLogin,user,busy}=useAuth();const naviga
 export function AdminLayout(){
  const {user,logout,setProfile}=useAuth(),location=useLocation(),navigate=useNavigate();
  const [menuOpen,setMenuOpen]=useState(false),[authChecked,setAuthChecked]=useState(false),[profileOpen,setProfileOpen]=useState(false),[searchText,setSearchText]=useState('');
- const [openGroups,setOpenGroups]=useState(()=>({Products:location.pathname.startsWith('/admin/products')||location.pathname.startsWith('/admin/inventory'),Marketing:location.pathname.includes('homepage-builder'),Appearance:location.pathname.includes('homepage-builder')||location.pathname.includes('/seo'),Settings:location.pathname.includes('/settings')}));
+ const [openGroups,setOpenGroups]=useState(()=>({Products:location.pathname.startsWith('/admin/products')||location.pathname.startsWith('/admin/inventory')||location.pathname.startsWith('/admin/product-reviews')||location.pathname.startsWith('/admin/product-reviews'),Marketing:location.pathname.includes('homepage-builder'),Appearance:location.pathname.includes('homepage-builder')||location.pathname.includes('/seo'),Settings:location.pathname.includes('/settings')}));
  const [brandLogo,setBrandLogo]=useState(()=>{try{return localStorage.getItem('so-footer-logo')||''}catch{return ''}});
  useEffect(()=>{let active=true;if(!user||!staffRoles.includes(user.role)){setAuthChecked(true);return()=>{active=false}}api.get('/auth/me').then(({data})=>{if(active){setProfile?.(data);setAuthChecked(true)}}).catch(()=>{if(active){logout();setAuthChecked(true)}});return()=>{active=false}},[]);
  useEffect(()=>{let active=true;api.get('/storefront').then(({data})=>{if(!active)return;const logo=String(data?.footerLogo||'');setBrandLogo(logo);try{if(logo)localStorage.setItem('so-footer-logo',logo);else localStorage.removeItem('so-footer-logo')}catch{}}).catch(()=>{});return()=>{active=false}},[]);
