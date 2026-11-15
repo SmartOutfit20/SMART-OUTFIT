@@ -10397,3 +10397,9 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 @media (max-width: 650px) {
   .home-page > .hero.hero-loading { min-height: 260px; }
 }
+
+
+/* Tablet: give the expanded storefront navigation 35px side spacing. */
+@media (min-width:651px) and (max-width:820px){
+  .header .nav.nav-open{padding-left:35px;padding-right:35px}
+}
