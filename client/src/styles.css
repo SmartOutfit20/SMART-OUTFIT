@@ -10641,3 +10641,65 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 @media(max-width:390px){
   .account-wrap.account-dashboard{padding-left:12px!important;padding-right:12px!important}
 }
+
+
+/* SMART OUTFIT — logged-out account landing */
+.account-loggedout{
+  width:100%;max-width:1220px;margin:0 auto;padding:clamp(28px,4vw,54px) clamp(16px,3vw,36px) 64px;
+  color:#202720;font-family:'Hind Siliguri','DM Sans',sans-serif;
+}
+.account-loggedout-inner{
+  position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(300px,.95fr);
+  align-items:center;gap:36px;min-height:410px;overflow:hidden;padding:clamp(28px,5vw,64px);
+  border-radius:22px;background:linear-gradient(118deg,#f4f8f4 0%,#edf5ef 54%,#e2eee5 100%);
+  border:1px solid #e2ebe4;
+}
+.account-loggedout-copy{position:relative;z-index:1;max-width:570px}
+.account-loggedout-eyebrow{display:inline-flex;align-items:center;gap:8px;color:#16845a;font:700 11px 'Manrope','Hind Siliguri',sans-serif;letter-spacing:1.2px}
+.account-loggedout-copy h1{margin:20px 0 12px;font:800 clamp(34px,4.4vw,54px)/1.22 'Hind Siliguri',sans-serif;letter-spacing:-1.2px;color:#202720}
+.account-loggedout-copy h1 em{font-style:normal;color:#16845a}
+.account-loggedout-copy>p{max-width:480px;margin:0;color:#667269;font-size:15px;line-height:1.9}
+.account-loggedout-actions{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:28px}
+.account-loggedout-primary{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:48px;padding:0 22px;border-radius:8px;background:#16845a;color:#fff;font:700 13px 'Hind Siliguri',sans-serif;box-shadow:0 8px 20px rgba(22,132,90,.17);transition:transform .2s,background .2s}
+.account-loggedout-primary:hover{background:#116d49;transform:translateY(-2px)}
+.account-loggedout-secondary{color:#33443a;font-size:13px;font-weight:700;text-decoration:underline;text-underline-offset:4px}
+.account-loggedout-trust{display:flex;gap:20px;flex-wrap:wrap;margin-top:32px;color:#65746a;font-size:11px}
+.account-loggedout-trust span{display:inline-flex;align-items:center;gap:7px}
+.account-loggedout-trust svg{color:#16845a}
+.account-loggedout-visual{position:relative;display:grid;place-items:center;min-height:300px;isolation:isolate}
+.account-loggedout-orbit{position:absolute;border:1px solid rgba(22,132,90,.15);border-radius:50%;aspect-ratio:1}
+.account-orbit-one{width:min(90%,310px)}.account-orbit-two{width:min(68%,235px);border-style:dashed}
+.account-loggedout-bag{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;width:170px;height:190px;border-radius:18px 18px 34px 34px;background:linear-gradient(145deg,#16845a,#0d5037);color:#fff;box-shadow:0 24px 55px rgba(16,83,56,.24);transform:rotate(-5deg)}
+.account-loggedout-bag:before{content:"";position:absolute;top:-24px;width:68px;height:42px;border:5px solid #16845a;border-bottom:0;border-radius:38px 38px 0 0}
+.account-loggedout-bag span{font:800 13px/1.35 'Manrope',sans-serif;letter-spacing:2px;text-align:center}
+.account-loggedout-float{position:absolute;display:flex;align-items:center;gap:10px;padding:12px 15px;border:1px solid #e3ebe5;border-radius:12px;background:#fff;box-shadow:0 12px 30px rgba(28,51,36,.09);color:#16845a}
+.account-loggedout-float span{display:grid;gap:2px;color:#28362d}
+.account-loggedout-float b{font:700 11px 'Manrope',sans-serif}.account-loggedout-float small{font-size:10px;color:#7a857d}
+.account-float-top{top:14%;right:-2%}.account-float-bottom{bottom:12%;left:-2%}
+.account-loggedout-benefits{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:20px}
+.account-loggedout-benefits article{display:flex;align-items:center;gap:13px;min-width:0;padding:20px 18px;border:1px solid #e8ece9;border-radius:13px;background:#fff}
+.account-loggedout-benefits article>span{display:grid;place-items:center;flex:0 0 42px;width:42px;height:42px;border-radius:11px;background:#edf6ef;color:#16845a}
+.account-loggedout-benefits article div{display:grid;gap:4px;min-width:0}
+.account-loggedout-benefits article b{font-size:13px;color:#29372e}.account-loggedout-benefits article small{font-size:10px;line-height:1.6;color:#7b857e}
+.account-loggedout-footnote{text-align:center;margin:25px 0 0;color:#788279;font-size:12px}
+.account-loggedout-footnote a{display:inline-flex;align-items:center;gap:5px;color:#16845a;font-weight:700}
+@media(max-width:760px){
+ .account-loggedout{padding:24px 16px 42px}
+ .account-loggedout-inner{grid-template-columns:1fr;gap:10px;padding:30px 24px 18px;min-height:0;border-radius:17px}
+ .account-loggedout-copy h1{font-size:clamp(32px,8vw,43px);margin-top:16px}
+ .account-loggedout-copy>p{font-size:13px;line-height:1.8}
+ .account-loggedout-actions{gap:14px;margin-top:22px}
+ .account-loggedout-primary{min-height:46px;padding:0 17px}
+ .account-loggedout-trust{gap:12px;margin-top:22px;font-size:10px}
+ .account-loggedout-visual{min-height:250px;margin-top:8px}
+ .account-loggedout-bag{width:136px;height:150px}
+ .account-loggedout-bag svg{width:38px;height:38px}
+ .account-float-top{top:10%;right:0}.account-float-bottom{bottom:8%;left:0}
+ .account-loggedout-benefits{grid-template-columns:1fr;gap:9px;margin-top:13px}
+ .account-loggedout-benefits article{padding:14px}
+ .account-loggedout-footnote{font-size:11px;line-height:1.8}
+}
+@media(min-width:761px) and (max-width:1024px){
+ .account-loggedout-inner{gap:18px;padding:34px}
+ .account-float-top{right:-1%}.account-float-bottom{left:-1%}
+}
