@@ -13873,3 +13873,160 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     padding:0;
   }
 }
+
+
+
+/* Add Product: restore the exact reference card composition (scoped to this page). */
+.admin-products-page.is-add-product-page .admin-product-editor{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-areas:
+    "heading heading"
+    "details images"
+    "options pricing"
+    "settings settings"
+    "actions actions";
+  align-items:stretch;
+  gap:14px;
+  width:100%;
+  max-width:1220px;
+  min-width:0;
+  margin:0 auto;
+  padding:18px 0 12px;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+}
+.admin-products-page.is-add-product-page .admin-product-editor>.admin-product-editor-heading{grid-area:heading}
+.admin-products-page.is-add-product-page #product-details{grid-area:details}
+.admin-products-page.is-add-product-page #product-images{grid-area:images}
+.admin-products-page.is-add-product-page #product-inventory{grid-area:options}
+.admin-products-page.is-add-product-page #product-pricing{grid-area:pricing}
+.admin-products-page.is-add-product-page #product-publish{grid-area:settings}
+.admin-products-page.is-add-product-page .admin-product-editor-actions{grid-area:actions}
+.admin-products-page.is-add-product-page .admin-product-section{
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  padding:18px;
+  border:1px solid #e5eee9;
+  border-radius:14px;
+  background:#fff;
+  box-shadow:0 5px 20px rgba(16,120,76,.055);
+}
+.admin-products-page.is-add-product-page .admin-product-section-heading{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  margin:0 0 16px;
+}
+.admin-products-page.is-add-product-page .admin-product-section-icon{
+  display:grid;
+  place-items:center;
+  width:34px;
+  height:34px;
+  flex:0 0 34px;
+  border:0;
+  border-radius:50%;
+  background:#e6f6ed;
+  color:#15965f;
+}
+.admin-products-page.is-add-product-page .admin-product-section-heading h4{
+  margin:0;
+  color:#14251d;
+  font-size:15px;
+  line-height:1.35;
+}
+.admin-products-page.is-add-product-page .admin-product-section-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+.admin-products-page.is-add-product-page .admin-product-section-grid>label{
+  min-width:0;
+  color:#18251e;
+  font-size:12px;
+}
+.admin-products-page.is-add-product-page .admin-product-section-grid input:not([type=checkbox]),
+.admin-products-page.is-add-product-page .admin-product-section-grid select,
+.admin-products-page.is-add-product-page .admin-product-section-grid textarea{
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  border:1px solid #dfe8e3;
+  border-radius:8px;
+  background:#fff;
+  padding:11px 12px;
+  font-size:13px;
+}
+.admin-products-page.is-add-product-page .admin-product-section-grid textarea{resize:vertical}
+.admin-products-page.is-add-product-page #product-images .so-add-dropzone{
+  min-height:142px;
+  border:1px dashed #70c49a;
+  border-radius:11px;
+  background:#f7fcf9;
+}
+.admin-products-page.is-add-product-page #product-publish .so-add-other-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:14px;
+}
+.admin-products-page.is-add-product-page .admin-product-editor-actions{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  width:100%;
+  margin:0;
+  padding:8px 0 0;
+  border:0;
+  background:transparent;
+  box-shadow:none;
+}
+.admin-products-page.is-add-product-page .admin-product-editor-actions>div{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+.admin-products-page.is-add-product-page .admin-product-editor-actions .admin-action{
+  min-height:42px;
+  border-color:#15965f;
+  background:#15965f;
+  color:#fff;
+}
+.admin-products-page.is-add-product-page .admin-product-editor-actions .admin-cancel{
+  min-height:42px;
+  border-color:#9bcfb2;
+  color:#10784c;
+  background:#fff;
+}
+@media(max-width:900px){
+  .admin-products-page.is-add-product-page .admin-product-editor{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+  }
+  .admin-products-page.is-add-product-page #product-publish .so-add-other-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:600px){
+  .admin-products-page.is-add-product-page .admin-product-editor{
+    grid-template-columns:minmax(0,1fr);
+    grid-template-areas:
+      "heading"
+      "details"
+      "images"
+      "options"
+      "pricing"
+      "settings"
+      "actions";
+    gap:12px;
+    padding:14px 0;
+  }
+  .admin-products-page.is-add-product-page .admin-product-section{padding:15px;border-radius:12px}
+  .admin-products-page.is-add-product-page .admin-product-section-grid{grid-template-columns:minmax(0,1fr)}
+  .admin-products-page.is-add-product-page .admin-product-section-grid .admin-field-wide{grid-column:1}
+  .admin-products-page.is-add-product-page #product-publish .so-add-other-grid{grid-template-columns:minmax(0,1fr)}
+  .admin-products-page.is-add-product-page .admin-product-editor-actions{align-items:stretch;flex-direction:column}
+  .admin-products-page.is-add-product-page .admin-product-editor-actions>div{width:100%}
+  .admin-products-page.is-add-product-page .admin-product-editor-actions>div button{flex:1;justify-content:center}
+}
