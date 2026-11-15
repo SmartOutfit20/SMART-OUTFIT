@@ -13728,7 +13728,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 
 
 /* Add Product — screenshot-matched editor, isolated to the Add Product route */
-.admin-products-page.is-add-product-page{max-width:1070px;margin:0 auto;padding:16px 0 26px}
+.admin-products-page.is-add-product-page{box-sizing:border-box;width:100%;max-width:1220px;min-width:0;margin:0 auto;padding:16px 0 26px}
 .admin-products-page.is-add-product-page .admin-product-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding:0;border:0;background:transparent}
 .admin-products-page.is-add-product-page .admin-product-editor-heading{grid-column:1/-1;display:block;margin:0;padding:0 0 2px}
 .admin-products-page.is-add-product-page .admin-product-editor-heading>div{display:block}
