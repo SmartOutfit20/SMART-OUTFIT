@@ -10385,3 +10385,15 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 @media(max-width:380px){
   .product-detail-refined .detail-purchase-card-v2 .detail-action-buttons{grid-template-columns:1fr}
 }
+
+
+/* Avoid showing the fallback hero artwork while admin banners are loading. */
+.home-page > .hero.hero-loading {
+  min-height: 390px;
+  padding: 0;
+  display: block;
+  background: #fff;
+}
+@media (max-width: 650px) {
+  .home-page > .hero.hero-loading { min-height: 260px; }
+}
