@@ -22,6 +22,6 @@ export const requireRole=(...roles)=>(req,res,next)=>{
 }
 
 export const requirePermission=(permission)=>(req,res,next)=>{
- if(!req.user||!hasPermission(req.user.role,permission))return res.status(403).json({message:'Insufficient permissions'})
+ if(!req.user||!hasPermission(req.user.role,permission,req.user.permissions))return res.status(403).json({message:'Insufficient permissions'})
  next()
 }
