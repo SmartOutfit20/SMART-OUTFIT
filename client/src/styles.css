@@ -13164,3 +13164,37 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .admin-shell .admin-products-page .admin-product-form .admin-form-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:13px;border-bottom:1px solid #e7efe9}
 .admin-shell .admin-products-page .admin-product-form .admin-action{min-height:44px;padding:0 22px;border-radius:9px;background:#15965f;border-color:#15965f;font-weight:800}
 @media(max-width:680px){.admin-shell .admin-products-page .admin-product-form{padding:15px;gap:13px}.admin-shell .admin-products-page .admin-product-form .admin-form-heading{align-items:flex-start;flex-direction:column}}
+
+/* SMART OUTFIT — Product Reviews workspace only */
+.admin-shell .admin-product-reviews-page{width:100%;min-width:0}
+.admin-shell .admin-product-reviews-page .admin-welcome{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:20px}
+.admin-shell .admin-product-reviews-page .admin-welcome h1{margin:4px 0 6px;color:#111;font-size:28px;font-weight:800;letter-spacing:-.035em}
+.admin-shell .admin-product-reviews-page .admin-welcome p{margin:0;color:#68736c;font-size:13px}
+.admin-shell .admin-product-reviews-page .admin-review-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:18px 0 22px}
+.admin-shell .admin-product-reviews-page .admin-review-stats>div{min-width:0;padding:17px 19px;border:1px solid #dce8df;border-radius:13px;background:linear-gradient(140deg,#fff,#eaf7ef);box-shadow:0 5px 16px #102b1c0a}
+.admin-shell .admin-product-reviews-page .admin-review-stats>div>span{color:#35443a;font-size:12px}
+.admin-shell .admin-product-reviews-page .admin-review-stats>div>b{display:block;margin:7px 0;color:#111;font-size:25px;font-weight:800}
+.admin-shell .admin-product-reviews-page .admin-review-stats>div>small{color:#68736c;font-size:10px}
+.admin-shell .admin-product-reviews-page .admin-review-toolbar{display:flex;gap:12px;margin:0 0 16px}
+.admin-shell .admin-product-reviews-page .admin-review-toolbar input,.admin-shell .admin-product-reviews-page .admin-review-toolbar select{min-height:43px;padding:0 13px;border:1px solid #dce8df;border-radius:9px;background:#fff;color:#111;font:inherit;font-size:12px}
+.admin-shell .admin-product-reviews-page .admin-review-toolbar input{flex:1;min-width:0}
+.admin-shell .admin-product-reviews-page .admin-review-toolbar input:focus,.admin-shell .admin-product-reviews-page .admin-review-toolbar select:focus{outline:0;border-color:#15965f;box-shadow:0 0 0 3px #15965f1c}
+.admin-shell .admin-product-reviews-page .admin-review-list{display:grid;gap:12px}
+.admin-shell .admin-product-reviews-page .admin-review-card{display:grid;grid-template-columns:minmax(180px,1fr) minmax(220px,1.5fr) auto;align-items:center;gap:18px;padding:17px;border:1px solid #e0e9e3;border-radius:13px;background:#fff;box-shadow:0 4px 14px #102b1c08}
+.admin-shell .admin-product-reviews-page .admin-review-product{display:flex;align-items:center;gap:11px;min-width:0}
+.admin-shell .admin-product-reviews-page .admin-review-product img,.admin-shell .admin-product-reviews-page .admin-review-image{width:54px;height:62px;flex:0 0 54px;border-radius:8px;object-fit:cover;background:#eaf7ef;display:grid;place-items:center;color:#15965f}
+.admin-shell .admin-product-reviews-page .admin-review-product>div:last-child{display:grid;gap:4px;min-width:0}
+.admin-shell .admin-product-reviews-page .admin-review-product b{overflow-wrap:anywhere;color:#111;font-size:12px}
+.admin-shell .admin-product-reviews-page .admin-review-product small{color:#78837b;font-size:10px;overflow-wrap:anywhere}
+.admin-shell .admin-product-reviews-page .admin-review-rating{display:flex;align-items:center;gap:3px;color:#15965f}
+.admin-shell .admin-product-reviews-page .admin-review-rating b{margin-left:5px;color:#27332b;font-size:11px}
+.admin-shell .admin-product-reviews-page .admin-review-content p{margin:8px 0 0;color:#4b574f;font-size:12px;line-height:1.6;overflow-wrap:anywhere}
+.admin-shell .admin-product-reviews-page .admin-review-actions{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap}
+.admin-shell .admin-product-reviews-page .admin-review-actions>span{padding:5px 9px;border-radius:20px;font-size:10px;font-weight:700}
+.admin-shell .admin-product-reviews-page .admin-review-actions .is-approved{background:#eaf7ef;color:#10784c}
+.admin-shell .admin-product-reviews-page .admin-review-actions .is-pending{background:#fff5df;color:#946200}
+.admin-shell .admin-product-reviews-page .admin-review-actions .admin-action{min-height:34px;padding:0 11px;background:#15965f;border-color:#15965f;font-size:11px}
+.admin-shell .admin-product-reviews-page .admin-review-actions .admin-action.secondary{background:#fff;color:#10784c;border-color:#b9d9c5}
+.admin-shell .admin-product-reviews-page .admin-review-actions .admin-delete{min-height:34px;padding:0 10px;border:1px solid #f0d2d2;border-radius:8px;background:#fff;color:#b42318;font-size:11px}
+@media(max-width:1000px){.admin-shell .admin-product-reviews-page .admin-review-card{grid-template-columns:1fr 1.3fr}.admin-shell .admin-product-reviews-page .admin-review-actions{grid-column:1/-1;justify-content:flex-start}}
+@media(max-width:680px){.admin-shell .admin-product-reviews-page .admin-review-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-shell .admin-product-reviews-page .admin-welcome{align-items:flex-start;flex-direction:column}.admin-shell .admin-product-reviews-page .admin-review-toolbar{flex-direction:column}.admin-shell .admin-product-reviews-page .admin-review-card{grid-template-columns:1fr;gap:12px}.admin-shell .admin-product-reviews-page .admin-review-actions{grid-column:auto}}
