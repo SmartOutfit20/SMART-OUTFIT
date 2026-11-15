@@ -12198,3 +12198,21 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
  .admin-language-save-row .admin-action{justify-content:center;width:100%}
  .admin-language-panel{padding:17px}
 }
+
+
+/* Remove the reserved right-side gutter inside admin table cards */
+.admin-shell .admin-content .admin-table-wrap{
+  scrollbar-gutter:auto;
+}
+.admin-shell .admin-content .admin-table-wrap>.admin-table{
+  display:table;
+  width:100%;
+  min-width:760px;
+  max-width:none;
+  table-layout:auto;
+}
+@media(max-width:600px){
+  .admin-shell .admin-content .admin-table-wrap>.admin-table{
+    min-width:620px;
+  }
+}
