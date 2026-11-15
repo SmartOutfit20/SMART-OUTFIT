@@ -10520,11 +10520,11 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   }
 }
 
-/* Mobile: keep homepage section side gutters and set 35px vertical spacing. */
+/* Mobile: set section top padding to 16px while preserving bottom spacing. */
 @media (max-width:650px){
   .home-page > .section,
   .section{
-    padding-top:35px;
+    padding-top:16px;
     padding-bottom:35px;
   }
   .home-page > .section .category-grid{
