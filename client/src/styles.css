@@ -12052,3 +12052,55 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
  .admin-categories-page .admin-category-card-controls{grid-template-columns:repeat(2,minmax(0,1fr))}
  .admin-categories-page .admin-category-order{grid-column:1/-1}
 }
+
+
+/* Customer table: keep the scroll area and all columns inside the directory card */
+.admin-customers-page,
+.admin-customers-page .admin-customers-table-wrap{
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  box-sizing:border-box;
+}
+.admin-customers-page .admin-customers-table-wrap{
+  display:block;
+  margin:0;
+  overflow-x:auto;
+  overflow-y:hidden;
+  overscroll-behavior-x:contain;
+  -webkit-overflow-scrolling:touch;
+  justify-self:stretch;
+  align-self:stretch;
+}
+.admin-customers-page .admin-customers-table{
+  width:100%;
+  min-width:0;
+  table-layout:fixed;
+  border-collapse:collapse;
+}
+.admin-customers-page .admin-customers-table th,
+.admin-customers-page .admin-customers-table td{
+  min-width:0;
+  padding:13px 10px;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  word-break:normal;
+}
+.admin-customers-page .admin-customers-table th:nth-child(1){width:34%}
+.admin-customers-page .admin-customers-table th:nth-child(2){width:17%}
+.admin-customers-page .admin-customers-table th:nth-child(3){width:16%}
+.admin-customers-page .admin-customers-table th:nth-child(4){width:15%}
+.admin-customers-page .admin-customers-table th:nth-child(5){width:18%}
+.admin-customers-page .admin-customers-table .admin-customer-identity{width:100%;min-width:0}
+.admin-customers-page .admin-customers-table .admin-customer-identity>div{min-width:0}
+.admin-customers-page .admin-customers-table .admin-customer-identity b,
+.admin-customers-page .admin-customers-table .admin-customer-identity small{display:block;max-width:100%;overflow-wrap:anywhere}
+.admin-customers-page .admin-customers-table td:last-child .admin-action{max-width:100%;white-space:normal;overflow-wrap:anywhere}
+@media(max-width:1050px) and (min-width:761px){
+  .admin-customers-page .admin-customers-table{min-width:680px}
+  .admin-customers-page .admin-customers-table-wrap{max-width:100%}
+}
+@media(max-width:760px){
+  .admin-customers-page .admin-customers-table-wrap{width:100%;max-width:100%;margin:0;overflow:visible}
+  .admin-customers-page .admin-customers-table{display:block;width:100%;min-width:0;table-layout:auto}
+}
