@@ -11421,9 +11421,6 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 
 
 
-/* Add Product opens as a focused, standalone editor without the catalogue behind it. */
-.admin-products-page.is-add-product-page> :not(.admin-product-editor):not(.api-notice){display:none}
-.admin-products-page.is-add-product-page .admin-product-editor{margin:0;}
 /* SMART OUTFIT products workspace: scoped catalogue controls and responsive layout */
 .admin-products-page{width:100%;max-width:100%;min-width:0}
 .admin-products-page>*{min-width:0}
