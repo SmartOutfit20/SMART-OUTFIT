@@ -13042,12 +13042,6 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .admin-shell .admin-table-wrap{border-color:#e1ebe4!important}
 .admin-shell .admin-table th{background:#f1f8f3!important;color:#587263!important}
 .admin-shell .admin-table td{border-color:#edf3ee!important}
-.admin-shell .admin-product-form,
-.admin-shell .admin-image-uploader,
-.admin-shell .profile-photo-control{
-  border-color:#e1ebe4!important;
-  background:#fff!important;
-}
 .admin-shell .admin-product-form input:focus,
 .admin-shell .admin-product-form select:focus,
 .admin-shell .admin-product-form textarea:focus,
