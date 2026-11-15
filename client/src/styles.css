@@ -11766,3 +11766,92 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
  .admin-products-page .admin-variant-matrix{grid-template-columns:minmax(0,1fr)}
  .admin-products-page .admin-product-editor-actions>div:last-child{grid-template-columns:minmax(0,1fr)}
 }
+
+
+/* Product editor v3 — compact proportions, clearer brand colour and responsive controls */
+.admin-products-page .admin-product-editor{gap:12px;background:#f7f5fa}
+.admin-products-page .admin-product-editor-heading{padding:20px clamp(16px,2.4vw,26px)}
+.admin-products-page .admin-product-editor-heading h3{font-size:clamp(20px,2vw,26px);margin:5px 0}
+.admin-products-page .admin-product-editor-heading p{font-size:12px}
+.admin-products-page .admin-product-section-nav{margin-inline:16px;padding:5px;gap:4px}
+.admin-products-page .admin-product-section-nav a{min-height:35px;padding:7px 10px;font-size:11px}
+.admin-products-page .admin-product-section-nav a span{width:20px;height:20px;font-size:9px}
+.admin-products-page .admin-product-at-a-glance{margin-inline:16px}
+.admin-products-page .admin-product-at-a-glance>div{gap:4px;padding:12px 14px}
+.admin-products-page .admin-product-at-a-glance small{font-size:8px}
+.admin-products-page .admin-product-at-a-glance b{font-size:14px}
+.admin-products-page .admin-product-section{
+  margin-inline:16px;padding:17px 19px;border-radius:12px;
+}
+.admin-products-page .admin-product-section-heading{gap:11px;margin-bottom:14px;padding-bottom:11px}
+.admin-products-page .admin-product-section-icon{flex-basis:36px;width:36px;height:36px;border-radius:10px}
+.admin-products-page .admin-product-section-heading .eyebrow{font-size:8px}
+.admin-products-page .admin-product-section-heading h4{font-size:15px;margin:3px 0}
+.admin-products-page .admin-product-section-heading p{font-size:11px;line-height:1.5}
+.admin-products-page .admin-product-section-grid{gap:13px 16px}
+.admin-products-page .admin-product-section-grid>label{gap:6px;font-size:11px}
+.admin-products-page .admin-product-section-grid>label small{font-size:10px}
+.admin-products-page .admin-product-section-grid input:not([type=checkbox]),
+.admin-products-page .admin-product-section-grid select{min-height:42px;padding:9px 11px;font-size:12px}
+.admin-products-page .admin-product-section-grid textarea{min-height:90px;padding:10px 11px;font-size:12px}
+.admin-products-page .admin-image-uploader-enhanced{padding:14px}
+.admin-products-page .admin-image-preview img{height:108px}
+.admin-products-page .admin-image-empty{min-height:110px}
+.admin-products-page .admin-price-preview{min-height:76px;padding:12px 15px}
+.admin-products-page .admin-price-preview>b{font-size:20px}
+.admin-products-page .admin-variant-preview{padding:11px}
+.admin-products-page .admin-variant-matrix{gap:7px}
+.admin-products-page .admin-variant-matrix label{min-height:40px;padding:6px 8px}
+.admin-products-page .admin-variant-matrix input{min-height:32px}
+.admin-products-page .admin-product-publish-section{padding:16px 18px}
+.admin-products-page .admin-product-publish-section .admin-product-section-heading{margin-bottom:12px}
+.admin-products-page .admin-product-feature-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.admin-products-page .admin-product-publish-toggle{
+  min-height:62px;padding:10px 11px;gap:9px;border-radius:10px;
+  align-items:center;background:#fff;
+}
+.admin-products-page .admin-product-publish-toggle b{font-size:11px}
+.admin-products-page .admin-product-publish-toggle small{font-size:9px;line-height:1.4}
+.admin-products-page .admin-product-publish-toggle input{width:15px;height:15px}
+.admin-products-page .admin-product-publish-toggle>svg{width:15px;height:15px;flex:0 0 auto;color:#765295}
+.admin-products-page .admin-product-publish-toggle .status-published,
+.admin-products-page .admin-product-publish-toggle .status-draft{font-size:8px;padding:4px 6px}
+.admin-products-page .admin-product-editor-actions{margin-inline:16px;margin-bottom:16px;padding:13px 15px}
+.admin-products-page .admin-product-editor-actions>div:first-child b{font-size:12px}
+.admin-products-page .admin-product-editor-actions>div:first-child small{font-size:10px}
+.admin-products-page .admin-product-editor-actions>div:last-child button{min-height:39px;padding:9px 15px;font-size:11px}
+.admin-products-page .admin-product-editor-actions>div:last-child button[type=submit]{background:#4e2d6b}
+.admin-products-page .admin-product-section-nav a:hover,
+.admin-products-page .admin-product-section-nav a:focus-visible{background:#4e2d6b}
+.admin-products-page .admin-product-section-grid input:focus,
+.admin-products-page .admin-product-section-grid select:focus,
+.admin-products-page .admin-product-section-grid textarea:focus{border-color:#765295;box-shadow:0 0 0 3px rgba(104,65,141,.12)}
+@media(max-width:900px){
+ .admin-products-page .admin-product-feature-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .admin-products-page .admin-product-publish-toggle{min-height:58px}
+}
+@media(max-width:650px){
+ .admin-products-page .admin-product-editor{gap:10px}
+ .admin-products-page .admin-product-editor-heading{padding:17px 14px}
+ .admin-products-page .admin-product-editor-heading h3{font-size:19px}
+ .admin-products-page .admin-product-editor-heading p{font-size:10px}
+ .admin-products-page .admin-product-section-nav{margin-inline:9px}
+ .admin-products-page .admin-product-at-a-glance,.admin-products-page .admin-product-section{margin-inline:9px}
+ .admin-products-page .admin-product-section{padding:13px 12px}
+ .admin-products-page .admin-product-section-heading{margin-bottom:11px;padding-bottom:9px}
+ .admin-products-page .admin-product-section-heading h4{font-size:14px}
+ .admin-products-page .admin-product-section-heading p{font-size:10px}
+ .admin-products-page .admin-product-section-grid{gap:11px}
+ .admin-products-page .admin-product-publish-section{padding:13px 12px}
+ .admin-products-page .admin-product-feature-grid{grid-template-columns:minmax(0,1fr);gap:7px}
+ .admin-products-page .admin-product-publish-toggle{min-height:54px;padding:9px 10px}
+ .admin-products-page .admin-product-publish-toggle b{font-size:11px}
+ .admin-products-page .admin-product-publish-toggle small{font-size:9px}
+ .admin-products-page .admin-product-editor-actions{margin-inline:9px;margin-bottom:9px;padding:11px}
+}
+@media(max-width:390px){
+ .admin-products-page .admin-product-at-a-glance>div{padding:9px 7px}
+ .admin-products-page .admin-product-at-a-glance small{font-size:7px;letter-spacing:.5px}
+ .admin-products-page .admin-product-at-a-glance b{font-size:11px}
+ .admin-products-page .admin-product-editor-actions>div:last-child{grid-template-columns:1fr}
+}
