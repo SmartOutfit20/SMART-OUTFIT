@@ -10898,3 +10898,58 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
  .login-register-brand{min-height:56px;margin-bottom:12px}
  .login-register-brand img{max-height:56px}
 }
+
+
+/* Homepage Builder — isolated admin controls; preserves storefront layout. */
+.admin-content .admin-home-builder{
+ width:100%;max-width:1220px;margin:0 auto;display:grid;gap:18px;
+}
+.admin-content .admin-home-builder .admin-panel{
+ min-width:0;padding:22px;border:1px solid #e8e1ef;border-radius:16px;
+ background:#fff;box-shadow:0 10px 28px rgba(36,21,43,.045);
+}
+.admin-home-builder .admin-panel-heading{margin-bottom:16px}
+.admin-home-builder .admin-panel-heading h3{margin:4px 0 6px;font-size:17px;color:#30243b}
+.admin-home-builder .admin-panel-heading p{margin:0;color:#82778a;font-size:11px;line-height:1.7}
+.admin-home-builder-order{display:grid;gap:10px}
+.admin-home-builder-row{
+ display:grid;grid-template-columns:38px minmax(0,1fr) auto auto;align-items:center;gap:12px;
+ min-width:0;padding:12px;border:1px solid #eee8f3;border-radius:12px;background:#fcfbfd;
+}
+.admin-home-builder-row.is-enabled{border-color:#e2d6ed;background:#fbf8fe}
+.admin-home-builder-index{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:#eee6f5;color:#654181;font-size:11px;font-weight:900}
+.admin-home-builder-name{display:grid;gap:3px;min-width:0}
+.admin-home-builder-name b{font-size:12px;color:#352842}
+.admin-home-builder-name small{font-size:10px;color:#93899a}
+.admin-home-builder-toggle{display:flex;align-items:center;gap:7px;color:#62566d;font-size:11px;font-weight:700;white-space:nowrap}
+.admin-home-builder-toggle input{width:16px;height:16px;accent-color:#704795}
+.admin-home-builder-order-actions{display:flex;gap:6px}
+.admin-home-builder-order-actions button{min-width:34px;min-height:32px;padding:5px 9px;font-weight:800}
+.admin-home-builder-content .admin-settings-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.admin-home-builder-categories,.admin-home-builder-benefits{min-width:0;padding:14px;border:1px solid #eee7f3;border-radius:12px;background:#fcfbfd}
+.admin-home-builder-categories>b,.admin-home-builder-benefits>b{display:block;color:#473953;font-size:12px}
+.admin-home-builder-categories>p,.admin-home-builder-benefits>p{margin:5px 0 12px;color:#887e90;font-size:10px;line-height:1.6}
+.admin-home-builder-categories>div{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.admin-home-builder-categories .admin-check{min-width:0;overflow-wrap:anywhere}
+.admin-home-builder-benefits>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:12px 0;border-top:1px solid #eee8f3}
+.admin-home-builder-benefits label{display:flex;flex-direction:column;gap:6px;min-width:0;color:#51465c;font-size:11px;font-weight:800}
+.admin-home-builder-benefits input{width:100%;min-width:0;border:1px solid #e5ddea;border-radius:9px;background:#fff;padding:11px 12px;color:#30243b;font:inherit}
+.admin-home-builder .admin-settings-save{margin-top:0}
+.home-page .promo h2{white-space:pre-line}
+@media(max-width:760px){
+ .admin-content .admin-home-builder .admin-panel{padding:15px}
+ .admin-home-builder-row{grid-template-columns:32px minmax(0,1fr) auto;gap:8px;padding:10px}
+ .admin-home-builder-index{width:30px;height:30px}
+ .admin-home-builder-order-actions{grid-column:2/-1;justify-content:flex-end}
+ .admin-home-builder-content .admin-settings-grid{grid-template-columns:minmax(0,1fr)}
+ .admin-home-builder-categories>div{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .admin-home-builder-benefits>div{grid-template-columns:minmax(0,1fr)}
+ .admin-home-builder .admin-settings-save{align-items:stretch;flex-direction:column}
+ .admin-home-builder .admin-settings-save .admin-action{width:100%}
+}
+@media(max-width:420px){
+ .admin-home-builder-row{grid-template-columns:30px minmax(0,1fr);align-items:start}
+ .admin-home-builder-toggle{grid-column:2}
+ .admin-home-builder-order-actions{grid-column:2;justify-content:flex-start}
+ .admin-home-builder-categories>div{grid-template-columns:minmax(0,1fr)}
+}
