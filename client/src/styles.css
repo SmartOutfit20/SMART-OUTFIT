@@ -10698,3 +10698,78 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
  .account-loggedout-inner{gap:18px;padding:34px}
  .account-float-top{right:-1%}.account-float-bottom{left:-1%}
 }
+
+
+/* Login page — paired with the logged-out account landing, scoped to /login only. */
+.login-page-wrap.auth-premium{
+  min-height:0;padding:46px 20px 58px!important;
+  background:#fff;display:block;
+}
+.login-page-layout{
+  width:100%;max-width:1220px;margin:0 auto;
+  display:grid;grid-template-columns:minmax(0,1.12fr) minmax(390px,.88fr);
+  align-items:stretch;gap:28px;
+}
+.login-welcome-panel{
+  position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr) minmax(230px,.82fr);
+  align-items:center;gap:12px;min-height:590px;overflow:hidden;
+  padding:clamp(30px,4vw,54px);border:1px solid #e2ebe4;border-radius:22px;
+  background:linear-gradient(118deg,#f4f8f4 0%,#edf5ef 54%,#e2eee5 100%);
+}
+.login-welcome-copy{position:relative;z-index:2;max-width:510px}
+.login-welcome-eyebrow{display:inline-flex;align-items:center;gap:8px;color:#16845a;font:700 10px 'Manrope','Hind Siliguri',sans-serif;letter-spacing:1px}
+.login-welcome-copy h1{margin:22px 0 14px;color:#202720;font:800 clamp(32px,3.7vw,48px)/1.3 'Hind Siliguri',sans-serif;letter-spacing:-.8px}
+.login-welcome-copy h1 em{font-style:normal;color:#16845a}
+.login-welcome-copy>p{max-width:430px;margin:0;color:#69766d;font:400 14px/1.95 'Hind Siliguri',sans-serif}
+.login-welcome-points{display:flex;flex-wrap:wrap;gap:17px;margin-top:28px;color:#65746a;font:500 11px 'Hind Siliguri',sans-serif}
+.login-welcome-points span{display:inline-flex;align-items:center;gap:7px}
+.login-welcome-points svg{color:#16845a}
+.login-welcome-art{position:relative;display:grid;place-items:center;min-width:0;min-height:330px;isolation:isolate}
+.login-art-orbit{position:absolute;aspect-ratio:1;border:1px solid #16845a24;border-radius:50%}
+.login-art-orbit-one{width:min(100%,300px)}
+.login-art-orbit-two{width:min(78%,232px);border-style:dashed}
+.login-art-bag{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:13px;width:150px;height:178px;border-radius:17px 17px 30px 30px;background:linear-gradient(145deg,#16845a,#0d5037);color:#fff;box-shadow:0 24px 55px #1053383d;transform:rotate(-5deg)}
+.login-art-bag:before{content:"";position:absolute;top:-23px;width:62px;height:40px;border:5px solid #16845a;border-bottom:0;border-radius:36px 36px 0 0}
+.login-art-bag b{font:800 12px/1.35 'Manrope',sans-serif;letter-spacing:1.8px;text-align:center}
+.login-art-float{position:absolute;z-index:2;display:flex;align-items:center;gap:9px;padding:11px 12px;border:1px solid #e3ebe5;border-radius:11px;background:#fff;box-shadow:0 12px 28px #1c332414;color:#16845a}
+.login-art-float span{display:grid;gap:2px;color:#28362d}
+.login-art-float b{font:700 10px 'Manrope',sans-serif}
+.login-art-float small{color:#7a857d;font:400 9px 'Hind Siliguri',sans-serif}
+.login-art-float-top{top:18%;right:-3%}
+.login-art-float-bottom{bottom:16%;left:-3%}
+.login-form-card.auth-card-premium{
+  align-self:center;width:100%!important;max-width:490px;margin:0 auto;padding:clamp(27px,3.3vw,43px)!important;
+}
+.login-form-card h2{font:700 clamp(23px,2.3vw,29px)/1.4 'Hind Siliguri',sans-serif;letter-spacing:0;color:#26352b;margin:9px 0 7px}
+.login-form-card>p{font:400 13px/1.8 'Hind Siliguri',sans-serif}
+@media(max-width:1050px){
+  .login-page-layout{grid-template-columns:minmax(0,1fr) minmax(340px,.9fr);gap:18px}
+  .login-welcome-panel{grid-template-columns:1fr;min-height:570px;padding:30px}
+  .login-welcome-art{min-height:235px}
+  .login-art-bag{width:118px;height:138px}
+  .login-art-bag svg{width:38px;height:38px}
+  .login-art-float-top{right:8%}.login-art-float-bottom{left:8%}
+}
+@media(max-width:760px){
+  .login-page-wrap.auth-premium{padding:24px 16px 42px!important}
+  .login-page-layout{max-width:560px;grid-template-columns:1fr;gap:16px}
+  .login-welcome-panel{grid-template-columns:minmax(0,1fr) minmax(125px,.62fr);gap:5px;min-height:0;padding:24px 20px;border-radius:17px}
+  .login-welcome-copy h1{font-size:clamp(25px,6vw,34px);margin:14px 0 8px}
+  .login-welcome-copy>p{font-size:11px;line-height:1.75}
+  .login-welcome-points{gap:9px;margin-top:16px;font-size:9px}
+  .login-welcome-art{min-height:190px}
+  .login-art-bag{width:88px;height:108px;gap:8px}
+  .login-art-bag svg{width:29px;height:29px}
+  .login-art-bag b{font-size:9px}
+  .login-art-orbit-one{width:100%}.login-art-orbit-two{width:76%}
+  .login-art-float{gap:5px;padding:7px 8px}
+  .login-art-float svg{width:14px;height:14px}
+  .login-art-float b{font-size:8px}.login-art-float small{font-size:7px}
+  .login-art-float-top{top:8%;right:-3%}.login-art-float-bottom{bottom:7%;left:-4%}
+  .login-form-card.auth-card-premium{max-width:none;padding:25px 21px!important;border-radius:16px!important}
+}
+@media(max-width:420px){
+  .login-welcome-panel{grid-template-columns:1fr;padding:23px 20px 13px}
+  .login-welcome-art{min-height:175px;margin-top:3px}
+  .login-art-float-top{right:5%}.login-art-float-bottom{left:5%}
+}
