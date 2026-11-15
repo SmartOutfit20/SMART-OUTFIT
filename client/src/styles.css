@@ -10385,3 +10385,45 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 @media(max-width:380px){
   .product-detail-refined .detail-purchase-card-v2 .detail-action-buttons{grid-template-columns:1fr}
 }
+
+
+/* Homepage managed hero: keep every banner inside one clipped frame.
+   Fade between slides instead of pushing a second banner beside/below it. */
+.home-page > .hero.hero-managed {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  contain: paint;
+}
+.home-page > .hero.hero-managed .hero-managed-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transform: none;
+}
+.home-page > .hero.hero-managed .hero-managed-image--outgoing {
+  z-index: 1;
+  animation: smartOutfitHeroFadeOut .55s ease both !important;
+}
+.home-page > .hero.hero-managed .hero-managed-image--incoming {
+  z-index: 2;
+  animation: smartOutfitHeroFadeIn .55s ease both !important;
+}
+@keyframes smartOutfitHeroFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes smartOutfitHeroFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-page > .hero.hero-managed .hero-managed-image--incoming,
+  .home-page > .hero.hero-managed .hero-managed-image--outgoing {
+    animation-duration: .01ms !important;
+  }
+}
