@@ -81,6 +81,7 @@ export function AdminLayout(){
  const visibleNav=nav.map(item=>item.children?{...item,children:item.children.filter(child=>canAccessAdminPath(child.path,user))}:item).filter(item=>(!item.superAdmin||user?.role==='super_admin')&&(!item.children||item.children.length>0)&&(!item.path||canAccessAdminPath(item.path,user)));
  const flatNav=visibleNav.flatMap(item=>item.children?item.children.map(child=>({...child,parent:item.label})): [item]);
  const matches=searchText.trim()?flatNav.filter(item=>(item.label+' '+(item.parent||'')).toLowerCase().includes(searchText.trim().toLowerCase())).slice(0,6):[];
+ useEffect(()=>{if(!authChecked||location.pathname!=='/admin'||canAccessAdminPath('/admin',user))return;const first=visibleNav.find(item=>item.path)||visibleNav.find(item=>item.children?.length)?.children?.[0];if(first?.path)navigate(first.path,{replace:true})},[authChecked,location.pathname,user?.role,user?.permissions?.join(','),navigate]);
  const isActive=item=>item.path==='/admin'?location.pathname==='/admin':location.pathname===item.path||location.pathname.startsWith(item.path+'/');
  return <div className="admin-shell">
   {menuOpen&&<button type="button" className="admin-sidebar-backdrop" aria-label="Close navigation" onClick={()=>setMenuOpen(false)}/>}
