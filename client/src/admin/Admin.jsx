@@ -18,11 +18,11 @@ const nav=[
  {label:'Categories',path:'/admin/categories',icon:Tags},
  {label:'Coupons',path:'/admin/coupons',icon:TicketPercent},
  {label:'Marketing',icon:Sparkles,children:[{label:'Homepage Builder',path:'/admin/homepage-builder',icon:Sparkles}]},
- {label:'Appearance',icon:Eye,children:[{label:'Homepage Design',path:'/admin/homepage-builder',icon:Eye},{label:'SEO tools',path:'/admin/seo',icon:Search}]},
+ {label:'Appearance',icon:Eye,children:[{label:'Navigation menu',path:'/admin/navigation',icon:Globe},{label:'SEO tools',path:'/admin/seo',icon:Search}]},
  {label:'Reports',path:'/admin/reports',icon:BarChart3},
  {label:'Support',path:'/admin/support',icon:MessageSquare},
  {label:'Delivery',path:'/admin/delivery',icon:Truck},
- {label:'Settings',icon:Settings,children:[{label:'General Settings',path:'/admin/settings',icon:Settings},{label:'Admin Profile',path:'/admin/profile',icon:UserRound}]},
+ {label:'Settings',icon:Settings,children:[{label:'General Settings',path:'/admin/settings',icon:Settings},{label:'Language settings',path:'/admin/language',icon:Globe},{label:'Admin Profile',path:'/admin/profile',icon:UserRound}]},
  {label:'Roles & access',path:'/admin/roles',icon:Shield,superAdmin:true},
  {label:'Activity log',path:'/admin/activity-logs',icon:ClipboardList,superAdmin:true}
 ]
