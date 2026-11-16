@@ -2,6 +2,7 @@ import {Router} from 'express'
 import bcrypt from 'bcryptjs'
 import {requireAuth,requirePermission} from '../middleware/auth.js'
 import {getRolePermissions} from '../config/permissions.js'
+import {calculateRefundPlan,buildRefundCompareAndSetFilter} from '../services/refundRules.js'
 import {User,Order,SupportTicket,Setting,Product,Review,VisitorDaily,ActivityLog} from '../models/index.js'
 const router=Router()
 router.use(requireAuth)
@@ -93,21 +94,14 @@ router.post('/returns/:id/refunds',requirePermission('returns.manage'),async(req
  if(reference.length<3||reference.length>120)return res.status(400).json({message:'Enter the actual bank or mobile-wallet refund reference (3–120 characters).'})
  if(note.length>500)return res.status(400).json({message:'Refund note must be 500 characters or fewer.'})
  const order=await Order.findById(req.params.id)
- if(!order||order.status!=='returned')return res.status(404).json({message:'Returned order not found.'})
- if(!['paid','partially_refunded'].includes(order.paymentStatus))return res.status(409).json({message:'This order has no verified payment available to refund.'})
- const paidAmount=Number(order.advancePaymentAmount)>0?Number(order.advancePaymentAmount):Number(order.total||0)
- const refundedSoFar=Number(order.refundAmount||0)
- if(refundedSoFar+amount>paidAmount+0.01)return res.status(400).json({message:'Refund amount exceeds the verified amount received for this order.'})
- const nextRefundAmount=Number((refundedSoFar+amount).toFixed(2))
- const paymentStatus=nextRefundAmount+0.01>=paidAmount?'refunded':'partially_refunded'
+ if(!order)return res.status(404).json({message:'Returned order not found.'})
+ let refundPlan
+ try{refundPlan=calculateRefundPlan(order,amount)}catch(error){return res.status(error.status||400).json({message:error.message})}
  // Compare-and-set on the previous refund total: concurrent staff requests cannot
  // both spend the same remaining refundable balance.
  const updated=await Order.findOneAndUpdate(
-  {_id:order._id,status:'returned',paymentStatus:{$in:['paid','partially_refunded']},$and:[
-   refundedSoFar===0?{$or:[{refundAmount:0},{refundAmount:{$exists:false}}]}:{refundAmount:refundedSoFar},
-   {'refunds.reference':{$ne:reference}}
-  ]},
-  {$push:{refunds:{amount,reference,note,processedBy:req.user.sub,processedAt:new Date()}},$set:{refundAmount:nextRefundAmount,paymentStatus}},
+  buildRefundCompareAndSetFilter(order,reference),
+  {$push:{refunds:{amount,reference,note,processedBy:req.user.sub,processedAt:new Date()}},$set:{refundAmount:refundPlan.nextRefundAmount,paymentStatus:refundPlan.paymentStatus}},
   {new:true,runValidators:true}
  )
  if(!updated){
