@@ -101,3 +101,10 @@ The starter deliberately does not create a default administrator or expose a pub
 - Admin cannot change staff roles or read the Super Admin activity log. Editor can manage catalogue/coupons but cannot adjust inventory or orders. Support can work with support tickets and order updates but cannot verify advance payments. Viewer is read-only.
 - The admin sidebar hides Roles & Access and Activity Log from non-Super-Admin accounts.
 - Automated tests cover the permission matrix; authenticated route integration and staging database tests are still required.
+
+
+## Refund safety increment (2026-11-16)
+- Manual refund recording now uses an atomic compare-and-set against the order's previous refunded total. If two staff requests race, only the request based on the current balance can be recorded; the other receives a conflict response and must refresh.
+- Refund references cannot be duplicated within the same order, and refund amounts remain capped at the verified amount received (advance amount for prepaid orders, full total for paid COD orders).
+- Added unit tests for partial/full refunds, payment eligibility, legacy orders without a stored refund total, duplicate-reference protection and the compare-and-set guard.
+- This records a refund that staff have already completed through the bank/mobile wallet; it does not initiate a real payment-provider refund.
