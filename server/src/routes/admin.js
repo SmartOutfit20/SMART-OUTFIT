@@ -98,13 +98,25 @@ router.post('/returns/:id/refunds',requirePermission('returns.manage'),async(req
  const paidAmount=Number(order.advancePaymentAmount)>0?Number(order.advancePaymentAmount):Number(order.total||0)
  const refundedSoFar=Number(order.refundAmount||0)
  if(refundedSoFar+amount>paidAmount+0.01)return res.status(400).json({message:'Refund amount exceeds the verified amount received for this order.'})
- order.refunds=order.refunds||[]
- order.refunds.push({amount,reference,note,processedBy:req.user.sub,processedAt:new Date()})
- order.refundAmount=refundedSoFar+amount
- order.paymentStatus=order.refundAmount+0.01>=paidAmount?'refunded':'partially_refunded'
- await order.save()
- await recordAdminActivity(req,'order.refund.recorded','order',order._id,{amount,refundAmount:order.refundAmount,paymentStatus:order.paymentStatus,reference})
- res.json(order)
+ const nextRefundAmount=Number((refundedSoFar+amount).toFixed(2))
+ const paymentStatus=nextRefundAmount+0.01>=paidAmount?'refunded':'partially_refunded'
+ // Compare-and-set on the previous refund total: concurrent staff requests cannot
+ // both spend the same remaining refundable balance.
+ const updated=await Order.findOneAndUpdate(
+  {_id:order._id,status:'returned',paymentStatus:{$in:['paid','partially_refunded']},$and:[
+   refundedSoFar===0?{$or:[{refundAmount:0},{refundAmount:{$exists:false}}]}:{refundAmount:refundedSoFar},
+   {'refunds.reference':{$ne:reference}}
+  ]},
+  {$push:{refunds:{amount,reference,note,processedBy:req.user.sub,processedAt:new Date()}},$set:{refundAmount:nextRefundAmount,paymentStatus}},
+  {new:true,runValidators:true}
+ )
+ if(!updated){
+  const latest=await Order.findById(req.params.id).select('status paymentStatus refundAmount').lean()
+  if(!latest)return res.status(404).json({message:'Returned order not found.'})
+  return res.status(409).json({message:'This order or refund reference was updated by another request. Refresh the return record and try again.'})
+ }
+ await recordAdminActivity(req,'order.refund.recorded','order',updated._id,{amount,refundAmount:updated.refundAmount,paymentStatus:updated.paymentStatus,reference})
+ res.json(updated)
 }catch(e){next(e)}})
 router.get('/activity-logs',requirePermission('activity.read'),async(req,res,next)=>{
  try {
