@@ -108,3 +108,11 @@ The starter deliberately does not create a default administrator or expose a pub
 - Refund references cannot be duplicated within the same order, and refund amounts remain capped at the verified amount received (advance amount for prepaid orders, full total for paid COD orders).
 - Added unit tests for partial/full refunds, payment eligibility, legacy orders without a stored refund total, duplicate-reference protection and the compare-and-set guard.
 - This records a refund that staff have already completed through the bank/mobile wallet; it does not initiate a real payment-provider refund.
+
+
+## Public customer support flow (2026-11-17)
+- Fixed the public Contact Us form, which previously posted to an admin-only route and therefore required a staff bearer token.
+- Added `POST /api/support` outside the authenticated admin router. It validates name, reply email, optional Bangladesh mobile number, subject and message before saving a ticket for the existing Admin Support workspace.
+- Added a per-IP limit of five support submissions per 15 minutes and a honeypot field; automated submissions that fill the honeypot are accepted without being stored.
+- The endpoint returns only a receipt message and ticket ID, not the submitted personal details. Email/SMS notifications are not sent unless a separate provider integration is configured.
+- Added unit tests for input normalization, validation, Bangladesh phone format and honeypot handling. Live MongoDB ticket creation and end-to-end browser submission still require staging verification.
