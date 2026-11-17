@@ -18,6 +18,7 @@ import coupons from './routes/coupons.js'
 import admin from './routes/admin.js'
 import storefront from './routes/storefront.js'
 import analytics from './routes/analytics.js'
+import support from './routes/support.js'
 import { shouldSkipAuthRateLimit } from './config/rateLimits.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -40,6 +41,15 @@ app.use('/api/categories', categories)
 app.use('/api/orders', orders)
 app.use('/api/coupons', coupons)
 app.use('/api/admin', admin)
+app.use('/api/support', rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: req => req.method !== 'POST',
+  message: { message: 'Too many support messages. Please try again in 15 minutes.' }
+}))
+app.use('/api/support', support)
 app.use('/api/storefront', storefront)
 app.use('/api/analytics', analytics)
 
