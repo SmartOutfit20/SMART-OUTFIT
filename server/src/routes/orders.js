@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 import { requireAuth, requirePermission } from '../middleware/auth.js'
 import { Order, Product, Coupon, Setting, ActivityLog } from '../models/index.js'
 import { normalizeDeliveryAddress, deliveryAddressError, normalizeRequestedItems, calculateCouponDiscount, calculateDeliveryCharge } from '../services/checkoutRules.js'
+import { normalizeReturnRequest, assessReturnEligibility } from '../services/returnRules.js'
 
 const router = Router()
 router.use(requireAuth)
@@ -242,6 +243,28 @@ router.patch('/:id/advance-payment-verify', requirePermission('orders.verify_pay
 router.get('/mine', async (req, res, next) => {
   try { await migrateOrderSerials(); res.json(await Order.find({ customer: req.user.sub }).populate('items.product', 'name sku images').sort({ createdAt: -1 }).lean()) }
   catch (error) { next(error) }
+})
+
+router.post('/:id/return-request', async (req, res, next) => {
+  try {
+    const { reason } = normalizeReturnRequest(req.body)
+    const order = await Order.findOne({ _id: req.params.id, customer: req.user.sub })
+    if (!order) throw httpError('Order not found in your account.', 404)
+    assessReturnEligibility(order, new Date())
+    const now = new Date()
+    const updated = await Order.findOneAndUpdate(
+      { _id: order._id, customer: req.user.sub, status: 'delivered',
+        returnRequests: { $not: { $elemMatch: { status: { $in: ['requested', 'approved', 'received'] } } } } },
+      { $push: {
+        returnRequests: { reason, status: 'requested', requestedAt: now },
+        statusHistory: { status: 'return_requested', note: 'Customer submitted a return request.', createdAt: now }
+      } },
+      { new: true, runValidators: true }
+    ).lean()
+    if (!updated) throw httpError('A return request is already active or this order is no longer eligible. Refresh your order and try again.', 409)
+    await recordOrderActivity(req, 'order.return_requested', updated, { requestCount: updated.returnRequests?.length || 1 })
+    res.status(201).json({ message: 'Your return request has been submitted for store review.', order: updated })
+  } catch (error) { next(error) }
 })
 
 router.get('/admin/all', requirePermission('orders.read'), async (req, res, next) => {

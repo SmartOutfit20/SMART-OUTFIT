@@ -116,3 +116,10 @@ The starter deliberately does not create a default administrator or expose a pub
 - Added a per-IP limit of five support submissions per 15 minutes and a honeypot field; automated submissions that fill the honeypot are accepted without being stored.
 - The endpoint returns only a receipt message and ticket ID, not the submitted personal details. Email/SMS notifications are not sent unless a separate provider integration is configured.
 - Added unit tests for input normalization, validation, Bangladesh phone format and honeypot handling. Live MongoDB ticket creation and end-to-end browser submission still require staging verification.
+
+
+## Customer returns increment (2026-11-18)
+- Customers can submit a return request from their own delivered order within seven days of the recorded delivery timestamp. The API checks order ownership, verified payment, delivery history, request reason length and active-request duplication.
+- Return requests are embedded in the order record and include customer reason, review status, reviewer, timestamps and store note. Submission uses an atomic order update to prevent concurrent duplicate active requests.
+- Staff with `returns.manage` can approve or reject a pending request; rejection requires a customer-visible reason. Approved items can be marked received. Only after receipt does the order enter the existing `returned` state and become eligible for the existing manual refund ledger.
+- Refund recording remains a manual record of money already sent; no bank/mobile-wallet transfer is initiated. The return-request window is currently fixed at seven days. Live database and browser end-to-end tests are still required.
