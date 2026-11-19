@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs'
 import {requireAuth,requirePermission} from '../middleware/auth.js'
 import {getRolePermissions} from '../config/permissions.js'
 import {calculateRefundPlan,buildRefundCompareAndSetFilter} from '../services/refundRules.js'
+import {normalizeReturnReview,buildReturnReviewCompareAndSetFilter,buildReturnReviewUpdate} from '../services/returnRules.js'
 import {User,Order,SupportTicket,Setting,Product,Review,VisitorDaily,ActivityLog} from '../models/index.js'
 const router=Router()
 router.use(requireAuth)
@@ -88,29 +89,30 @@ router.get('/returns',requirePermission('returns.read'),async(req,res,next)=>{tr
  res.json(orders)
 }catch(e){next(e)}})
 router.patch('/returns/:id/request',requirePermission('returns.manage'),async(req,res,next)=>{try{
- const status=String(req.body.status||''),requestId=String(req.body.requestId||''),note=String(req.body.note||'').trim()
- if(!['approved','rejected','received'].includes(status))return res.status(400).json({message:'Choose approve, reject or mark received.'})
- if(note.length>500)return res.status(400).json({message:'Return review note must be 500 characters or fewer.'})
- if(status==='rejected'&&note.length<5)return res.status(400).json({message:'Add a rejection reason of at least 5 characters so the customer can understand the decision.'})
- const order=await Order.findById(req.params.id)
- if(!order)return res.status(404).json({message:'Order not found.'})
- const request=order.returnRequests.id(requestId)
- if(!request)return res.status(404).json({message:'Return request not found.'})
- if((status==='approved'||status==='rejected')&&request.status!=='requested')return res.status(409).json({message:'Only a pending return request can be approved or rejected.'})
- if(status==='received'&&request.status!=='approved')return res.status(409).json({message:'Only an approved return can be marked as received.'})
- if(status==='received'){
-  if(order.status!=='delivered')return res.status(409).json({message:'This order is no longer in the delivered state.'})
-  order.status='returned'
-  order.statusHistory=order.statusHistory||[]
-  order.statusHistory.push({status:'returned',note:'Returned item(s) received and checked by the store.',createdAt:new Date()})
+ const orderId=String(req.params.id||''),requestId=String(req.body?.requestId||'')
+ if(!/^[a-f\\d]{24}$/i.test(orderId))return res.status(400).json({message:'Invalid order ID.'})
+ if(!/^[a-f\\d]{24}$/i.test(requestId))return res.status(400).json({message:'Invalid return request ID.'})
+ const {status,note}=normalizeReturnReview(req.body)
+ const now=new Date()
+ // One atomic compare-and-set prevents two staff members from reviewing the same
+ // pending request, and prevents receipt after the order has left delivered state.
+ const updated=await Order.findOneAndUpdate(
+  buildReturnReviewCompareAndSetFilter(orderId,requestId,status),
+  buildReturnReviewUpdate({status,note,reviewerId:req.user.sub,now}),
+  {new:true,runValidators:true}
+ ).populate('customer','name email phone')
+ if(!updated){
+  const order=await Order.findById(orderId).select('returnRequests._id').lean()
+  if(!order)return res.status(404).json({message:'Order not found.'})
+  const requestExists=(order.returnRequests||[]).some(item=>String(item._id)===requestId)
+  if(!requestExists)return res.status(404).json({message:'Return request not found.'})
+  const message=status==='received'
+   ?'This return was already updated or the order is no longer delivered. Refresh the return record.'
+   :'This return request is no longer pending. Refresh the return record before reviewing it.'
+  return res.status(409).json({message})
  }
- request.status=status
- request.reviewedAt=new Date()
- request.reviewedBy=req.user.sub
- request.adminNote=note
- await order.save()
- await recordAdminActivity(req,'order.return_request.'+status,'order',order._id,{requestId,status})
- res.json(order)
+ await recordAdminActivity(req,'order.return_request.'+status,'order',updated._id,{requestId,status})
+ res.json(updated)
 }catch(e){next(e)}})
 router.post('/returns/:id/refunds',requirePermission('returns.manage'),async(req,res,next)=>{try{
  const amount=Number(req.body.amount),reference=String(req.body.reference||'').trim(),note=String(req.body.note||'').trim()
