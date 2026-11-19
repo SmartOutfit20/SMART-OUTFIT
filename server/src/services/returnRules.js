@@ -1,6 +1,8 @@
 const RETURN_WINDOW_DAYS = 7
 const DAY_MS = 24 * 60 * 60 * 1000
 const REVIEW_EXPECTED_STATUS = Object.freeze({ approved: 'requested', rejected: 'requested', received: 'approved' })
+const GENERIC_ORDER_STATUSES = new Set(['confirmed', 'processing', 'shipped', 'delivered', 'cancelled'])
+export function isGenericOrderStatusAllowed(status) { return GENERIC_ORDER_STATUSES.has(status) }
 function conflict(message) { return Object.assign(new Error(message), { status: 409 }) }
 function badRequest(message) { return Object.assign(new Error(message), { status: 400 }) }
 export function normalizeReturnRequest(input) {
