@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 import { requireAuth, requirePermission } from '../middleware/auth.js'
 import { Order, Product, Coupon, Setting, ActivityLog } from '../models/index.js'
 import { normalizeDeliveryAddress, deliveryAddressError, normalizeRequestedItems, calculateCouponDiscount, calculateDeliveryCharge } from '../services/checkoutRules.js'
-import { normalizeReturnRequest, assessReturnEligibility } from '../services/returnRules.js'
+import { normalizeReturnRequest, assessReturnEligibility, isGenericOrderStatusAllowed } from '../services/returnRules.js'
 
 const router = Router()
 router.use(requireAuth)
@@ -275,8 +275,10 @@ router.get('/admin/all', requirePermission('orders.read'), async (req, res, next
 router.patch('/:id/status', requirePermission('orders.update'), async (req, res, next) => {
   let session
   try {
-    const allowed = ['confirmed', 'processing', 'shipped', 'delivered', 'cancelled', 'returned']
-    if (!allowed.includes(req.body.status)) return res.status(400).json({ message: 'Invalid order status' })
+    if (!isGenericOrderStatusAllowed(req.body.status)) {
+      if (req.body.status === 'returned') return res.status(409).json({ message: 'Mark an approved return as received in Returns & Refunds; returned status cannot be set directly.' })
+      return res.status(400).json({ message: 'Invalid order status' })
+    }
     session = await mongoose.startSession()
     let updatedOrder
     await session.withTransaction(async () => {
