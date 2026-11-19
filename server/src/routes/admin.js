@@ -90,8 +90,8 @@ router.get('/returns',requirePermission('returns.read'),async(req,res,next)=>{tr
 }catch(e){next(e)}})
 router.patch('/returns/:id/request',requirePermission('returns.manage'),async(req,res,next)=>{try{
  const orderId=String(req.params.id||''),requestId=String(req.body?.requestId||'')
- if(!/^[a-f\\d]{24}$/i.test(orderId))return res.status(400).json({message:'Invalid order ID.'})
- if(!/^[a-f\\d]{24}$/i.test(requestId))return res.status(400).json({message:'Invalid return request ID.'})
+ if(!/^[a-f0-9]{24}$/i.test(orderId))return res.status(400).json({message:'Invalid order ID.'})
+ if(!/^[a-f0-9]{24}$/i.test(requestId))return res.status(400).json({message:'Invalid return request ID.'})
  const {status,note}=normalizeReturnReview(req.body)
  const now=new Date()
  // One atomic compare-and-set prevents two staff members from reviewing the same
