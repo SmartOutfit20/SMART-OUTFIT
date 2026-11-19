@@ -128,4 +128,5 @@ The starter deliberately does not create a default administrator or expose a pub
 - Staff approve/reject/receive decisions now use a single MongoDB compare-and-set update against the exact embedded return request ID and its expected prior status. Concurrent reviewers cannot both change the same pending request.
 - Marking a return as received also requires the parent order to remain delivered; the same atomic update changes the order to returned and appends its status-history entry.
 - Added normalized review-note validation and conflict responses so stale Admin screens must refresh rather than silently overwrite another staff member's decision.
-- Added unit tests for transition filters, note validation and the atomic received update. These tests verify the update construction; an actual concurrent MongoDB integration test remains outstanding.
+- Removed `returned` from the generic order-status API. Staff must mark an approved request as received through Returns & Refunds; this prevents directly changing an order to returned and bypassing the review/receipt step.
+- Added unit tests for transition filters, note validation, the atomic received update and the generic status guard. These tests verify policy/update construction; an actual concurrent MongoDB integration test remains outstanding.
