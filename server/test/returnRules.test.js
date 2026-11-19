@@ -5,7 +5,8 @@ import {
   normalizeReturnReview,
   assessReturnEligibility,
   buildReturnReviewCompareAndSetFilter,
-  buildReturnReviewUpdate
+  buildReturnReviewUpdate,
+  isGenericOrderStatusAllowed
 } from '../src/services/returnRules.js'
 
 const now = new Date('2026-11-18T03:00:00.000Z')
@@ -98,4 +99,14 @@ test('builds a review update without changing order status for approve/reject', 
     'returnRequests.$.reviewedBy': 'staff-1',
     'returnRequests.$.adminNote': 'Outside return policy'
   } })
+})
+
+
+test('generic order updates cannot bypass the approved return receipt workflow', () => {
+  for (const status of ['confirmed', 'processing', 'shipped', 'delivered', 'cancelled']) {
+    assert.equal(isGenericOrderStatusAllowed(status), true)
+  }
+  assert.equal(isGenericOrderStatusAllowed('returned'), false)
+  assert.equal(isGenericOrderStatusAllowed('pending'), false)
+  assert.equal(isGenericOrderStatusAllowed('unknown'), false)
 })
