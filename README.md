@@ -130,3 +130,10 @@ The starter deliberately does not create a default administrator or expose a pub
 - Added normalized review-note validation and conflict responses so stale Admin screens must refresh rather than silently overwrite another staff member's decision.
 - Removed `returned` from the generic order-status API. Staff must mark an approved request as received through Returns & Refunds; this prevents directly changing an order to returned and bypassing the review/receipt step.
 - Added unit tests for transition filters, note validation, the atomic received update and the generic status guard. These tests verify policy/update construction; an actual concurrent MongoDB integration test remains outstanding.
+
+## Order fulfilment transition guard (2026-11-20)
+- The staff order-status API now enforces a sequential lifecycle: pending → confirmed → processing → shipped → delivered. Orders may be cancelled only before shipment; delivered, cancelled and returned orders are terminal in the generic status API.
+- Orders awaiting manual bKash/Nagad advance-payment verification can only be cancelled; they cannot enter fulfilment until the payment is verified.
+- The Admin order selector shows only the current status and valid next steps. The server remains authoritative and returns a conflict response for skipped, reversed, repeated or terminal transitions.
+- Added isolated unit tests for the transition matrix. These tests validate policy logic; authenticated API and live MongoDB workflow tests remain outstanding.
+
