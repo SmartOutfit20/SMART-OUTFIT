@@ -4,6 +4,7 @@ import { requireAuth, requirePermission } from '../middleware/auth.js'
 import { Order, Product, Coupon, Setting, ActivityLog } from '../models/index.js'
 import { normalizeDeliveryAddress, deliveryAddressError, normalizeRequestedItems, calculateCouponDiscount, calculateDeliveryCharge } from '../services/checkoutRules.js'
 import { normalizeReturnRequest, assessReturnEligibility, isGenericOrderStatusAllowed } from '../services/returnRules.js'
+import { isOrderStatusTransitionAllowed, getOrderStatusTransitionMessage } from '../services/orderStatusRules.js'
 
 const router = Router()
 router.use(requireAuth)
@@ -285,9 +286,10 @@ router.patch('/:id/status', requirePermission('orders.update'), async (req, res,
       const order = await Order.findById(req.params.id).session(session)
       if (!order) throw httpError('Order not found.', 404)
       if (order.paymentStatus === 'pending' && req.body.status !== 'cancelled') throw httpError('Verify the advance delivery payment before confirming or processing this order.', 409)
-      if (order.status === 'cancelled' && req.body.status !== 'cancelled') throw httpError('Cancelled orders cannot be reopened; create a new order instead.', 409)
-      if (req.body.status === 'cancelled' && order.status !== 'cancelled') {
-        if (!['pending', 'confirmed', 'processing'].includes(order.status)) throw httpError('Orders that have shipped or been delivered must use the return workflow.', 409)
+      if (!isOrderStatusTransitionAllowed(order.status, req.body.status, order.paymentStatus)) {
+        throw httpError(getOrderStatusTransitionMessage(order.status, req.body.status), 409)
+      }
+      if (req.body.status === 'cancelled') {
         if (order.paymentStatus === 'paid' && Number(order.advancePaymentAmount) > 0) throw httpError('This order has a verified advance payment. Resolve its refund before cancelling.', 409)
         const reason = String(req.body.cancellationReason || '').trim()
         if (reason.length < 5) throw httpError('Please enter a cancellation reason (at least 5 characters) so the customer can see the notice.', 400)
