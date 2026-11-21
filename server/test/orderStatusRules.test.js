@@ -28,7 +28,7 @@ test('shipped orders can only move to delivered', () => {
 })
 
 test('delivered, cancelled and returned orders are terminal in the generic status API', () => {
-  for (const status of ['delivered', 'cancelled', 'returned']) {
+  for (const status of ['delivered', 'partially_returned', 'cancelled', 'returned']) {
     assert.deepEqual(getAllowedOrderStatusTransitions(status), [])
     assert.equal(isOrderStatusTransitionAllowed(status, 'processing'), false)
   }

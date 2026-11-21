@@ -1,11 +1,13 @@
 import {Router} from 'express'
+import mongoose from 'mongoose'
 import bcrypt from 'bcryptjs'
 import {requireAuth,requirePermission} from '../middleware/auth.js'
 import {getRolePermissions} from '../config/permissions.js'
-import {calculateRefundPlan,buildRefundCompareAndSetFilter} from '../services/refundRules.js'
-import {normalizeReturnReview,buildReturnReviewCompareAndSetFilter,buildReturnReviewUpdate} from '../services/returnRules.js'
+import {calculateRefundPlan,buildRefundCompareAndSetFilter,getReturnRefundableAmount} from '../services/refundRules.js'
+import {normalizeReturnReview,buildReturnReviewCompareAndSetFilter,buildReturnReviewUpdate,normalizeReturnRestockIndexes,calculateReturnProgress} from '../services/returnRules.js'
 import {User,Order,SupportTicket,Setting,Product,Review,VisitorDaily,ActivityLog} from '../models/index.js'
 const router=Router()
+const routeError=(message,status=400)=>Object.assign(new Error(message),{status})
 router.use(requireAuth)
 
 async function recordAdminActivity(req,action,resource,resourceId='',metadata={}) {
@@ -85,35 +87,72 @@ router.patch('/roles/:id/status',requirePermission('staff.manage'),async(req,res
 router.get('/settings',requirePermission('settings.read'),async(req,res,next)=>{try{res.json(await Setting.find().lean())}catch(e){next(e)}})
 router.patch('/settings',requirePermission('settings.manage'),async(req,res,next)=>{try{const allowed=['homepageLayout','homepageBanners','shopBanners','navigationMenu','storeLogo','footerLogo','faviconLogo','appLogo','storeName','tagline','supportEmail','supportPhone','whatsappNumber','storeAddress','deliveryCharge','insideDhakaDeliveryCharge','outsideDhakaDeliveryCharge','freeShippingThreshold','storeNotice','defaultLanguage','announcementEnabled','maintenanceMode','returnPolicy','shippingPolicy','aboutText','facebookUrl','instagramUrl','youtubeUrl','tiktokUrl','advancePaymentEnabled','bkashNumber','bkashAccountName','bkashInstructions','nagadNumber','nagadAccountName','nagadInstructions','homepageSeoTitle','homepageSeoDescription','homepageSeoKeywords','seoDefaultTitle','seoDefaultDescription','seoOgImage','seoIndexingEnabled','announcementShowPhone','announcementSocials'];const numeric=['deliveryCharge','insideDhakaDeliveryCharge','outsideDhakaDeliveryCharge','freeShippingThreshold'],boolean=['announcementEnabled','announcementShowPhone','maintenanceMode','advancePaymentEnabled','seoIndexingEnabled'];const out=[];for(const key of allowed){if(req.body[key]!==undefined){let value=req.body[key];if(key==='homepageLayout'){if(!value||typeof value!=='object'||Array.isArray(value))return res.status(400).json({message:'Homepage layout must be an object'});const validIds=['hero','benefits','categories','collection','promo'];const sections=Array.isArray(value.sections)?value.sections.filter(x=>validIds.includes(x.id)).slice(0,5):[];const defaults={categories:{eyebrow:'HANDPICKED FOR YOU',title:'পছন্দের ক্যাটাগরি',categoryIds:[]},collection:{eyebrow:'THE LATEST EDIT',title:'নতুন কালেকশন',description:'আপনার পছন্দের নতুন স্টাইলগুলো দেখে নিন।',productMode:'newest'},benefits:{items:[{title:'Nationwide Delivery',description:'Across Bangladesh'},{title:'Secure Checkout',description:'Trusted payment options'},{title:'Easy Returns',description:'Simple return support'}]},promo:{eyebrow:'YOUR EVERYDAY, ELEVATED',title:'GOOD STYLE.\nGOOD ENERGY.',description:'Find the pieces that feel like you.',buttonText:'SHOP THE EDIT',buttonLink:'/shop'}};const source=value;value={sections:validIds.map((id,index)=>{const item=sections.find(x=>x.id===id);return {id,enabled:item?item.enabled!==false:true,sortOrder:item&&Number.isFinite(Number(item.sortOrder))?Number(item.sortOrder):index}}).sort((a,b)=>a.sortOrder-b.sortOrder),categories:{eyebrow:String(source.categories?.eyebrow??defaults.categories.eyebrow).slice(0,100),title:String(source.categories?.title??defaults.categories.title).slice(0,120),categoryIds:Array.isArray(source.categories?.categoryIds)?[...new Set(source.categories.categoryIds.map(x=>String(x).slice(0,64)).filter(Boolean))].slice(0,8):[]},collection:{eyebrow:String(source.collection?.eyebrow??defaults.collection.eyebrow).slice(0,100),title:String(source.collection?.title??defaults.collection.title).slice(0,120),description:String(source.collection?.description??defaults.collection.description).slice(0,300),productMode:['newest','featured','best-seller'].includes(source.collection?.productMode)?source.collection.productMode:'newest'},benefits:{items:(Array.isArray(source.benefits?.items)?source.benefits.items:defaults.benefits.items).slice(0,3).map((item,index)=>({title:String(item.title||'').slice(0,80),description:String(item.description||'').slice(0,140)}))},promo:{eyebrow:String(source.promo?.eyebrow??defaults.promo.eyebrow).slice(0,100),title:String(source.promo?.title??defaults.promo.title).slice(0,180),description:String(source.promo?.description??defaults.promo.description).slice(0,300),buttonText:String(source.promo?.buttonText??defaults.promo.buttonText).slice(0,40),buttonLink:String(source.promo?.buttonLink??'/shop').slice(0,300)}}}else if(key==='shopBanners'){if(!Array.isArray(value)||value.length>3)return res.status(400).json({message:'Shop banners must be a list of up to 3 items'});value=value.map((item,index)=>{const image=String(item.image||'');if(image.length>1200000||(image&&!image.startsWith('data:image/webp;base64,')))throw Object.assign(new Error('Shop banner images must be compressed WebP files under 1.2 MB'),{status:400});return {title:String(item.title||'').slice(0,160),description:String(item.description||'').slice(0,240),buttonLink:String(item.buttonLink||'/shop').slice(0,300),image,enabled:item.enabled!==false,sortOrder:index}})}else if(key==='homepageBanners'){if(!Array.isArray(value)||value.length>4)return res.status(400).json({message:'Homepage banners must be a list of up to 4 items'});value=value.map((item,index)=>{const image=String(item.image||'');if(image.length>1200000||(image&&!/^data:image\/webp;base64,[A-Za-z0-9+/=]+$/.test(image)))throw Object.assign(new Error('Banner images must be compressed WebP files under 1.2 MB'),{status:400});return {eyebrow:String(item.eyebrow||'').slice(0,100),title:String(item.title||'').slice(0,160),description:String(item.description||'').slice(0,300),buttonText:String(item.buttonText||'').slice(0,40),buttonLink:String(item.buttonLink||'/shop').slice(0,300),image,enabled:item.enabled!==false,sortOrder:index}})}else if(key==='navigationMenu'){if(!Array.isArray(value))return res.status(400).json({message:'Navigation menu must be a list'});value=value.slice(0,80).map((item,index)=>({categoryId:String(item.categoryId||'').slice(0,64),label:String(item.label||'').trim().slice(0,60),href:String(item.href||'').trim().slice(0,300),parentId:String(item.parentId||'').slice(0,64),icon:String(item.icon||'tag').slice(0,32),enabled:item.enabled!==false,sortOrder:Number.isFinite(Number(item.sortOrder))?Number(item.sortOrder):index})).filter(item=>item.categoryId&&item.label&&(!item.href||(item.href.startsWith('/')&&!item.href.startsWith('//'))))}else if(['storeLogo','footerLogo','faviconLogo','appLogo'].includes(key)){value=String(value||'');if(value.length>1200000|| (value&&!/^data:image\/webp;base64,[A-Za-z0-9+/=]+$/.test(value)))return res.status(400).json({message:'Brand images must be compressed WebP files under 1.2 MB'})}else if(key==='announcementSocials'){if(!Array.isArray(value))return res.status(400).json({message:'Announcement social links must be a list'});value=[...new Set(value.filter(x=>['facebook','instagram','youtube','tiktok'].includes(String(x))))]}else if(numeric.includes(key)){value=Number(value);if(!Number.isFinite(value)||value<0)return res.status(400).json({message:key+' must be a valid non-negative amount'})}else if(boolean.includes(key)){value=Boolean(value)}else{const limits={homepageSeoTitle:70,homepageSeoDescription:180,homepageSeoKeywords:300,seoDefaultTitle:70,seoDefaultDescription:180,seoOgImage:500};value=String(value).trim().slice(0,limits[key]|| (key==='returnPolicy'||key==='shippingPolicy'||key==='aboutText'?5000:500));if(key==='seoOgImage'&&value&&!/^https:\/\//i.test(value))return res.status(400).json({message:'Social share image must use a public HTTPS URL.'})}out.push(Setting.findOneAndUpdate({key},{$set:{value}},{upsert:true,new:true,setDefaultsOnInsert:true}))}}res.json(await Promise.all(out));await recordAdminActivity(req,'settings.updated','store_settings','',{keys:Object.keys(req.body||{}).filter(key=>allowed.includes(key))})}catch(e){next(e)}})
 router.get('/returns',requirePermission('returns.read'),async(req,res,next)=>{try{
- const orders=await Order.find({$or:[{status:'returned'},{'returnRequests.0':{$exists:true}}]}).populate('customer','name email phone').sort({updatedAt:-1}).limit(300).lean()
- res.json(orders)
+ const orders=await Order.find({$or:[{status:{$in:['partially_returned','returned']}},{'returnRequests.0':{$exists:true}}]}).populate('customer','name email phone').sort({updatedAt:-1}).limit(300).lean()
+ res.json(orders.map(order=>({...order,returnRefundableAmount:getReturnRefundableAmount(order)})))
 }catch(e){next(e)}})
-router.patch('/returns/:id/request',requirePermission('returns.manage'),async(req,res,next)=>{try{
+router.patch('/returns/:id/request',requirePermission('returns.manage'),async(req,res,next)=>{let session;try{
  const orderId=String(req.params.id||''),requestId=String(req.body?.requestId||'')
  if(!/^[a-f0-9]{24}$/i.test(orderId))return res.status(400).json({message:'Invalid order ID.'})
  if(!/^[a-f0-9]{24}$/i.test(requestId))return res.status(400).json({message:'Invalid return request ID.'})
  const {status,note}=normalizeReturnReview(req.body)
  const now=new Date()
- // One atomic compare-and-set prevents two staff members from reviewing the same
- // pending request, and prevents receipt after the order has left delivered state.
- const updated=await Order.findOneAndUpdate(
-  buildReturnReviewCompareAndSetFilter(orderId,requestId,status),
-  buildReturnReviewUpdate({status,note,reviewerId:req.user.sub,now}),
-  {new:true,runValidators:true}
- ).populate('customer','name email phone')
+ const filter=buildReturnReviewCompareAndSetFilter(orderId,requestId,status)
+ let updated
+ if(status==='received'){
+  session=await mongoose.startSession()
+  await session.withTransaction(async()=>{
+   const order=await Order.findOne(filter).session(session)
+   if(!order)throw routeError('This return request is no longer approved or the order is no longer eligible. Refresh the return record.',409)
+   const request=(order.returnRequests||[]).find(item=>String(item._id)===requestId)
+   if(!request||request.status!=='approved')throw routeError('This return request is no longer approved. Refresh the return record.',409)
+   const requestItems=Array.isArray(request.items)?request.items:[]
+   const restockIndexes=normalizeReturnRestockIndexes(req.body.restockItemIndexes,requestItems)
+   for(const index of restockIndexes){
+    const returnedItem=requestItems.find(item=>Number(item.orderItemIndex)===index)
+    const orderItem=order.items?.[index]
+    const productId=orderItem?.product?._id||orderItem?.product
+    const quantity=Math.max(0,Number(returnedItem?.quantity)||0)
+    if(!productId||!quantity)throw routeError('A selected restock item no longer matches the original order. Refresh the return record.',409)
+    const product=await Product.findById(productId).select('variantStocks').session(session)
+    if(!product)throw routeError('A selected product no longer exists. Unselect it from restock and receive the item without adding it to available stock.',409)
+    const hasVariants=Array.isArray(product.variantStocks)&&product.variantStocks.length>0
+    if(hasVariants){
+     const variant=product.variantStocks.find(item=>item.size===orderItem.size&&item.color===orderItem.color)
+     if(!variant)throw routeError('A selected size/colour variant no longer exists. Unselect it from restock and receive the item without adding it to available stock.',409)
+     const result=await Product.updateOne({_id:productId,variantStocks:{$elemMatch:{size:orderItem.size,color:orderItem.color}}},{$inc:{stock:quantity,'variantStocks.$.stock':quantity}},{session})
+     if(!result.matchedCount)throw routeError('Inventory changed while receiving this return. Refresh and try again.',409)
+    }else{
+     const result=await Product.updateOne({_id:productId},{$inc:{stock:quantity}},{session})
+     if(!result.matchedCount)throw routeError('Inventory changed while receiving this return. Refresh and try again.',409)
+    }
+   }
+   request.status='received'
+   request.reviewedAt=now
+   request.reviewedBy=req.user.sub
+   request.adminNote=note
+   request.restockItemIndexes=restockIndexes
+   const progress=calculateReturnProgress(order)
+   const nextStatus=progress.allReturned?'returned':'partially_returned'
+   order.status=nextStatus
+   order.statusHistory=order.statusHistory||[]
+   order.statusHistory.push({status:nextStatus,note:'Store received '+progress.returnedQuantity+' of '+progress.orderedQuantity+' ordered item(s).',createdAt:now})
+   await order.save({session})
+   updated=order
+  })
+ }else{
+  updated=await Order.findOneAndUpdate(filter,buildReturnReviewUpdate({status,note,reviewerId:req.user.sub,now}),{new:true,runValidators:true})
+ }
  if(!updated){
   const order=await Order.findById(orderId).select('returnRequests._id').lean()
   if(!order)return res.status(404).json({message:'Order not found.'})
   const requestExists=(order.returnRequests||[]).some(item=>String(item._id)===requestId)
   if(!requestExists)return res.status(404).json({message:'Return request not found.'})
-  const message=status==='received'
-   ?'This return was already updated or the order is no longer delivered. Refresh the return record.'
-   :'This return request is no longer pending. Refresh the return record before reviewing it.'
-  return res.status(409).json({message})
+  return res.status(409).json({message:'This return request was updated by another staff member. Refresh the return record before continuing.'})
  }
- await recordAdminActivity(req,'order.return_request.'+status,'order',updated._id,{requestId,status})
+ await updated.populate('customer','name email phone')
+ await recordAdminActivity(req,'order.return_request.'+status,'order',updated._id,{requestId,status,restocked:status==='received'?(updated.returnRequests.find(item=>String(item._id)===requestId)?.restockItemIndexes||[]):[]})
  res.json(updated)
-}catch(e){next(e)}})
+}catch(e){next(e)}finally{if(session)await session.endSession()}})
 router.post('/returns/:id/refunds',requirePermission('returns.manage'),async(req,res,next)=>{try{
  const amount=Number(req.body.amount),reference=String(req.body.reference||'').trim(),note=String(req.body.note||'').trim()
  if(!Number.isFinite(amount)||amount<=0)return res.status(400).json({message:'Enter a valid refund amount greater than zero.'})
@@ -123,8 +162,6 @@ router.post('/returns/:id/refunds',requirePermission('returns.manage'),async(req
  if(!order)return res.status(404).json({message:'Returned order not found.'})
  let refundPlan
  try{refundPlan=calculateRefundPlan(order,amount)}catch(error){return res.status(error.status||400).json({message:error.message})}
- // Compare-and-set on the previous refund total: concurrent staff requests cannot
- // both spend the same remaining refundable balance.
  const updated=await Order.findOneAndUpdate(
   buildRefundCompareAndSetFilter(order,reference),
   {$push:{refunds:{amount,reference,note,processedBy:req.user.sub,processedAt:new Date()}},$set:{refundAmount:refundPlan.nextRefundAmount,paymentStatus:refundPlan.paymentStatus}},

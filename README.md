@@ -137,3 +137,12 @@ The starter deliberately does not create a default administrator or expose a pub
 - The Admin order selector shows only the current status and valid next steps. The server remains authoritative and returns a conflict response for skipped, reversed, repeated or terminal transitions.
 - Added isolated unit tests for the transition matrix. These tests validate policy logic; authenticated API and live MongoDB workflow tests remain outstanding.
 
+
+
+## Partial returns and inspected inventory receipt (2026-11-21)
+- Customers can select specific purchased order lines and whole-number quantities for return. The API snapshots the original product, SKU, size, colour and unit price; it ignores client-supplied prices and product details.
+- Requested, approved and received quantities are reserved against the original order line. A customer can submit another return request for the remaining quantities after the previous request is received or rejected, within the original seven-day delivery window.
+- Return receipt runs in a MongoDB transaction. Staff can explicitly select only inspected, resaleable items to restock; selected variant stock and aggregate product stock are incremented with the order/request receipt update. Items not selected are recorded as received but are not returned to available stock.
+- The order becomes `partially_returned` until all ordered quantities have been received; only then does it become `returned`. Generic fulfilment status updates cannot set either return status.
+- Refund ceilings are calculated from received item quantities after proportional coupon/discount allocation and exclude delivery charge. Refunds remain manual records of money already sent; no bKash/Nagad transfer is initiated.
+- These receipt and stock updates require a MongoDB replica set or sharded cluster. Unit tests cover item selection, quantity reservation, return progress, restock selection and refund limits; live concurrent MongoDB and browser end-to-end tests remain outstanding.

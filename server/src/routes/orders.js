@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 import { requireAuth, requirePermission } from '../middleware/auth.js'
 import { Order, Product, Coupon, Setting, ActivityLog } from '../models/index.js'
 import { normalizeDeliveryAddress, deliveryAddressError, normalizeRequestedItems, calculateCouponDiscount, calculateDeliveryCharge } from '../services/checkoutRules.js'
-import { normalizeReturnRequest, assessReturnEligibility, isGenericOrderStatusAllowed } from '../services/returnRules.js'
+import { normalizeReturnRequest, normalizeReturnItems, assessReturnEligibility, isGenericOrderStatusAllowed } from '../services/returnRules.js'
 import { isOrderStatusTransitionAllowed, getOrderStatusTransitionMessage } from '../services/orderStatusRules.js'
 
 const router = Router()
@@ -252,19 +252,21 @@ router.post('/:id/return-request', async (req, res, next) => {
     const order = await Order.findOne({ _id: req.params.id, customer: req.user.sub })
     if (!order) throw httpError('Order not found in your account.', 404)
     assessReturnEligibility(order, new Date())
+    const items = normalizeReturnItems(req.body.items, order)
     const now = new Date()
+    const requestedQuantity = items.reduce((sum, item) => sum + item.quantity, 0)
     const updated = await Order.findOneAndUpdate(
-      { _id: order._id, customer: req.user.sub, status: 'delivered',
-        returnRequests: { $not: { $elemMatch: { status: { $in: ['requested', 'approved', 'received'] } } } } },
+      { _id: order._id, customer: req.user.sub, status: { $in: ['delivered', 'partially_returned'] },
+        returnRequests: { $not: { $elemMatch: { status: { $in: ['requested', 'approved'] } } } } },
       { $push: {
-        returnRequests: { reason, status: 'requested', requestedAt: now },
-        statusHistory: { status: 'return_requested', note: 'Customer submitted a return request.', createdAt: now }
+        returnRequests: { reason, items, status: 'requested', requestedAt: now },
+        statusHistory: { status: 'return_requested', note: 'Customer requested return of ' + requestedQuantity + ' item(s).', createdAt: now }
       } },
       { new: true, runValidators: true }
     ).lean()
-    if (!updated) throw httpError('A return request is already active or this order is no longer eligible. Refresh your order and try again.', 409)
-    await recordOrderActivity(req, 'order.return_requested', updated, { requestCount: updated.returnRequests?.length || 1 })
-    res.status(201).json({ message: 'Your return request has been submitted for store review.', order: updated })
+    if (!updated) throw httpError('A return request is already awaiting review or this order is no longer eligible. Refresh your order and try again.', 409)
+    await recordOrderActivity(req, 'order.return_requested', updated, { requestCount: updated.returnRequests?.length || 1, requestedQuantity })
+    res.status(201).json({ message: 'Your selected return items have been submitted for store review.', order: updated })
   } catch (error) { next(error) }
 })
 
