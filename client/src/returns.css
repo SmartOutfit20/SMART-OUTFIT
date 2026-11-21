@@ -1,0 +1,13 @@
+/* SMART OUTFIT partial-return customer and admin controls */
+.so-account-return-items{display:grid;gap:8px;margin:14px 0}
+.so-account-return-items label{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 13px;border:1px solid var(--line);background:#fff}
+.so-account-return-items label>span{min-width:0;display:grid;gap:4px}
+.so-account-return-items label b{font-size:12px}
+.so-account-return-items label small{font-size:10px;color:var(--muted);line-height:1.5}
+.so-account-return-items input{width:76px;min-width:76px;padding:9px;border:1px solid var(--line);border-radius:4px}
+.so-account-return-status ul{margin:8px 0 14px;padding-left:18px;color:var(--muted);font-size:11px;line-height:1.8}
+.admin-return-items{display:grid;gap:7px;margin:9px 0;padding:9px;border:1px solid var(--line);background:var(--soft)}
+.admin-return-items>small{font-size:10px;color:var(--muted);line-height:1.5}
+.admin-return-items label{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;font-size:11px;line-height:1.5}
+.admin-return-items input[type=checkbox]{width:16px;height:16px;flex:0 0 auto;accent-color:var(--purple)}
+@media(max-width:640px){.so-account-return-items label{align-items:flex-start}.so-account-return-items input{width:64px;min-width:64px}.admin-return-items label{font-size:10px}}
