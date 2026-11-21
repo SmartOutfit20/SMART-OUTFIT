@@ -5,6 +5,7 @@ const ORDER_STATUS_TRANSITIONS = Object.freeze({
   shipped: Object.freeze(['delivered']),
   delivered: Object.freeze([]),
   cancelled: Object.freeze([]),
+  partially_returned: Object.freeze([]),
   returned: Object.freeze([])
 })
 
