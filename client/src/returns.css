@@ -11,3 +11,10 @@
 .admin-return-items label{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;font-size:11px;line-height:1.5}
 .admin-return-items input[type=checkbox]{width:16px;height:16px;flex:0 0 auto;accent-color:var(--purple)}
 @media(max-width:640px){.so-account-return-items label{align-items:flex-start}.so-account-return-items input{width:64px;min-width:64px}.admin-return-items label{font-size:10px}}
+
+.admin-return-history{margin:0 0 9px;padding:7px 9px;border:1px solid var(--line);background:#fff}
+.admin-return-history summary{cursor:pointer;font-size:10px;font-weight:700;color:var(--purple)}
+.admin-return-history>div{display:grid;gap:3px;padding:8px 0;border-top:1px solid var(--line)}
+.admin-return-history>div:first-of-type{margin-top:7px}
+.admin-return-history b{font-size:10px}
+.admin-return-history small{font-size:10px;color:var(--muted);line-height:1.5}
