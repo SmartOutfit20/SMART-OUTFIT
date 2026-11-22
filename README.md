@@ -16,7 +16,8 @@ A Bangladesh-focused MERN fashion commerce starter with a React/Vite storefront,
 - Real bKash/Nagad/Rocket payment processing and server-side verification.
 - Pathao/Steadfast/RedX courier booking and tracking.
 - Cloudinary media uploads, email/SMS, Google OAuth, refunds, 2FA and scheduled backups.
-- Production security review, automated test suite and deployment verification.
+- Production security review, staging database integration tests and deployment verification.
+- Automated backend and storefront unit tests run in GitHub Actions; they do not replace live database or browser end-to-end tests.
 
 No payment success, courier booking, or database persistence is simulated as a real transaction.
 
@@ -146,3 +147,11 @@ The starter deliberately does not create a default administrator or expose a pub
 - The order becomes `partially_returned` until all ordered quantities have been received; only then does it become `returned`. Generic fulfilment status updates cannot set either return status.
 - Refund ceilings are calculated from received item quantities after proportional coupon/discount allocation and exclude delivery charge. Refunds remain manual records of money already sent; no bKash/Nagad transfer is initiated.
 - These receipt and stock updates require a MongoDB replica set or sharded cluster. Unit tests cover item selection, quantity reservation, return progress, restock selection and refund limits; live concurrent MongoDB and browser end-to-end tests remain outstanding.
+
+
+## Customer return and refund timeline (2026-11-22)
+- Customer Order Tracking now shows return-request decisions in chronological order, including request/review timestamps, selected product variants and customer-visible store notes.
+- Added the store-recorded refund ledger to the customer's own order details, with amount, processed date, transaction reference and note. The UI labels these as recorded refunds and does not initiate or claim a payment transfer.
+- Separated actual order statuses from the `return_requested` history event so customers no longer see an event-only value in the order-status filter.
+- Added a dependency-free storefront unit test suite and wired it into the root `npm test` command and GitHub Actions.
+- The customer timeline reads the authenticated customer's existing `/api/orders/mine` response. Live database persistence, payment transfer and browser end-to-end behavior still require staging verification.

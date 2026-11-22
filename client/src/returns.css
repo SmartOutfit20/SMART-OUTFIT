@@ -18,3 +18,23 @@
 .admin-return-history>div:first-of-type{margin-top:7px}
 .admin-return-history b{font-size:10px}
 .admin-return-history small{font-size:10px;color:var(--muted);line-height:1.5}
+
+/* Customer-visible return decisions and recorded refund ledger */
+.so-account-return-entry{display:grid;gap:8px;padding:14px 0;border-top:1px solid var(--line)}
+.so-account-return-entry:first-of-type{border-top:0}
+.so-account-return-entry-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.so-account-return-entry-heading b{color:var(--purple);font-size:12px}
+.so-account-return-entry-heading small,.so-account-return-entry>small{color:var(--muted);font-size:10px;line-height:1.5}
+.so-account-return-entry>p{margin:0;font-size:11px;line-height:1.65}
+.so-account-return-entry .so-account-return-note{padding:9px 11px;border-left:3px solid var(--purple);background:var(--soft);color:var(--ink)}
+.so-account-refund-history{margin-top:16px;padding:16px;border:1px solid var(--line);background:#fff}
+.so-account-refund-history h3{margin:0 0 8px}
+.so-account-refund-total{margin:0 0 10px;font-size:12px;font-weight:700;color:var(--purple)}
+.so-account-refund-history ol{display:grid;gap:0;margin:0 0 10px;padding:0;list-style:none}
+.so-account-refund-history li{display:grid;gap:5px;padding:11px 0;border-top:1px solid var(--line);font-size:11px}
+.so-account-refund-history li>div{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.so-account-refund-history li b{font-size:13px}
+.so-account-refund-history li small,.so-account-refund-history>small{font-size:10px;color:var(--muted);line-height:1.5}
+.so-account-refund-history li span{overflow-wrap:anywhere;color:var(--muted)}
+.so-account-refund-history li p{margin:0;line-height:1.5}
+@media(max-width:640px){.so-account-refund-history{padding:12px}.so-account-return-entry-heading{align-items:flex-start;flex-direction:column;gap:4px}}
