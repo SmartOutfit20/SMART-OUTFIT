@@ -14,10 +14,12 @@ const mongoUri = process.env.MONGODB_TEST_URI
 test('MongoDB allows only one concurrent return reservation from the same partial-return snapshot', {
   skip: !mongoUri && 'Set MONGODB_TEST_URI to run the replica-set integration test.'
 }, async () => {
-  await mongoose.connect(mongoUri, { serverSelectionTimeoutMS: 10000 })
   let orderId
+  let connected = false
 
   try {
+    await mongoose.connect(mongoUri, { serverSelectionTimeoutMS: 10000 })
+    connected = true
     const customerId = new mongoose.Types.ObjectId()
     const order = await Order.create({
       orderNumber: 'TEST-RETURN-CAS-' + randomUUID(),
@@ -83,7 +85,9 @@ test('MongoDB allows only one concurrent return reservation from the same partia
       .reduce((sum, item) => sum + Number(item.quantity || 0), 0)
     assert.equal(reservedQuantity, 2, 'received plus pending quantities must not exceed the two purchased units')
   } finally {
-    if (orderId) await Order.deleteOne({ _id: orderId })
-    await mongoose.disconnect()
+    if (connected) {
+      if (orderId) await Order.deleteOne({ _id: orderId }).catch(() => {})
+      await mongoose.disconnect()
+    }
   }
 })
