@@ -133,13 +133,13 @@ test('generic order updates cannot bypass the return receipt workflow', () => {
 
 
 test('customer return submissions compare-and-set the order version and owner', () => {
-  const order = deliveredOrder({ _id: 'order-1', __v: 4 })
+  const order = deliveredOrder({ _id: 'order-1', returnRequestRevision: 4 })
   assert.deepEqual(buildReturnRequestCompareAndSetFilter(order, 'customer-1'), {
     _id: 'order-1',
     customer: 'customer-1',
     status: { $in: ['delivered', 'partially_returned'] },
     returnRequests: { $not: { $elemMatch: { status: { $in: ['requested', 'approved'] } } } },
-    __v: 4
+    returnRequestRevision: 4
   })
 })
 
@@ -150,7 +150,7 @@ test('legacy orders without a version key can be initialized by only one return 
     customer: 'customer-1',
     status: { $in: ['delivered', 'partially_returned'] },
     returnRequests: { $not: { $elemMatch: { status: { $in: ['requested', 'approved'] } } } },
-    $or: [{ __v: { $exists: false } }, { __v: 0 }]
+    $or: [{ returnRequestRevision: 0 }, { returnRequestRevision: { $exists: false } }]
   })
 })
 
@@ -166,7 +166,7 @@ test('return submission update appends the request and history while incrementin
       returnRequests: { reason: 'The selected size does not fit.', items: [{ orderItemIndex: 0, quantity: 1 }], status: 'requested', requestedAt: now },
       statusHistory: { status: 'return_requested', note: 'Customer requested return of 1 item(s).', createdAt: now }
     },
-    $inc: { __v: 1 }
+    $inc: { returnRequestRevision: 1 }
   })
   assert.throws(() => buildReturnRequestUpdate({ reason: '', items: [], requestedQuantity: 0, now }), /reason and at least one selected item/)
 })
