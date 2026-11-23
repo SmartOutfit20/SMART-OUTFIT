@@ -155,3 +155,10 @@ The starter deliberately does not create a default administrator or expose a pub
 - Separated actual order statuses from the `return_requested` history event so customers no longer see an event-only value in the order-status filter.
 - Added a dependency-free storefront unit test suite and wired it into the root `npm test` command and GitHub Actions.
 - The customer timeline reads the authenticated customer's existing `/api/orders/mine` response. Live database persistence, payment transfer and browser end-to-end behavior still require staging verification.
+
+
+## Customer return reservation concurrency fix (2026-11-23)
+- Customer return submission now uses the order's MongoDB version key (__v) as a compare-and-set guard, in addition to the ownership, eligible-order-status and no-active-request conditions.
+- The request and customer-visible history event are appended while incrementing __v in the same atomic update. If two tabs/devices submit against the same remaining quantities, only the first update can reserve them; the other receives HTTP 409 and must refresh.
+- Legacy orders without a version key match only when __v is absent or zero; the successful update initializes the version key, preventing a second stale submission from winning.
+- Added unit tests for versioned and legacy filters and the atomic update shape. These tests verify query/update construction; concurrent writes against a real MongoDB replica set and browser flows still require staging verification.
