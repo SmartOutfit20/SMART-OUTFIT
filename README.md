@@ -160,5 +160,12 @@ The starter deliberately does not create a default administrator or expose a pub
 ## Customer return reservation concurrency fix (2026-11-23)
 - Customer return submission now uses the order's dedicated order field (returnRequestRevision) as a compare-and-set guard, in addition to the ownership, eligible-order-status and no-active-request conditions.
 - The request and customer-visible history event are appended while incrementing returnRequestRevision in the same atomic update. If two tabs/devices submit against the same remaining quantities, only the first update can reserve them; the other receives HTTP 409 and must refresh.
-- Legacy orders without a version key match only when returnRequestRevision is absent or zero; the successful update initializes the version key, preventing a second stale submission from winning.
+- Legacy orders without a stored returnRequestRevision match only when the field is absent or zero; the successful update initializes the revision field, preventing a second stale submission from winning.
 - Added unit tests for versioned and legacy filters and the atomic update shape. These tests verify query/update construction; concurrent writes against a real MongoDB replica set and browser flows still require staging verification.
+
+
+## MongoDB return concurrency integration test (2026-11-23)
+- CI now starts an isolated single-node MongoDB 7.0 replica set and runs a database-backed concurrency test against it; no production credentials or customer data are used.
+- The test creates a partial-return fixture with one previously received unit, loads two identical order snapshots, and concurrently attempts to reserve the same remaining unit. It asserts exactly one update wins, one receives a compare-and-set miss, and the combined reserved quantity stays within the purchased quantity.
+- Local runs skip this integration test unless MONGODB_TEST_URI points to a disposable MongoDB replica set. The CI job supplies its own ephemeral URI.
+- This verifies the single-document return-reservation guard against MongoDB in CI. It does not verify production Atlas connectivity, full checkout transactions, external payment transfers, courier bookings, or browser end-to-end flows.

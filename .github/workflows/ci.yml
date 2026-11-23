@@ -18,7 +18,28 @@ jobs:
           node-version: 22
       - name: Install workspace dependencies
         run: npm install --no-audit --no-fund
-      - name: Run backend and storefront unit tests
+      - name: Start isolated MongoDB replica set
+        run: |
+          docker run -d --name smart-outfit-mongo -p 27017:27017 mongo:7.0 mongod --replSet rs0 --bind_ip_all
+          for attempt in {1..30}; do
+            if docker exec smart-outfit-mongo mongosh --quiet --eval 'db.adminCommand({ ping: 1 }).ok' | grep -q '1'; then
+              break
+            fi
+            sleep 1
+          done
+          docker exec smart-outfit-mongo mongosh --quiet --eval 'rs.initiate({_id: "rs0", members: [{_id: 0, host: "localhost:27017"}]})'
+          for attempt in {1..30}; do
+            if docker exec smart-outfit-mongo mongosh --quiet --eval 'db.hello().isWritablePrimary' | grep -q 'true'; then
+              exit 0
+            fi
+            sleep 1
+          done
+          docker logs smart-outfit-mongo
+          echo "MongoDB replica set did not become primary" >&2
+          exit 1
+      - name: Run backend and storefront tests
+        env:
+          MONGODB_TEST_URI: mongodb://localhost:27017/smartoutfit_return_test?replicaSet=rs0
         run: npm test
       - name: Build customer storefront
         run: npm run build
