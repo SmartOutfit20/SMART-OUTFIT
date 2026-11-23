@@ -5,6 +5,17 @@ const ACTIVE_RETURN_STATUSES = new Set(['requested', 'approved'])
 const RESERVED_RETURN_STATUSES = new Set(['requested', 'approved', 'received'])
 const GENERIC_ORDER_STATUSES = new Set(['confirmed', 'processing', 'shipped', 'delivered', 'cancelled'])
 
+export function normalizeReturnWindowDays(value) {
+  if (value === undefined || value === null || value === '') return RETURN_WINDOW_DAYS
+  const days = Number(value)
+  if (!Number.isInteger(days) || days < 1 || days > 30) {
+    const error = new Error('Return window configuration must be a whole number from 1 to 30 days.')
+    error.status = 503
+    throw error
+  }
+  return days
+}
+
 export function isGenericOrderStatusAllowed(status) {
   return GENERIC_ORDER_STATUSES.has(status)
 }
@@ -209,12 +220,11 @@ export function assessReturnEligibility(order, now = new Date(), returnWindowDay
     .sort((a, b) => b - a)
   const deliveredAt = deliveredEntries[0]
   if (!deliveredAt) throw conflict('The delivery date is missing from this order. Please contact customer support.')
-  const days = Number(returnWindowDays)
-  if (!Number.isInteger(days) || days < 1 || days > 30) throw new Error('Return window configuration must be between 1 and 30 days.')
+  const days = normalizeReturnWindowDays(returnWindowDays)
   const expiresAt = new Date(deliveredAt.getTime() + days * DAY_MS)
   const current = new Date(now)
   if (!Number.isFinite(current.getTime()) || current < deliveredAt) throw conflict('The delivery date is not valid for return processing.')
-  if (current > expiresAt) throw conflict('The 7-day return request window has expired.')
+  if (current > expiresAt) throw conflict(`The ${days}-day return request window has expired.`)
   if ((Array.isArray(order.returnRequests) ? order.returnRequests : []).some(request => ACTIVE_RETURN_STATUSES.has(request?.status))) {
     throw conflict('A return request is already awaiting store review for this order.')
   }
