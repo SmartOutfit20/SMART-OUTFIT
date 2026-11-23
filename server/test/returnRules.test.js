@@ -8,6 +8,8 @@ import {
   normalizeReturnReview,
   assessReturnEligibility,
   buildReturnReviewCompareAndSetFilter,
+  buildReturnRequestCompareAndSetFilter,
+  buildReturnRequestUpdate,
   buildReturnReviewUpdate,
   isGenericOrderStatusAllowed
 } from '../src/services/returnRules.js'
@@ -127,4 +129,44 @@ test('builds an atomic received update with the calculated parent status', () =>
 test('generic order updates cannot bypass the return receipt workflow', () => {
   for (const status of ['confirmed', 'processing', 'shipped', 'delivered', 'cancelled']) assert.equal(isGenericOrderStatusAllowed(status), true)
   for (const status of ['pending', 'partially_returned', 'returned', 'unknown']) assert.equal(isGenericOrderStatusAllowed(status), false)
+})
+
+
+test('customer return submissions compare-and-set the order version and owner', () => {
+  const order = deliveredOrder({ _id: 'order-1', returnRequestRevision: 4 })
+  assert.deepEqual(buildReturnRequestCompareAndSetFilter(order, 'customer-1'), {
+    _id: 'order-1',
+    customer: 'customer-1',
+    status: { $in: ['delivered', 'partially_returned'] },
+    returnRequests: { $not: { $elemMatch: { status: { $in: ['requested', 'approved'] } } } },
+    returnRequestRevision: 4
+  })
+})
+
+test('legacy orders without a version key can be initialized by only one return submission', () => {
+  const order = deliveredOrder({ _id: 'legacy-order' })
+  assert.deepEqual(buildReturnRequestCompareAndSetFilter(order, 'customer-1'), {
+    _id: 'legacy-order',
+    customer: 'customer-1',
+    status: { $in: ['delivered', 'partially_returned'] },
+    returnRequests: { $not: { $elemMatch: { status: { $in: ['requested', 'approved'] } } } },
+    $or: [{ returnRequestRevision: 0 }, { returnRequestRevision: { $exists: false } }]
+  })
+})
+
+test('return submission update appends the request and history while incrementing the version', () => {
+  const update = buildReturnRequestUpdate({
+    reason: 'The selected size does not fit.',
+    items: [{ orderItemIndex: 0, quantity: 1 }],
+    requestedQuantity: 1,
+    now
+  })
+  assert.deepEqual(update, {
+    $push: {
+      returnRequests: { reason: 'The selected size does not fit.', items: [{ orderItemIndex: 0, quantity: 1 }], status: 'requested', requestedAt: now },
+      statusHistory: { status: 'return_requested', note: 'Customer requested return of 1 item(s).', createdAt: now }
+    },
+    $inc: { returnRequestRevision: 1 }
+  })
+  assert.throws(() => buildReturnRequestUpdate({ reason: '', items: [], requestedQuantity: 0, now }), /reason and at least one selected item/)
 })

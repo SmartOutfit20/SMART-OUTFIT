@@ -74,6 +74,51 @@ export function normalizeReturnItems(input, order) {
   return normalized
 }
 
+/**
+ * Compare-and-set guard for customer return submissions.
+ *
+ * A customer may submit another request after a prior partial return has been
+ * received. Two requests based on the same order snapshot must not both reserve
+ * the same remaining quantities. The order version key makes the reservation
+ * update single-winner; legacy orders without a version key are initialized atomically.
+ */
+export function buildReturnRequestCompareAndSetFilter(order, customerId) {
+  if (!order?._id || !customerId) throw badRequest('A valid order and customer are required to submit a return.')
+  const filter = {
+    _id: order._id,
+    customer: customerId,
+    status: { $in: ['delivered', 'partially_returned'] },
+    returnRequests: { $not: { $elemMatch: { status: { $in: [...ACTIVE_RETURN_STATUSES] } } } }
+  }
+  const revision = Number(order.returnRequestRevision ?? 0)
+  if (!Number.isInteger(revision) || revision < 0) throw badRequest('The return request revision is invalid.')
+  if (revision === 0) {
+    filter.$or = [{ returnRequestRevision: 0 }, { returnRequestRevision: { $exists: false } }]
+  } else {
+    filter.returnRequestRevision = revision
+  }
+  return filter
+}
+
+export function buildReturnRequestUpdate({ reason, items, requestedQuantity, now = new Date() }) {
+  if (!String(reason || '').trim() || !Array.isArray(items) || !items.length) {
+    throw badRequest('A return reason and at least one selected item are required.')
+  }
+  const quantity = Number(requestedQuantity)
+  if (!Number.isInteger(quantity) || quantity < 1) throw badRequest('Return quantity must be a positive whole number.')
+  return {
+    $push: {
+      returnRequests: { reason, items, status: 'requested', requestedAt: now },
+      statusHistory: {
+        status: 'return_requested',
+        note: 'Customer requested return of ' + quantity + ' item(s).',
+        createdAt: now
+      }
+    },
+    $inc: { returnRequestRevision: 1 }
+  }
+}
+
 export function normalizeReturnRestockIndexes(input, requestItems) {
   if (input === undefined || input === null) return []
   if (!Array.isArray(input)) throw badRequest('Choose which received items are safe to return to saleable stock.')
