@@ -158,7 +158,7 @@ The starter deliberately does not create a default administrator or expose a pub
 
 
 ## Customer return reservation concurrency fix (2026-11-23)
-- Customer return submission now uses the order's MongoDB version key (__v) as a compare-and-set guard, in addition to the ownership, eligible-order-status and no-active-request conditions.
-- The request and customer-visible history event are appended while incrementing __v in the same atomic update. If two tabs/devices submit against the same remaining quantities, only the first update can reserve them; the other receives HTTP 409 and must refresh.
-- Legacy orders without a version key match only when __v is absent or zero; the successful update initializes the version key, preventing a second stale submission from winning.
+- Customer return submission now uses the order's dedicated order field (returnRequestRevision) as a compare-and-set guard, in addition to the ownership, eligible-order-status and no-active-request conditions.
+- The request and customer-visible history event are appended while incrementing returnRequestRevision in the same atomic update. If two tabs/devices submit against the same remaining quantities, only the first update can reserve them; the other receives HTTP 409 and must refresh.
+- Legacy orders without a version key match only when returnRequestRevision is absent or zero; the successful update initializes the version key, preventing a second stale submission from winning.
 - Added unit tests for versioned and legacy filters and the atomic update shape. These tests verify query/update construction; concurrent writes against a real MongoDB replica set and browser flows still require staging verification.
