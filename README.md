@@ -162,3 +162,10 @@ The starter deliberately does not create a default administrator or expose a pub
 - The request and customer-visible history event are appended while incrementing returnRequestRevision in the same atomic update. If two tabs/devices submit against the same remaining quantities, only the first update can reserve them; the other receives HTTP 409 and must refresh.
 - Legacy orders without a version key match only when returnRequestRevision is absent or zero; the successful update initializes the version key, preventing a second stale submission from winning.
 - Added unit tests for versioned and legacy filters and the atomic update shape. These tests verify query/update construction; concurrent writes against a real MongoDB replica set and browser flows still require staging verification.
+
+
+## Configurable customer return window (2026-11-23)
+- Added a Super Admin-only setting for the customer return request window, configurable from 1 to 30 calendar days after the recorded delivery timestamp. Existing stores and orders default to 7 days unless the setting is changed.
+- The authenticated customer return endpoint reads the same persisted setting used by the public storefront configuration, so the customer-facing form and server eligibility check stay aligned. The API remains authoritative and reports the configured window when it has expired.
+- The General Settings workspace shows the control only to Super Admin accounts. The server rejects attempts by other staff roles to change this specific setting even if they can edit other store settings.
+- Added unit coverage for default, boundary, invalid and custom-window eligibility behavior. Staging database and browser end-to-end verification are still required.
