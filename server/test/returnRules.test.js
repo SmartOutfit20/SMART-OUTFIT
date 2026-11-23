@@ -7,6 +7,7 @@ import {
   calculateReturnProgress,
   normalizeReturnReview,
   assessReturnEligibility,
+  normalizeReturnWindowDays,
   buildReturnReviewCompareAndSetFilter,
   buildReturnRequestCompareAndSetFilter,
   buildReturnRequestUpdate,
@@ -169,4 +170,24 @@ test('return submission update appends the request and history while incrementin
     $inc: { returnRequestRevision: 1 }
   })
   assert.throws(() => buildReturnRequestUpdate({ reason: '', items: [], requestedQuantity: 0, now }), /reason and at least one selected item/)
+})
+
+
+test('normalizes a Super Admin return window to a whole number from 1 to 30 days', () => {
+  assert.equal(normalizeReturnWindowDays(undefined), 7)
+  assert.equal(normalizeReturnWindowDays(null), 7)
+  assert.equal(normalizeReturnWindowDays('14'), 14)
+  assert.equal(normalizeReturnWindowDays(1), 1)
+  assert.equal(normalizeReturnWindowDays(30), 30)
+  for (const invalid of [0, 31, 1.5, 'abc', -1]) {
+    assert.throws(() => normalizeReturnWindowDays(invalid), /whole number from 1 to 30 days/)
+  }
+})
+
+test('applies the configured return window to the recorded delivery timestamp', () => {
+  const order = deliveredOrder({
+    statusHistory: [{ status: 'delivered', createdAt: new Date(now.getTime() - 2 * 86400000) }]
+  })
+  assert.throws(() => assessReturnEligibility(order, now, 1), /1-day return request window has expired/)
+  assert.equal(assessReturnEligibility(order, now, 3).returnWindowDays, 3)
 })
