@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 import { requireAuth, requirePermission } from '../middleware/auth.js'
 import { Order, Product, Coupon, Setting, ActivityLog } from '../models/index.js'
 import { normalizeDeliveryAddress, deliveryAddressError, normalizeRequestedItems, calculateCouponDiscount, calculateDeliveryCharge } from '../services/checkoutRules.js'
-import { normalizeReturnRequest, normalizeReturnItems, assessReturnEligibility, isGenericOrderStatusAllowed, buildReturnRequestCompareAndSetFilter, buildReturnRequestUpdate } from '../services/returnRules.js'
+import { normalizeReturnRequest, normalizeReturnItems, assessReturnEligibility, normalizeReturnWindowDays, isGenericOrderStatusAllowed, buildReturnRequestCompareAndSetFilter, buildReturnRequestUpdate } from '../services/returnRules.js'
 import { isOrderStatusTransitionAllowed, getOrderStatusTransitionMessage } from '../services/orderStatusRules.js'
 
 const router = Router()
@@ -251,7 +251,9 @@ router.post('/:id/return-request', async (req, res, next) => {
     const { reason } = normalizeReturnRequest(req.body)
     const order = await Order.findOne({ _id: req.params.id, customer: req.user.sub })
     if (!order) throw httpError('Order not found in your account.', 404)
-    assessReturnEligibility(order, new Date())
+    const returnWindowSetting = await Setting.findOne({ key: 'returnWindowDays' }).lean()
+    const returnWindowDays = normalizeReturnWindowDays(returnWindowSetting?.value)
+    assessReturnEligibility(order, new Date(), returnWindowDays)
     const items = normalizeReturnItems(req.body.items, order)
     const now = new Date()
     const requestedQuantity = items.reduce((sum, item) => sum + item.quantity, 0)
