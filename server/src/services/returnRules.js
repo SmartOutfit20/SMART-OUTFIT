@@ -90,10 +90,12 @@ export function buildReturnRequestCompareAndSetFilter(order, customerId) {
     status: { $in: ['delivered', 'partially_returned'] },
     returnRequests: { $not: { $elemMatch: { status: { $in: [...ACTIVE_RETURN_STATUSES] } } } }
   }
-  if (Number.isInteger(order.__v) && order.__v >= 0) {
-    filter.__v = order.__v
+  const revision = Number(order.returnRequestRevision ?? 0)
+  if (!Number.isInteger(revision) || revision < 0) throw badRequest('The return request revision is invalid.')
+  if (revision === 0) {
+    filter.$or = [{ returnRequestRevision: 0 }, { returnRequestRevision: { $exists: false } }]
   } else {
-    filter.$or = [{ __v: { $exists: false } }, { __v: 0 }]
+    filter.returnRequestRevision = revision
   }
   return filter
 }
@@ -113,7 +115,7 @@ export function buildReturnRequestUpdate({ reason, items, requestedQuantity, now
         createdAt: now
       }
     },
-    $inc: { __v: 1 }
+    $inc: { returnRequestRevision: 1 }
   }
 }
 
