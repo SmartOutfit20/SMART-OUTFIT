@@ -68,3 +68,5 @@
 .product-review-success{padding:12px 14px;border-radius:10px;background:#eef8f0;color:#216a35}
 .rating-new{font-size:.72rem;color:#7c7287;letter-spacing:.02em}
 @media(max-width:640px){.product-reviews-section{margin:30px 0;padding:18px;border-radius:15px}.product-reviews-heading{align-items:flex-start;flex-direction:column;gap:12px}.product-review-form{padding:16px}.product-review-card-top{align-items:flex-start;flex-direction:column}}
+
+.product-review-summary-stars{display:inline-flex;align-items:center;gap:2px;color:#8b5bc5}
