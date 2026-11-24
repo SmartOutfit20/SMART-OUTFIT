@@ -178,3 +178,9 @@ The starter deliberately does not create a default administrator or expose a pub
 - Added an 8-submission-per-15-minute IP limit for review POST requests and a unique product/customer index to prevent duplicate reviews under concurrent submissions.
 - Removed the storefront's hard-coded 4.8-star fallback. Product cards now show only approved rating aggregates; products without approved reviews are labeled as new instead of displaying a fabricated score.
 - Automated policy tests cover input validation, verified purchase eligibility, return reservations and duplicate-review state. Database/index creation, authenticated route integration and browser end-to-end review moderation still require staging verification.
+
+
+## Delivery workspace transition guard (2026-11-24)
+- Reused the shared sequential order-status transition policy in the Admin delivery update endpoint. Delivery staff can no longer skip confirmed → processing → shipped → delivered or mark a COD order paid by jumping directly to delivered.
+- Courier name and tracking-number edits remain available without changing order status. Invalid status jumps return HTTP 409.
+- Added a regression test for delivery-workspace transition rules. Authenticated API and live database verification remain outstanding.
