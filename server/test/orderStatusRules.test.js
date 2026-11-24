@@ -46,6 +46,12 @@ test('orders awaiting advance-payment verification can only be cancelled', () =>
   assert.equal(isOrderStatusTransitionAllowed('pending', 'cancelled', 'pending'), true)
 })
 
+test('delivery workspace cannot skip fulfilment steps', () => {
+  assert.equal(isOrderStatusTransitionAllowed('confirmed', 'delivered', 'unpaid'), false)
+  assert.equal(isOrderStatusTransitionAllowed('processing', 'delivered', 'unpaid'), false)
+  assert.equal(isOrderStatusTransitionAllowed('shipped', 'delivered', 'unpaid'), true)
+})
+
 test('provides an actionable conflict message for invalid transitions', () => {
   assert.match(getOrderStatusTransitionMessage('shipped', 'cancelled'), /cannot move from "shipped" to "cancelled"/)
 })
