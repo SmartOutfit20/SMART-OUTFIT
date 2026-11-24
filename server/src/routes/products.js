@@ -1,11 +1,28 @@
 import { Router } from 'express'
-import { Product, Category, ActivityLog, Setting } from '../models/index.js'
+import { Product, Category, ActivityLog, Setting, Review } from '../models/index.js'
 import { starterProducts } from '../data/starterProducts.js'
 import { requireAuth, requirePermission } from '../middleware/auth.js'
 import { hasPermission } from '../config/permissions.js'
 import sharp from 'sharp'
 
 const router = Router()
+
+async function attachReviewSummaries(items) {
+  if (!items.length) return items
+  const totals = await Review.aggregate([
+    { $match: { product: { $in: items.map(item => item._id) }, isApproved: true } },
+    { $group: { _id: '$product', averageRating: { $avg: '$rating' }, reviewCount: { $sum: 1 } } }
+  ])
+  const byProduct = new Map(totals.map(row => [String(row._id), row]))
+  return items.map(item => {
+    const summary = byProduct.get(String(item._id))
+    return {
+      ...item,
+      rating: summary ? Number(Number(summary.averageRating).toFixed(1)) : 0,
+      reviewCount: summary?.reviewCount || 0
+    }
+  })
+}
 const productWrite = [requireAuth, requirePermission('products.write')]
 const productRead = [requireAuth, requirePermission('products.read')]
 const productOrInventoryRead = [requireAuth, (req,res,next) => { if (!hasPermission(req.user?.role,'products.read',req.user?.permissions) && !hasPermission(req.user?.role,'inventory.read',req.user?.permissions)) return res.status(403).json({message:'Insufficient permissions'}); next() }]
@@ -207,7 +224,8 @@ router.get('/', async (req, res, next) => {
       Product.find(filter).populate('category', 'name slug').sort(sortBy).skip((p - 1) * l).limit(l).lean(),
       Product.countDocuments(filter)
     ])
-    res.json({ items, total, page: p, pages: Math.ceil(total / l) })
+    const ratedItems = await attachReviewSummaries(items)
+    res.json({ items: ratedItems, total, page: p, pages: Math.ceil(total / l) })
   } catch (e) { next(e) }
 })
 
@@ -352,9 +370,10 @@ router.get('/:id', async (req, res, next) => {
     const filter = /^[a-f0-9]{24}$/i.test(identifier)
       ? { _id: identifier, isPublished: true }
       : { $or: [{ slug: identifier }, { legacySlugs: identifier }], isPublished: true }
-    const item = await Product.findOne(filter).populate('category', 'name slug')
+    const item = await Product.findOne(filter).populate('category', 'name slug').lean()
     if (!item) return res.status(404).json({ message: 'Product not found' })
-    res.json(item)
+    const [ratedItem] = await attachReviewSummaries([item])
+    res.json(ratedItem)
   } catch (e) { next(e) }
 })
 export default router
