@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import '../returns.css'
 import { Link, Navigate, useParams, useSearchParams, useNavigate, useLocation } from 'react-router-dom'
-import { ArrowRight, ArrowLeft, ShoppingBag, Trash2, LayoutDashboard, LockKeyhole, SlidersHorizontal, Minus, Plus, ShieldCheck, Truck, RotateCcw, UserRound, Heart, Facebook, Instagram, Youtube, Music2, Mail, Phone, MapPin, Clock, PackageCheck, RefreshCw, HelpCircle, Eye, EyeOff } from 'lucide-react'
+import { ArrowRight, ArrowLeft, ShoppingBag, Trash2, LayoutDashboard, LockKeyhole, SlidersHorizontal, Minus, Plus, ShieldCheck, Truck, RotateCcw, UserRound, Heart, Facebook, Instagram, Youtube, Music2, Mail, Phone, MapPin, Clock, PackageCheck, RefreshCw, HelpCircle, Eye, EyeOff, Star } from 'lucide-react'
 import ProductCard from '../components/ProductCard'
 import { products as demoProducts, categories as demoCategories, money } from '../data/products'
 import { useShop } from '../context/ShopContext'
@@ -11,7 +11,7 @@ import { ORDER_STATUS_LABELS, ORDER_HISTORY_LABELS, RETURN_REQUEST_STATUS_LABELS
 
 async function compressProfilePhoto(file){const raw=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(new Error('Could not read image'));reader.readAsDataURL(file)});const img=await new Promise((resolve,reject)=>{const el=new Image();el.onload=()=>resolve(el);el.onerror=()=>reject(new Error('Invalid image file'));el.src=raw});const scale=Math.min(1,900/Math.max(img.width,img.height));const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Image compression is unavailable in this browser.');ctx.drawImage(img,0,0,canvas.width,canvas.height);let data=canvas.toDataURL('image/webp',0.72);if(data.length>900000)data=canvas.toDataURL('image/webp',0.5);if(data.length>1200000)throw new Error('Photo is too large after compression. Choose another image.');return data}
 function normalizeProduct(p) {
-  return { ...p, id: p._id || p.id, oldPrice: p.compareAtPrice || p.oldPrice || 0, tag: p.tags?.[0] || p.tag, category: typeof p.category === 'object' ? p.category?.name || 'Collection' : p.category || 'Collection', color: p.color || '#d9c7ef', sizes: p.sizes?.length ? p.sizes : ['S','M','L','XL'], rating: p.rating || 4.8 }
+  return { ...p, id: p._id || p.id, oldPrice: p.compareAtPrice || p.oldPrice || 0, tag: p.tags?.[0] || p.tag, category: typeof p.category === 'object' ? p.category?.name || 'Collection' : p.category || 'Collection', color: p.color || '#d9c7ef', sizes: p.sizes?.length ? p.sizes : ['S','M','L','XL'], rating: Number(p.rating) || 0, reviewCount: Number(p.reviewCount) || 0 }
 }
 const DEFAULT_HOMEPAGE_LAYOUT={
  sections:[{id:'hero',enabled:true,sortOrder:0},{id:'benefits',enabled:true,sortOrder:1},{id:'categories',enabled:true,sortOrder:2},{id:'collection',enabled:true,sortOrder:3},{id:'promo',enabled:true,sortOrder:4}],
@@ -114,8 +114,9 @@ export function Shop(){
 }
 
 export function ProductDetail(){
- const {id}=useParams(),{addToCart,toggleWish,wishlist}=useShop(),navigate=useNavigate()
+ const {id}=useParams(),{addToCart,toggleWish,wishlist}=useShop(),navigate=useNavigate(),{user}=useAuth()
  const [p,setP]=useState(()=>demoProducts.find(x=>x.id===id)||null),[loading,setLoading]=useState(true),[size,setSize]=useState(''),[color,setColor]=useState(''),[qty,setQty]=useState(1),[activeImage,setActiveImage]=useState(0),[relatedProducts,setRelatedProducts]=useState([])
+ const [reviews,setReviews]=useState([]),[reviewSummary,setReviewSummary]=useState({averageRating:0,reviewCount:0}),[reviewEligibility,setReviewEligibility]=useState({eligible:false,alreadyReviewed:false}),[reviewLoading,setReviewLoading]=useState(true),[reviewBusy,setReviewBusy]=useState(false),[reviewRating,setReviewRating]=useState(5),[reviewComment,setReviewComment]=useState(''),[reviewError,setReviewError]=useState(''),[reviewNotice,setReviewNotice]=useState('')
  useEffect(()=>{let live=true;setLoading(true);setP(demoProducts.find(x=>x.id===id)||null);api.get(`/products/${encodeURIComponent(id)}`).then(({data})=>{if(!live)return;const product=normalizeProduct(data);setP(product);if(product.slug&&product.slug!==id)navigate(`/product/${encodeURIComponent(product.slug)}`,{replace:true})}).catch(async()=>{try{const categories=await getCategories();if(!live)return;const slugify=value=>String(value||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');const category=categories.find(item=>String(item.slug||'').toLowerCase()===String(id).toLowerCase()||slugify(item.name)===String(id).toLowerCase());if(category){navigate(`/shop?category=${encodeURIComponent(category.name)}`,{replace:true});return}}catch(error){console.warn('Could not resolve category URL:',error)}if(live)setP(null)}).finally(()=>{if(live)setLoading(false)});return()=>{live=false}},[id,navigate])
  useEffect(()=>{
   let live=true
@@ -145,6 +146,32 @@ export function ProductDetail(){
   }).catch(()=>{if(live)setRelatedProducts([])})
   return()=>{live=false}
  },[p?._id])
+ useEffect(()=>{
+  if(!p?._id){setReviews([]);setReviewSummary({averageRating:0,reviewCount:0});setReviewEligibility({eligible:false,alreadyReviewed:false});setReviewLoading(false);return}
+  let live=true
+  setReviewLoading(true);setReviewError('')
+  api.get('/reviews/'+p._id).then(({data})=>{
+   if(!live)return
+   setReviews(Array.isArray(data.items)?data.items:[])
+   setReviewSummary(data.summary||{averageRating:0,reviewCount:0})
+  }).catch(error=>{if(live)setReviewError(error.response?.data?.message||'Customer reviews could not be loaded.')}).finally(()=>{if(live)setReviewLoading(false)})
+  if(user?.role==='customer'){
+   api.get('/reviews/'+p._id+'/eligibility').then(({data})=>{if(live)setReviewEligibility(data)}).catch(()=>{if(live)setReviewEligibility({eligible:false,alreadyReviewed:false})})
+  }else setReviewEligibility({eligible:false,alreadyReviewed:false})
+  return()=>{live=false}
+ },[p?._id,user?.id,user?.role])
+ async function submitProductReview(event){
+  event.preventDefault()
+  if(!p?._id)return
+  setReviewBusy(true);setReviewError('');setReviewNotice('')
+  try{
+   const {data}=await api.post('/reviews/'+p._id,{rating:reviewRating,comment:reviewComment})
+   setReviewEligibility({eligible:false,alreadyReviewed:true})
+   setReviewComment('')
+   setReviewNotice(data.message||'Your review was submitted for moderation.')
+  }catch(error){setReviewError(error.response?.data?.message||'Your review could not be submitted. Please try again.')}
+  finally{setReviewBusy(false)}
+ }
  useEffect(()=>{if(p){const firstAvailable=p.variantStocks?.find(v=>Number(v.stock)>0);setSize(firstAvailable?.size||p.sizes?.[0]||'S');setColor(firstAvailable?.color||p.colors?.[0]||'');setQty(1)}setActiveImage(0)},[p,id])
  const variantRows=Array.isArray(p?.variantStocks)?p.variantStocks:[];const availableSizes=p?.sizes?.length?p.sizes:[...new Set(variantRows.map(v=>String(v.size||'')).filter(Boolean))];const availableColors=p?.colors?.length?p.colors:[...new Set(variantRows.map(v=>String(v.color||'')).filter(Boolean))];const selectedVariant=variantRows.find(v=>String(v.size||'').toLowerCase()===String(size||'').toLowerCase()&&String(v.color||'').toLowerCase()===String(color||'').toLowerCase());const selectedStock=variantRows.length?(selectedVariant?.stock??0):Number(p?.stock??0)
  const productMatchesRoute=String(p?._id||p?.id||'')===String(id)||String(p?.slug||'')===String(id)
@@ -198,6 +225,16 @@ export function ProductDetail(){
     </section>
    </div>
   </div>
+  <section className="product-reviews-section" aria-labelledby="product-reviews-title">
+   <div className="product-reviews-heading"><div><span className="eyebrow">VERIFIED CUSTOMER FEEDBACK</span><h2 id="product-reviews-title">Customer reviews · ক্রেতার মতামত</h2></div><div className="product-review-summary">{reviewSummary.reviewCount>0?<><strong>{Number(reviewSummary.averageRating).toFixed(1)}</strong><span><span aria-label={reviewSummary.reviewCount+' approved reviews'}>★★★★★</span><small>{reviewSummary.reviewCount} approved reviews</small></span></>:<span>No approved reviews yet · এখনো কোনো অনুমোদিত রিভিউ নেই</span>}</div></div>
+   {reviewLoading?<p className="product-review-muted" role="status">Loading customer reviews…</p>:reviewError&&!reviews.length?<p className="api-notice">{reviewError}</p>:reviews.length?<div className="product-review-list">{reviews.map(review=><article className="product-review-card" key={review._id}><div className="product-review-card-top"><b>{review.customer?.name||'SMART OUTFIT customer'}</b><span className="product-review-stars" aria-label={review.rating+' out of 5 stars'}>{'★'.repeat(Number(review.rating)||0)}{'☆'.repeat(5-(Number(review.rating)||0))}</span></div><p>{review.comment}</p><small>{review.createdAt?new Date(review.createdAt).toLocaleDateString('en-BD'):'Verified customer review'}</small></article>)}</div>:<p className="product-review-muted">Be the first customer to share an approved review for this product.</p>}
+   {reviewNotice&&<p className="product-review-success" role="status">{reviewNotice}</p>}
+   {user?.role==='customer'&&reviewEligibility.eligible&&<form className="product-review-form" onSubmit={submitProductReview}><h3>Write a review · আপনার মতামত দিন</h3><label>Your rating</label><div className="product-review-rating-picker" role="group" aria-label="Choose a rating from 1 to 5">{[1,2,3,4,5].map(value=><button type="button" key={value} className={value<=reviewRating?'selected':''} aria-label={value+' stars'} aria-pressed={reviewRating===value} onClick={()=>setReviewRating(value)}><Star size={22} fill={value<=reviewRating?'currentColor':'none'}/></button>)}</div><label>Review<textarea required minLength={10} maxLength={1000} rows={4} value={reviewComment} onChange={event=>setReviewComment(event.target.value)} placeholder="Share your experience with this product (10–1,000 characters)."/></label><button type="submit" disabled={reviewBusy||reviewComment.trim().length<10}>{reviewBusy?'Submitting review…':'Submit review for moderation'}</button></form>}
+   {user?.role==='customer'&&reviewEligibility.alreadyReviewed&&<p className="product-review-muted">You have already submitted a review for this product.</p>}
+   {user?.role==='customer'&&!reviewEligibility.eligible&&!reviewEligibility.alreadyReviewed&&<p className="product-review-muted">Verified reviews are available after a paid order is delivered. Products reserved for return cannot be reviewed.</p>}
+   {!user&&<p className="product-review-muted"><Link to={'/login?next='+encodeURIComponent('/product/'+(p.slug||p.id))}>Sign in</Link> to review this product after a delivered, paid order.</p>}
+   {reviewError&&reviews.length>0&&<p className="api-notice">{reviewError}</p>}
+  </section>
   {relatedProducts.length>0&&<section className="section detail-related-section shop-page-classic"><div className="detail-related-heading"><span className="eyebrow">আপনার জন্য বাছাই করা</span><h2>এগুলোও আপনার ভালো লাগতে পারে</h2><p>আপনার পছন্দের সঙ্গে মানানসই আরও কিছু স্টাইল</p></div><div className="product-grid shop-product-grid">{relatedProducts.map(x=><ProductCard key={x.id} product={x}/>)}</div></section>}
  </div>
 }
