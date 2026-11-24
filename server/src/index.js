@@ -19,6 +19,7 @@ import admin from './routes/admin.js'
 import storefront from './routes/storefront.js'
 import analytics from './routes/analytics.js'
 import support from './routes/support.js'
+import reviews from './routes/reviews.js'
 import { shouldSkipAuthRateLimit } from './config/rateLimits.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -37,6 +38,8 @@ app.use('/api/auth', rateLimit({ windowMs: 15 * 60 * 1000, limit: 30, standardHe
 app.use('/api/auth', auth)
 app.use('/api/health', health)
 app.use('/api/products', products)
+app.use('/api/reviews', rateLimit({ windowMs: 15 * 60 * 1000, limit: 8, standardHeaders: true, legacyHeaders: false, skip: req => req.method !== 'POST', message: { message: 'Too many review submissions. Please try again in 15 minutes.' } }))
+app.use('/api/reviews', reviews)
 app.use('/api/categories', categories)
 app.use('/api/orders', orders)
 app.use('/api/coupons', coupons)
