@@ -169,3 +169,12 @@ The starter deliberately does not create a default administrator or expose a pub
 - The authenticated customer return endpoint reads the same persisted setting used by the public storefront configuration, so the customer-facing form and server eligibility check stay aligned. The API remains authoritative and reports the configured window when it has expired.
 - The General Settings workspace shows the control only to Super Admin accounts. The server rejects attempts by other staff roles to change this specific setting even if they can edit other store settings.
 - Added unit coverage for default, boundary, invalid and custom-window eligibility behavior. Staging database and browser end-to-end verification are still required.
+
+
+## Verified customer product reviews (2026-11-24)
+- Added a customer review API that exposes only Admin-approved reviews and aggregates real average ratings/counts for published products.
+- Customers can submit one review per product only after a paid order is delivered. Products whose quantities are reserved by an active return or already received return cannot be reviewed; retained quantities on a partial return remain eligible.
+- New reviews enter the existing Admin → Product Reviews moderation queue and are not shown publicly until approved.
+- Added an 8-submission-per-15-minute IP limit for review POST requests and a unique product/customer index to prevent duplicate reviews under concurrent submissions.
+- Removed the storefront's hard-coded 4.8-star fallback. Product cards now show only approved rating aggregates; products without approved reviews are labeled as new instead of displaying a fabricated score.
+- Automated policy tests cover input validation, verified purchase eligibility, return reservations and duplicate-review state. Database/index creation, authenticated route integration and browser end-to-end review moderation still require staging verification.
