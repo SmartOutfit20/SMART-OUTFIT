@@ -4,6 +4,7 @@ import { starterProducts } from '../data/starterProducts.js'
 import { requireAuth, requirePermission } from '../middleware/auth.js'
 import { hasPermission } from '../config/permissions.js'
 import sharp from 'sharp'
+import { normalizeCatalogueQuery, buildCategoryLookup, buildCatalogueFilter, buildCatalogueSort } from '../services/catalogueRules.js'
 
 const router = Router()
 
@@ -212,20 +213,27 @@ router.get('/', async (req, res, next) => {
   try {
     await ensureShortProductSlugs()
     await ensureProductSerials()
-    const { q, category, page = 1, limit = 12, sort = 'newest' } = req.query
-    const filter = { isPublished: true }
-    if (q) filter.name = { $regex: String(q).slice(0, 80), $options: 'i' }
-    if (category) filter.category = category
-    if (sort === 'featured') filter.isFeatured = true
-    if (sort === 'best-seller') filter.isBestSeller = true
-    const p = Math.max(1, Number(page) || 1), l = Math.min(48, Math.max(1, Number(limit) || 12))
-    const sortBy = sort === 'price-low' ? { price: 1 } : sort === 'price-high' ? { price: -1 } : { createdAt: -1 }
-    const [items, total] = await Promise.all([
-      Product.find(filter).populate('category', 'name slug').sort(sortBy).skip((p - 1) * l).limit(l).lean(),
-      Product.countDocuments(filter)
-    ])
+    const filters = normalizeCatalogueQuery(req.query)
+    let categoryId
+    if (filters.category) {
+      const category = await Category.findOne(buildCategoryLookup(filters.category)).select('_id').lean()
+      if (!category) return res.json({ items: [], total: 0, page: 1, pages: 0, limit: filters.limit })
+      categoryId = category._id
+    }
+    const filter = buildCatalogueFilter(filters, categoryId)
+    if (filters.sort === 'featured') filter.isFeatured = true
+    if (filters.sort === 'best-seller') filter.isBestSeller = true
+    const total = await Product.countDocuments(filter)
+    const pages = Math.ceil(total / filters.limit)
+    const page = pages ? Math.min(filters.page, pages) : 1
+    const items = await Product.find(filter)
+      .populate('category', 'name slug')
+      .sort(buildCatalogueSort(filters.sort))
+      .skip((page - 1) * filters.limit)
+      .limit(filters.limit)
+      .lean()
     const ratedItems = await attachReviewSummaries(items)
-    res.json({ items: ratedItems, total, page: p, pages: Math.ceil(total / l) })
+    res.json({ items: ratedItems, total, page, pages, limit: filters.limit })
   } catch (e) { next(e) }
 })
 

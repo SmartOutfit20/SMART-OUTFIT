@@ -184,3 +184,12 @@ The starter deliberately does not create a default administrator or expose a pub
 - Reused the shared sequential order-status transition policy in the Admin delivery update endpoint. Delivery staff can no longer skip confirmed → processing → shipped → delivered or mark a COD order paid by jumping directly to delivered.
 - Courier name and tracking-number edits remain available without changing order status. Invalid status jumps return HTTP 409.
 - Added a regression test for delivery-workspace transition rules. Authenticated API and live database verification remain outstanding.
+
+
+## API-backed catalogue filtering and pagination (2026-11-25)
+- The public products endpoint resolves category filters by MongoDB ID, URL slug, or exact category name, so current slug links and older shared category-name links work.
+- Search is literal (regex metacharacters are escaped) and covers product name, description, and tags. Server-side filters support BDT minimum/maximum price, size, colour, in-stock items, and sale items.
+- Added deterministic recommended/newest/price/featured/best-seller ordering and server-side pagination with a 48-item maximum page size. Responses include effective page, page count, total count, and limit.
+- The storefront requests filtered pages from the API instead of downloading only the first 48 products and filtering that partial list in the browser. Search, category, sort, filter, and page state are shareable through URL query parameters.
+- Added a clearly labeled preview-catalogue filter fallback when the API is unavailable. Preview products remain non-purchasable.
+- Added pure backend and storefront catalogue helper tests. These do not replace MongoDB integration or browser end-to-end tests.

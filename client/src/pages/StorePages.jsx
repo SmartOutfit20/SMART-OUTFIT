@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import '../returns.css'
+import '../catalogue.css'
+import { buildCatalogueParams, filterPreviewProducts } from '../utils/catalogue'
 import { Link, Navigate, useParams, useSearchParams, useNavigate, useLocation } from 'react-router-dom'
 import { ArrowRight, ArrowLeft, ShoppingBag, Trash2, LayoutDashboard, LockKeyhole, SlidersHorizontal, Minus, Plus, ShieldCheck, Truck, RotateCcw, UserRound, Heart, Facebook, Instagram, Youtube, Music2, Mail, Phone, MapPin, Clock, PackageCheck, RefreshCw, HelpCircle, Eye, EyeOff, Star } from 'lucide-react'
 import ProductCard from '../components/ProductCard'
@@ -10,8 +12,12 @@ import { useAuth } from '../context/AuthContext'
 import { ORDER_STATUS_LABELS, ORDER_HISTORY_LABELS, RETURN_REQUEST_STATUS_LABELS, getSortedOrderHistory, getSortedReturnRequests, getSortedRefunds, getRefundTotal } from '../utils/orderTimeline'
 
 async function compressProfilePhoto(file){const raw=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(new Error('Could not read image'));reader.readAsDataURL(file)});const img=await new Promise((resolve,reject)=>{const el=new Image();el.onload=()=>resolve(el);el.onerror=()=>reject(new Error('Invalid image file'));el.src=raw});const scale=Math.min(1,900/Math.max(img.width,img.height));const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Image compression is unavailable in this browser.');ctx.drawImage(img,0,0,canvas.width,canvas.height);let data=canvas.toDataURL('image/webp',0.72);if(data.length>900000)data=canvas.toDataURL('image/webp',0.5);if(data.length>1200000)throw new Error('Photo is too large after compression. Choose another image.');return data}
+function slugifyCategory(value){return String(value||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'')}
 function normalizeProduct(p) {
-  return { ...p, id: p._id || p.id, oldPrice: p.compareAtPrice || p.oldPrice || 0, tag: p.tags?.[0] || p.tag, category: typeof p.category === 'object' ? p.category?.name || 'Collection' : p.category || 'Collection', color: p.color || '#d9c7ef', sizes: p.sizes?.length ? p.sizes : ['S','M','L','XL'], rating: Number(p.rating) || 0, reviewCount: Number(p.reviewCount) || 0 }
+  const category = p.category && typeof p.category === 'object' ? p.category : null
+  const variantSizes = [...new Set((p.variantStocks || []).map(v => String(v.size || '').trim()).filter(Boolean))]
+  const variantColors = [...new Set((p.variantStocks || []).map(v => String(v.color || '').trim()).filter(Boolean))]
+  return { ...p, id: p._id || p.id, oldPrice: p.compareAtPrice || p.oldPrice || 0, tag: p.tags?.[0] || p.tag, categoryId: category?._id || p.categoryId, categorySlug: category?.slug || p.categorySlug || (typeof p.category === 'string' ? slugifyCategory(p.category) : ''), category: category?.name || p.category || 'Collection', color: p.color || '#d9c7ef', sizes: p.sizes?.length ? p.sizes : variantSizes.length ? variantSizes : ['S','M','L','XL'], colors: p.colors?.length ? p.colors : variantColors, rating: Number(p.rating) || 0, reviewCount: Number(p.reviewCount) || 0 }
 }
 const DEFAULT_HOMEPAGE_LAYOUT={
  sections:[{id:'hero',enabled:true,sortOrder:0},{id:'benefits',enabled:true,sortOrder:1},{id:'categories',enabled:true,sortOrder:2},{id:'collection',enabled:true,sortOrder:3},{id:'promo',enabled:true,sortOrder:4}],
@@ -36,7 +42,7 @@ export function Home(){
  const banner=banners[activeBanner]||null
  const sectionConfig=(homepageLayout.sections||DEFAULT_HOMEPAGE_LAYOUT.sections).slice().sort((a,b)=>(a.sortOrder||0)-(b.sortOrder||0))
  const categoryConfig=homepageLayout.categories||DEFAULT_HOMEPAGE_LAYOUT.categories
- const availableCategories=homeCategories.length?homeCategories:demoCategories.filter(name=>name!=='All').map(name=>({_id:name,name}))
+ const availableCategories=homeCategories.length?homeCategories:demoCategories.filter(name=>name!=='All').map(name=>({_id:name,name,slug:slugifyCategory(name)}))
  const chosenCategories=(categoryConfig.categoryIds?.length?availableCategories.filter(c=>categoryConfig.categoryIds.includes(c._id)):availableCategories.filter(c=>c.isActive!==false).slice(0,4)).slice(0,8)
  const benefitItems=homepageLayout.benefits?.items||DEFAULT_HOMEPAGE_LAYOUT.benefits.items
  const collection=homepageLayout.collection||DEFAULT_HOMEPAGE_LAYOUT.collection
@@ -45,7 +51,7 @@ export function Home(){
  const renderSection=id=>{
   if(id==='hero')return heroSection
   if(id==='benefits')return <section className="benefits">{benefitItems.slice(0,3).map((item,index)=>{const Icon=[Truck,ShieldCheck,RotateCcw][index%3];return <div key={index}><Icon/><b>{item.title}</b><small>{item.description}</small></div>})}</section>
-  if(id==='categories')return <section className="section"><div className="section-heading"><div><span className="eyebrow">{categoryConfig.eyebrow}</span><h2>{categoryConfig.title}</h2></div><Link to="/shop">সব দেখুন <ArrowRight size={16}/></Link></div><div className="category-grid">{chosenCategories.map((item,index)=><Link to={'/shop?category='+encodeURIComponent(item.name)} className={'category-tile tile-'+(index%4)} key={item._id}><span>{String(index+1).padStart(2,'0')} / CATEGORY</span><b>{item.name.toUpperCase()}</b><small>EXPLORE <ArrowRight size={14}/></small></Link>)}</div></section>
+  if(id==='categories')return <section className="section"><div className="section-heading"><div><span className="eyebrow">{categoryConfig.eyebrow}</span><h2>{categoryConfig.title}</h2></div><Link to="/shop">সব দেখুন <ArrowRight size={16}/></Link></div><div className="category-grid">{chosenCategories.map((item,index)=><Link to={'/shop?category='+encodeURIComponent(item.slug||slugifyCategory(item.name))} className={'category-tile tile-'+(index%4)} key={item._id}><span>{String(index+1).padStart(2,'0')} / CATEGORY</span><b>{item.name.toUpperCase()}</b><small>EXPLORE <ArrowRight size={14}/></small></Link>)}</div></section>
   if(id==='collection')return <section className="section section-tint home-new-collection"><div className="section-heading"><div><span className="eyebrow">{collection.eyebrow}</span><h2>{collection.title}</h2><p>{collection.description}</p></div><Link to="/shop">সব পণ্য <ArrowRight size={16}/></Link></div><div className="product-grid shop-product-grid">{latest.map(p=><ProductCard key={p.id} product={p}/>)}</div></section>
   if(id==='promo')return <section className="promo"><div><span className="eyebrow">{promo.eyebrow}</span><h2>{promo.title}</h2><p>{promo.description}</p><Link to={promo.buttonLink||'/shop'} className="btn btn-dark">{promo.buttonText||'SHOP THE EDIT'} <ArrowRight size={17}/></Link></div><div className="promo-art"><span>SO.</span></div></section>
   return null
@@ -54,17 +60,15 @@ export function Home(){
 }
 export function Shop(){
  const [params,setParams]=useSearchParams()
- const [query,setQuery]=useState(params.get('search')||'')
- const [sort,setSort]=useState('featured')
  const [remote,setRemote]=useState([])
- const [cats,setCats]=useState(demoCategories)
- const [source,setSource]=useState('sample')
+ const [cats,setCats]=useState(()=>demoCategories.filter(name=>name!=='All').map(name=>({name,slug:slugifyCategory(name)})))
+ const [source,setSource]=useState('api')
  const [loading,setLoading]=useState(true)
  const [error,setError]=useState('')
+ const [totalCount,setTotalCount]=useState(0)
+ const [pageCount,setPageCount]=useState(0)
+ const [currentPage,setCurrentPage]=useState(1)
  const [filterOpen,setFilterOpen]=useState(false)
- const [sizeFilter,setSizeFilter]=useState('')
- const [stockOnly,setStockOnly]=useState(false)
- const [maxPrice,setMaxPrice]=useState(20000)
  const [shopBanners,setShopBanners]=useState([])
  const [activeShopBanner,setActiveShopBanner]=useState(0)
  const [previousShopBanner,setPreviousShopBanner]=useState(null)
@@ -72,44 +76,100 @@ export function Shop(){
  const shopBannerTouchStartX=useRef(null)
  const changeShopBanner=useCallback((next,direction=1)=>{if(next===activeShopBanner)return;setPreviousShopBanner(shopBanners[activeShopBanner]||null);setShopBannerDirection(direction);setActiveShopBanner(next)},[shopBanners,activeShopBanner])
  const category=params.get('category')||'All'
- useEffect(()=>{setQuery(params.get('search')||'')},[params])
+ const query=params.get('search')||''
+ const allowedSorts=['recommended','newest','price-low','price-high','featured','best-seller']
+ const sort=allowedSorts.includes(params.get('sort'))?params.get('sort'):'recommended'
+ const page=Math.max(1,Math.floor(Number(params.get('page'))||1))
+ const sizeFilter=params.get('size')||''
+ const colorFilter=params.get('color')||''
+ const stockOnly=params.get('stock')==='1'
+ const saleOnly=params.get('sale')==='1'
+ const minPriceValue=Number(params.get('minPrice')||0)
+ const minPrice=Number.isFinite(minPriceValue)?Math.min(50000,Math.max(0,minPriceValue)):0
+ const maxPriceValue=Number(params.get('maxPrice')||20000)
+ const maxPrice=Number.isFinite(maxPriceValue)?Math.min(50000,Math.max(minPrice,maxPriceValue)):Math.max(minPrice,20000)
+ const updateParam=(key,value)=>setParams(previous=>{
+  const next=new URLSearchParams(previous)
+  if(value===undefined||value===null||value==='')next.delete(key)
+  else next.set(key,String(value))
+  if(key!=='page')next.delete('page')
+  return next
+ })
  useEffect(()=>{
   let active=true
+  getCategories().then(items=>{if(active&&Array.isArray(items))setCats(items.filter(item=>item&&item.isActive!==false))}).catch(()=>{})
+  return()=>{active=false}
+ },[])
+ useEffect(()=>{
+  if(category==='All'||!cats.length)return
+  const match=cats.find(item=>String(item.slug||'').toLowerCase()===category.toLowerCase()||String(item.name||'').toLowerCase()===category.toLowerCase())
+  if(match?.slug&&match.slug!==category)setParams(previous=>{const next=new URLSearchParams(previous);next.set('category',match.slug);next.delete('page');return next})
+ },[category,cats,setParams])
+ useEffect(()=>{
+  const controller=new AbortController()
   setLoading(true)
-  Promise.all([getProducts({limit:48,q:query,sort:sort==='featured'?'newest':sort}),getCategories()])
-   .then(([p,c])=>{if(!active)return;setRemote((p.items||[]).map(normalizeProduct));if(c.length)setCats(['All',...c.map(x=>x.name)]);setSource('api');setError('')})
-   .catch(()=>{if(active){setRemote(demoProducts);setSource('sample');setError('লাইভ ক্যাটালগ পাওয়া যাচ্ছে না—এখন প্রিভিউ পণ্য দেখানো হচ্ছে।')}})
-   .finally(()=>{if(active)setLoading(false)})
-  return ()=>{active=false}
- },[query,sort])
- useEffect(()=>{let active=true;api.get('/storefront').then(({data})=>{if(active){setShopBanners((data.shopBanners||[]).filter(x=>x&&x.enabled!==false&&typeof x.image==='string'&&x.image.trim()).sort((a,b)=>(a.sortOrder||0)-(b.sortOrder||0)));setActiveShopBanner(0)}}).catch(()=>{});return()=>{active=false}},[])
+  const request=buildCatalogueParams({page,limit:12,query,category,sort,minPrice,maxPrice,size:sizeFilter,color:colorFilter,inStock:stockOnly,sale:saleOnly})
+  getProducts(request,{signal:controller.signal}).then(data=>{
+   setRemote((data.items||[]).map(normalizeProduct))
+   setTotalCount(Number(data.total)||0)
+   setPageCount(Number(data.pages)||0)
+   setCurrentPage(Number(data.page)||1)
+   setSource('api')
+   setError('')
+  }).catch(error=>{
+   if(controller.signal.aborted||error.code==='ERR_CANCELED')return
+   const preview=demoProducts.map(normalizeProduct)
+   setRemote(preview)
+   setTotalCount(preview.length)
+   setPageCount(1)
+   setCurrentPage(1)
+   setSource('preview')
+   setError('লাইভ ক্যাটালগ পাওয়া যাচ্ছে না—এখন প্রিভিউ পণ্য দেখানো হচ্ছে।')
+  }).finally(()=>{if(!controller.signal.aborted)setLoading(false)})
+  return()=>controller.abort()
+ },[page,query,category,sort,minPrice,maxPrice,sizeFilter,colorFilter,stockOnly,saleOnly])
+ useEffect(()=>{
+  let active=true
+  api.get('/storefront').then(({data})=>{
+   if(!active)return
+   setShopBanners((data.shopBanners||[]).filter(x=>x&&x.enabled!==false&&typeof x.image==='string'&&x.image.trim()).sort((a,b)=>(a.sortOrder||0)-(b.sortOrder||0)))
+   setActiveShopBanner(0)
+  }).catch(()=>{})
+  return()=>{active=false}
+ },[])
  useEffect(()=>{if(activeShopBanner>=shopBanners.length)setActiveShopBanner(0)},[shopBanners.length,activeShopBanner])
  useEffect(()=>{if(!previousShopBanner)return;const timer=window.setTimeout(()=>setPreviousShopBanner(null),850);return()=>window.clearTimeout(timer)},[previousShopBanner,activeShopBanner])
  useEffect(()=>{if(shopBanners.length<2)return;const timer=window.setInterval(()=>changeShopBanner((activeShopBanner+1)%shopBanners.length,1),4500);return()=>window.clearInterval(timer)},[shopBanners.length,activeShopBanner,changeShopBanner])
  const activeShopBannerItem=shopBanners[activeShopBanner]||null
- const items=useMemo(()=>remote.filter(p=>{
-  const matchesCategory=category==='All'||p.category===category
-  const term=query.trim().toLowerCase()
-  const matchesSearch=!term||[p.name,p.category,p.description,...(p.tags||[])].some(value=>String(value||'').toLowerCase().includes(term))
-  const matchesSize=!sizeFilter||(p.sizes||[]).some(s=>String(s).toLowerCase()===sizeFilter.toLowerCase())
-  const matchesStock=!stockOnly||(p.variantStocks?.length?p.variantStocks.some(v=>Number(v.stock)>0):Number(p.stock||0)>0)
-  return matchesCategory&&matchesSearch&&matchesSize&&matchesStock&&Number(p.price||0)<=maxPrice
- }).sort((a,b)=>sort==='price-low'?a.price-b.price:sort==='price-high'?b.price-a.price:0),[remote,category,sort,query,sizeFilter,stockOnly,maxPrice])
- const sizes=useMemo(()=>[...new Set(remote.flatMap(p=>p.sizes||[]))],[remote])
- const recommendations=useMemo(()=>[...remote].sort((a,b)=>(Number(b.rating)||0)-(Number(a.rating)||0)).slice(0,4),[remote])
- const clearFilters=()=>{setSizeFilter('');setStockOnly(false);setMaxPrice(20000);setParams(prev=>{const next=new URLSearchParams(prev);next.delete('category');return next})}
- const chooseCategory=name=>setParams(prev=>{const next=new URLSearchParams(prev);if(name==='All')next.delete('category');else next.set('category',name);return next})
+ const filters={category,query,minPrice,maxPrice,size:sizeFilter,color:colorFilter,inStock:stockOnly,sale:saleOnly,sort}
+ const items=source==='api'?remote:filterPreviewProducts(remote,filters)
+ const displayedCount=source==='api'?totalCount:items.length
+ const sizes=[...new Set(remote.flatMap(product=>product.sizes||[]))]
+ const colors=[...new Set(remote.flatMap(product=>product.colors||[]))]
+ const recommendations=[...remote].sort((a,b)=>(Number(b.rating)||0)-(Number(a.rating)||0)).slice(0,4)
+ const selectedCategory=cats.find(item=>String(item.slug||'').toLowerCase()===category.toLowerCase()||String(item.name||'').toLowerCase()===category.toLowerCase())
+ const categoryLabel=category==='All'?'All Products':selectedCategory?.name||category
+ const clearFilters=()=>setParams(new URLSearchParams())
+ const chooseCategory=value=>updateParam('category',value==='All'?'':value)
  return <div className="page-wrap shop-page shop-page-classic">
   {activeShopBannerItem?.image&&<section className="shop-managed-banner shop-managed-banner-slider" aria-label="Shop promotions" onTouchStart={event=>{shopBannerTouchStartX.current=event.changedTouches[0]?.clientX??null}} onTouchEnd={event=>{const endX=event.changedTouches[0]?.clientX;if(shopBannerTouchStartX.current!==null&&endX!==undefined&&Math.abs(endX-shopBannerTouchStartX.current)>45&&shopBanners.length>1){changeShopBanner((activeShopBanner+(endX<shopBannerTouchStartX.current?1:-1)+shopBanners.length)%shopBanners.length,endX<shopBannerTouchStartX.current?1:-1)}shopBannerTouchStartX.current=null}}>{previousShopBanner?.image&&<div key={'out-'+(previousShopBanner._id||previousShopBanner.id||previousShopBanner.image)} className={'shop-managed-banner-image shop-managed-banner-image--outgoing '+(shopBannerDirection>0?'slide-next':'slide-previous')} style={{backgroundImage:'url('+previousShopBanner.image+')'}}/>}<Link key={activeShopBannerItem._id||activeShopBannerItem.id||activeShopBannerItem.image} to={activeShopBannerItem.buttonLink||'/shop'} className={'shop-managed-banner-image shop-managed-banner-image--incoming '+(shopBannerDirection>0?'slide-next':'slide-previous')} style={{backgroundImage:'url('+activeShopBannerItem.image+')'}} aria-label={activeShopBannerItem.title||'Explore shop'}>{(activeShopBannerItem.title||activeShopBannerItem.description)&&<span className="shop-managed-banner-copy">{activeShopBannerItem.title&&<b>{activeShopBannerItem.title}</b>}{activeShopBannerItem.description&&<small>{activeShopBannerItem.description}</small>}</span>}</Link>{shopBanners.length>1&&<><div className="shop-managed-banner-controls"><button type="button" aria-label="Previous banner" onClick={()=>changeShopBanner((activeShopBanner-1+shopBanners.length)%shopBanners.length,-1)}>‹</button><button type="button" aria-label="Next banner" onClick={()=>changeShopBanner((activeShopBanner+1)%shopBanners.length,1)}>›</button></div><div className="shop-managed-banner-dots" role="group" aria-label="Shop banner navigation">{shopBanners.map((item,index)=><button key={item._id||item.id||index} type="button" className={index===activeShopBanner?'active':''} aria-label={'Show banner '+(index+1)} aria-current={index===activeShopBanner?'true':undefined} onClick={()=>changeShopBanner(index,index>=activeShopBanner?1:-1)}/>)}</div></>}</section>}
-  <div className="breadcrumb"><Link to="/">HOME</Link> / <Link to="/shop">SHOP</Link>{category!=='All'&&<> / {category.toUpperCase()}</>}</div>
-  <div className="page-title"><div><span className="eyebrow">THE SMART OUTFIT EDIT</span><h1>{category==='All'?'SHOP ALL':category.toUpperCase()}</h1><p>{category==='All'?'Find your next favourite piece.':`Explore our ${category.toLowerCase()} collection.`}</p></div><input className="search-input" placeholder="পণ্য খুঁজুন..." value={query} onChange={e=>setQuery(e.target.value)}/></div>
-  <div className="filter-row shop-classic-filter-row"><div className="shop-category-filters">{cats.map(c=><button type="button" className={category===c?'filter active':'filter'} key={c} onClick={()=>chooseCategory(c)}>{c==='All'?'All Products':c}</button>)}</div><button type="button" className={filterOpen?'shop-refine-toggle active':'shop-refine-toggle'} onClick={()=>setFilterOpen(v=>!v)}><SlidersHorizontal size={15}/> Filters</button><select value={sort} onChange={e=>setSort(e.target.value)}><option value="featured">Recommended</option><option value="newest">Latest</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option></select></div>
-  {filterOpen&&<div className="shop-refine-panel"><div className="shop-refine-field"><b>Price up to</b><strong>৳{maxPrice.toLocaleString('en-BD')}</strong><input type="range" min="0" max="20000" step="100" value={maxPrice} onChange={e=>setMaxPrice(Number(e.target.value))}/><small>৳0 <span>৳20,000+</span></small></div>{sizes.length>0&&<div className="shop-refine-field"><b>Choose size</b><div className="shop-refine-sizes">{sizes.map(size=><button type="button" key={size} className={sizeFilter===size?'selected':''} onClick={()=>setSizeFilter(sizeFilter===size?'':size)}>{size}</button>)}</div></div>}<label className="shop-refine-stock"><input type="checkbox" checked={stockOnly} onChange={e=>setStockOnly(e.target.checked)}/> শুধু স্টকে থাকা পণ্য</label><button type="button" className="shop-refine-reset" onClick={clearFilters}>Reset filters</button></div>}
+  <div className="breadcrumb"><Link to="/">HOME</Link> / <Link to="/shop">SHOP</Link>{category!=='All'&&<> / {categoryLabel.toUpperCase()}</>}</div>
+  <div className="page-title"><div><span className="eyebrow">THE SMART OUTFIT EDIT</span><h1>{category==='All'?'SHOP ALL':categoryLabel.toUpperCase()}</h1><p>{category==='All'?'Find your next favourite piece.':'Explore our '+categoryLabel.toLowerCase()+' collection.'}</p></div><input className="search-input" placeholder="পণ্য খুঁজুন..." value={query} onChange={event=>updateParam('search',event.target.value)}/></div>
+  <div className="filter-row shop-classic-filter-row"><div className="shop-category-filters"><button type="button" className={category==='All'?'filter active':'filter'} onClick={()=>chooseCategory('All')}>All Products</button>{cats.map(item=>{const value=item.slug||slugifyCategory(item.name);const active=category===value||category===item.name;return <button type="button" className={active?'filter active':'filter'} key={item._id||value} onClick={()=>chooseCategory(value)}>{item.name}</button>})}</div><button type="button" className={filterOpen?'shop-refine-toggle active':'shop-refine-toggle'} onClick={()=>setFilterOpen(value=>!value)}><SlidersHorizontal size={15}/> Filters</button><select value={sort} onChange={event=>updateParam('sort',event.target.value)}><option value="recommended">Recommended</option><option value="newest">Latest</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option><option value="featured">Featured only</option><option value="best-seller">Best sellers</option></select></div>
+  {filterOpen&&<div className="shop-refine-panel">
+   <div className="shop-refine-field shop-refine-price-inputs"><b>Price range (BDT)</b><label>From ৳<input type="number" min="0" max={maxPrice} value={minPrice||''} onChange={event=>updateParam('minPrice',event.target.value)}/></label><strong>Up to ৳{maxPrice.toLocaleString('en-BD')}</strong><input type="range" min={minPrice} max="50000" step="100" value={Math.min(50000,maxPrice)} onChange={event=>updateParam('maxPrice',event.target.value)}/><small>৳{minPrice.toLocaleString('en-BD')} <span>৳50,000+</span></small></div>
+   {sizes.length>0&&<div className="shop-refine-field"><b>Choose size</b><div className="shop-refine-sizes">{sizes.map(size=><button type="button" key={size} className={sizeFilter===size?'selected':''} onClick={()=>updateParam('size',sizeFilter===size?'':size)}>{size}</button>)}</div></div>}
+   {colors.length>0&&<div className="shop-refine-field"><b>Choose colour</b><div className="shop-refine-sizes">{colors.map(color=><button type="button" key={color} className={colorFilter.toLowerCase()===String(color).toLowerCase()?'selected':''} onClick={()=>updateParam('color',colorFilter.toLowerCase()===String(color).toLowerCase()?'':color)}>{color}</button>)}</div></div>}
+   <label className="shop-refine-stock"><input type="checkbox" checked={stockOnly} onChange={event=>updateParam('stock',event.target.checked?'1':'')}/> শুধু স্টকে থাকা পণ্য</label>
+   <label className="shop-refine-stock"><input type="checkbox" checked={saleOnly} onChange={event=>updateParam('sale',event.target.checked?'1':'')}/> শুধু অফার পণ্য</label>
+   <button type="button" className="shop-refine-reset" onClick={clearFilters}>Reset filters</button>
+  </div>}
   {error&&<p className="api-notice">{error}</p>}
-  <p className="result-count" role="status" aria-live="polite">{loading?'LOADING PRODUCTS…':`${items.length} PRODUCTS · ${source==='api'?'LIVE CATALOGUE':'PREVIEW CATALOGUE'}`}</p>
-  <div className="product-grid shop-product-grid" aria-busy={loading}>{items.map(p=><ProductCard key={p.id} product={p}/>)}</div>
+  <p className="result-count" role="status" aria-live="polite">{loading?'LOADING PRODUCTS…':displayedCount+' PRODUCTS · '+(source==='api'?'LIVE CATALOGUE':'PREVIEW CATALOGUE')}</p>
+  <div className="product-grid shop-product-grid" aria-busy={loading}>{items.map(product=><ProductCard key={product.id} product={product}/>)}</div>
   {!loading&&!items.length&&<div className="shop-no-results"><h3>কোনো পণ্য পাওয়া যায়নি</h3><p>অন্য ক্যাটাগরি বা ফিল্টার দিয়ে আবার চেষ্টা করুন।</p><button type="button" onClick={clearFilters}>সব ফিল্টার মুছুন</button></div>}
-  {recommendations.length>0&&<section className="shop-recommendations"><div className="shop-recommendation-heading"><div><span className="eyebrow">HANDPICKED FOR YOU</span><h2>Recommended for you</h2><p>জনপ্রিয় পণ্য থেকে আপনার জন্য বাছাই করা কিছু পছন্দ।</p></div><span>SMART PICKS</span></div><div className="product-grid shop-product-grid">{recommendations.map(p=><ProductCard key={'recommend-'+p.id} product={p}/>)}</div></section>}
+  {source==='api'&&pageCount>1&&<nav className="shop-pagination" aria-label="Product pages"><button type="button" disabled={currentPage<=1} onClick={()=>updateParam('page',currentPage-1)}>← Previous</button><span aria-live="polite">Page {currentPage} of {pageCount}</span><button type="button" disabled={currentPage>=pageCount} onClick={()=>updateParam('page',currentPage+1)}>Next →</button></nav>}
+  {recommendations.length>0&&<section className="shop-recommendations"><div className="shop-recommendation-heading"><div><span className="eyebrow">HANDPICKED FOR YOU</span><h2>Recommended for you</h2><p>জনপ্রিয় পণ্য থেকে আপনার জন্য বাছাই করা কিছু পছন্দ।</p></div><span>SMART PICKS</span></div><div className="product-grid shop-product-grid">{recommendations.map(product=><ProductCard key={'recommend-'+product.id} product={product}/>)}</div></section>}
  </div>
 }
 
@@ -117,7 +177,7 @@ export function ProductDetail(){
  const {id}=useParams(),{addToCart,toggleWish,wishlist}=useShop(),navigate=useNavigate(),{user}=useAuth()
  const [p,setP]=useState(()=>demoProducts.find(x=>x.id===id)||null),[loading,setLoading]=useState(true),[size,setSize]=useState(''),[color,setColor]=useState(''),[qty,setQty]=useState(1),[activeImage,setActiveImage]=useState(0),[relatedProducts,setRelatedProducts]=useState([])
  const [reviews,setReviews]=useState([]),[reviewSummary,setReviewSummary]=useState({averageRating:0,reviewCount:0}),[reviewEligibility,setReviewEligibility]=useState({eligible:false,alreadyReviewed:false}),[reviewLoading,setReviewLoading]=useState(true),[reviewBusy,setReviewBusy]=useState(false),[reviewRating,setReviewRating]=useState(5),[reviewComment,setReviewComment]=useState(''),[reviewError,setReviewError]=useState(''),[reviewNotice,setReviewNotice]=useState('')
- useEffect(()=>{let live=true;setLoading(true);setP(demoProducts.find(x=>x.id===id)||null);api.get(`/products/${encodeURIComponent(id)}`).then(({data})=>{if(!live)return;const product=normalizeProduct(data);setP(product);if(product.slug&&product.slug!==id)navigate(`/product/${encodeURIComponent(product.slug)}`,{replace:true})}).catch(async()=>{try{const categories=await getCategories();if(!live)return;const slugify=value=>String(value||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');const category=categories.find(item=>String(item.slug||'').toLowerCase()===String(id).toLowerCase()||slugify(item.name)===String(id).toLowerCase());if(category){navigate(`/shop?category=${encodeURIComponent(category.name)}`,{replace:true});return}}catch(error){console.warn('Could not resolve category URL:',error)}if(live)setP(null)}).finally(()=>{if(live)setLoading(false)});return()=>{live=false}},[id,navigate])
+ useEffect(()=>{let live=true;setLoading(true);setP(demoProducts.find(x=>x.id===id)||null);api.get(`/products/${encodeURIComponent(id)}`).then(({data})=>{if(!live)return;const product=normalizeProduct(data);setP(product);if(product.slug&&product.slug!==id)navigate(`/product/${encodeURIComponent(product.slug)}`,{replace:true})}).catch(async()=>{try{const categories=await getCategories();if(!live)return;const slugify=value=>String(value||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');const category=categories.find(item=>String(item.slug||'').toLowerCase()===String(id).toLowerCase()||slugify(item.name)===String(id).toLowerCase());if(category){navigate(`/shop?category=${encodeURIComponent(category.slug||slugifyCategory(category.name))}`,{replace:true});return}}catch(error){console.warn('Could not resolve category URL:',error)}if(live)setP(null)}).finally(()=>{if(live)setLoading(false)});return()=>{live=false}},[id,navigate])
  useEffect(()=>{
   let live=true
   if(!p?._id){setRelatedProducts([]);return()=>{live=false}}
@@ -182,7 +242,7 @@ export function ProductDetail(){
  const displayColor=c=>({'pure white':'পিওর হোয়াইট','white':'হোয়াইট','classic black':'ক্লাসিক ব্ল্যাক','black':'ব্ল্যাক','chocolate brown':'চকোলেট ব্রাউন','brown':'ব্রাউন','navy blue':'নেভি ব্লু','navy':'নেভি','grey':'গ্রে','gray':'গ্রে','red':'লাল','blue':'নীল','green':'সবুজ'})[String(c||'').trim().toLowerCase()]||String(c||'')
  const stockLabel=selectedStock<1?'স্টকে নেই':selectedStock<=5?(`মাত্র ${selectedStock}টি বাকি`):'স্টকে আছে'
  return <div className="page-wrap product-detail-refined">
-  <div className="breadcrumb"><Link to="/">HOME</Link> / <Link to="/shop">SHOP</Link> / <Link to={`/shop?category=${encodeURIComponent(p.category)}`}>{p.category.toUpperCase()}</Link> / {p.name.toUpperCase()}</div>
+  <div className="breadcrumb"><Link to="/">HOME</Link> / <Link to="/shop">SHOP</Link> / <Link to={`/shop?category=${encodeURIComponent(p.categorySlug||p.category)}`}>{p.category.toUpperCase()}</Link> / {p.name.toUpperCase()}</div>
   <div className="detail-layout">
    <div className="detail-gallery">
     <div className="detail-art" style={{'--art':p.color}}>
