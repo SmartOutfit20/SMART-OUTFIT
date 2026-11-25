@@ -15,7 +15,9 @@ async function compressProfilePhoto(file){const raw=await new Promise((resolve,r
 function slugifyCategory(value){return String(value||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'')}
 function normalizeProduct(p) {
   const category = p.category && typeof p.category === 'object' ? p.category : null
-  return { ...p, id: p._id || p.id, oldPrice: p.compareAtPrice || p.oldPrice || 0, tag: p.tags?.[0] || p.tag, categoryId: category?._id || p.categoryId, categorySlug: category?.slug || p.categorySlug || (typeof p.category === 'string' ? slugifyCategory(p.category) : ''), category: category?.name || p.category || 'Collection', color: p.color || '#d9c7ef', sizes: p.sizes?.length ? p.sizes : ['S','M','L','XL'], rating: Number(p.rating) || 0, reviewCount: Number(p.reviewCount) || 0 }
+  const variantSizes = [...new Set((p.variantStocks || []).map(v => String(v.size || '').trim()).filter(Boolean))]
+  const variantColors = [...new Set((p.variantStocks || []).map(v => String(v.color || '').trim()).filter(Boolean))]
+  return { ...p, id: p._id || p.id, oldPrice: p.compareAtPrice || p.oldPrice || 0, tag: p.tags?.[0] || p.tag, categoryId: category?._id || p.categoryId, categorySlug: category?.slug || p.categorySlug || (typeof p.category === 'string' ? slugifyCategory(p.category) : ''), category: category?.name || p.category || 'Collection', color: p.color || '#d9c7ef', sizes: p.sizes?.length ? p.sizes : variantSizes.length ? variantSizes : ['S','M','L','XL'], colors: p.colors?.length ? p.colors : variantColors, rating: Number(p.rating) || 0, reviewCount: Number(p.reviewCount) || 0 }
 }
 const DEFAULT_HOMEPAGE_LAYOUT={
  sections:[{id:'hero',enabled:true,sortOrder:0},{id:'benefits',enabled:true,sortOrder:1},{id:'categories',enabled:true,sortOrder:2},{id:'collection',enabled:true,sortOrder:3},{id:'promo',enabled:true,sortOrder:4}],
@@ -65,6 +67,7 @@ export function Shop(){
  const [error,setError]=useState('')
  const [totalCount,setTotalCount]=useState(0)
  const [pageCount,setPageCount]=useState(0)
+ const [currentPage,setCurrentPage]=useState(1)
  const [filterOpen,setFilterOpen]=useState(false)
  const [shopBanners,setShopBanners]=useState([])
  const [activeShopBanner,setActiveShopBanner]=useState(0)
@@ -110,6 +113,7 @@ export function Shop(){
    setRemote((data.items||[]).map(normalizeProduct))
    setTotalCount(Number(data.total)||0)
    setPageCount(Number(data.pages)||0)
+   setCurrentPage(Number(data.page)||1)
    setSource('api')
    setError('')
   }).catch(error=>{
@@ -118,6 +122,7 @@ export function Shop(){
    setRemote(preview)
    setTotalCount(preview.length)
    setPageCount(1)
+   setCurrentPage(1)
    setSource('preview')
    setError('লাইভ ক্যাটালগ পাওয়া যাচ্ছে না—এখন প্রিভিউ পণ্য দেখানো হচ্ছে।')
   }).finally(()=>{if(!controller.signal.aborted)setLoading(false)})
@@ -163,7 +168,7 @@ export function Shop(){
   <p className="result-count" role="status" aria-live="polite">{loading?'LOADING PRODUCTS…':displayedCount+' PRODUCTS · '+(source==='api'?'LIVE CATALOGUE':'PREVIEW CATALOGUE')}</p>
   <div className="product-grid shop-product-grid" aria-busy={loading}>{items.map(product=><ProductCard key={product.id} product={product}/>)}</div>
   {!loading&&!items.length&&<div className="shop-no-results"><h3>কোনো পণ্য পাওয়া যায়নি</h3><p>অন্য ক্যাটাগরি বা ফিল্টার দিয়ে আবার চেষ্টা করুন।</p><button type="button" onClick={clearFilters}>সব ফিল্টার মুছুন</button></div>}
-  {source==='api'&&pageCount>1&&<nav className="shop-pagination" aria-label="Product pages"><button type="button" disabled={page<=1} onClick={()=>updateParam('page',page-1)}>← Previous</button><span aria-live="polite">Page {page} of {pageCount}</span><button type="button" disabled={page>=pageCount} onClick={()=>updateParam('page',page+1)}>Next →</button></nav>}
+  {source==='api'&&pageCount>1&&<nav className="shop-pagination" aria-label="Product pages"><button type="button" disabled={currentPage<=1} onClick={()=>updateParam('page',currentPage-1)}>← Previous</button><span aria-live="polite">Page {currentPage} of {pageCount}</span><button type="button" disabled={currentPage>=pageCount} onClick={()=>updateParam('page',currentPage+1)}>Next →</button></nav>}
   {recommendations.length>0&&<section className="shop-recommendations"><div className="shop-recommendation-heading"><div><span className="eyebrow">HANDPICKED FOR YOU</span><h2>Recommended for you</h2><p>জনপ্রিয় পণ্য থেকে আপনার জন্য বাছাই করা কিছু পছন্দ।</p></div><span>SMART PICKS</span></div><div className="product-grid shop-product-grid">{recommendations.map(product=><ProductCard key={'recommend-'+product.id} product={product}/>)}</div></section>}
  </div>
 }
