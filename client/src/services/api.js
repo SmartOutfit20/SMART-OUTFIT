@@ -12,8 +12,8 @@ api.interceptors.request.use(config => {
   return config
 })
 
-export async function getProducts(params = {}) {
-  const { data } = await api.get('/products', { params })
+export async function getProducts(params = {}, config = {}) {
+  const { data } = await api.get('/products', { ...config, params })
   return data
 }
 export async function getCategories() {
