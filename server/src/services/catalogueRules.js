@@ -102,7 +102,19 @@ export function buildCatalogueFacetPipelines(filters, categoryId) {
             },
             {
               $filter: {
-                input: { $map: { input: { $ifNull: ['$variantStocks', []] }, as: 'variant', in: '$$variant.' + variantField } },
+                input: {
+                  $map: {
+                    input: {
+                      $filter: {
+                        input: { $ifNull: ['$variantStocks', []] },
+                        as: 'variant',
+                        cond: filters.inStock ? { $gt: [{ $ifNull: ['$variant.stock', 0] }, 0] } : true
+                      }
+                    },
+                    as: 'variant',
+                    in: '$variant.' + variantField
+                  }
+                },
                 as: 'value',
                 cond: { $and: [{ $eq: [{ $type: '$$value' }, 'string'] }, { $ne: [{ $trim: { input: '$$value' } }, ''] }] }
               }
