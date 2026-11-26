@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { normalizeCatalogueQuery, buildCategoryLookup, buildCatalogueFilter, buildCatalogueSort, escapeCatalogueRegex } from '../src/services/catalogueRules.js'
+import { normalizeCatalogueQuery, buildCategoryLookup, buildCatalogueFilter, buildCatalogueSort, escapeCatalogueRegex, buildCatalogueFacetPipelines } from '../src/services/catalogueRules.js'
 const categoryId = '64a000000000000000000001'
 test('normalizes pagination, search, filters and allowed sort values', () => {
   assert.deepEqual(normalizeCatalogueQuery({page:'3',limit:'100',q:'  cotton tee ',category:'t-shirts',minPrice:'500',maxPrice:'2500',size:' M ',color:'Black',inStock:'true',sale:'1',sort:'price-low'}), {
