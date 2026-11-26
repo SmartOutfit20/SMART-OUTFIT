@@ -108,11 +108,11 @@ export function buildCatalogueFacetPipelines(filters, categoryId) {
                       $filter: {
                         input: { $ifNull: ['$variantStocks', []] },
                         as: 'variant',
-                        cond: filters.inStock ? { $gt: [{ $ifNull: ['$variant.stock', 0] }, 0] } : true
+                        cond: filters.inStock ? { $gt: [{ $ifNull: ['$$variant.stock', 0] }, 0] } : true
                       }
                     },
                     as: 'variant',
-                    in: '$variant.' + variantField
+                    in: '$$variant.' + variantField
                   }
                 },
                 as: 'value',
