@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import '../returns.css'
 import '../catalogue.css'
-import { buildCatalogueParams, filterPreviewProducts } from '../utils/catalogue'
+import { buildCatalogueParams, filterPreviewProducts, normalizeCatalogueFacets } from '../utils/catalogue'
 import { Link, Navigate, useParams, useSearchParams, useNavigate, useLocation } from 'react-router-dom'
 import { ArrowRight, ArrowLeft, ShoppingBag, Trash2, LayoutDashboard, LockKeyhole, SlidersHorizontal, Minus, Plus, ShieldCheck, Truck, RotateCcw, UserRound, Heart, Facebook, Instagram, Youtube, Music2, Mail, Phone, MapPin, Clock, PackageCheck, RefreshCw, HelpCircle, Eye, EyeOff, Star } from 'lucide-react'
 import ProductCard from '../components/ProductCard'
 import { products as demoProducts, categories as demoCategories, money } from '../data/products'
 import { useShop } from '../context/ShopContext'
-import api, { getProducts, getCategories } from '../services/api'
+import api, { getProducts, getCategories, getCatalogueFacets } from '../services/api'
 import { useAuth } from '../context/AuthContext'
 import { ORDER_STATUS_LABELS, ORDER_HISTORY_LABELS, RETURN_REQUEST_STATUS_LABELS, getSortedOrderHistory, getSortedReturnRequests, getSortedRefunds, getRefundTotal } from '../utils/orderTimeline'
 
@@ -65,6 +65,7 @@ export function Shop(){
  const [source,setSource]=useState('api')
  const [loading,setLoading]=useState(true)
  const [error,setError]=useState('')
+ const [facets,setFacets]=useState(()=>normalizeCatalogueFacets())
  const [totalCount,setTotalCount]=useState(0)
  const [pageCount,setPageCount]=useState(0)
  const [currentPage,setCurrentPage]=useState(1)
@@ -107,6 +108,17 @@ export function Shop(){
  },[category,cats,setParams])
  useEffect(()=>{
   const controller=new AbortController()
+  const request=buildCatalogueParams({query,category,inStock:stockOnly,sale:saleOnly})
+  delete request.page
+  delete request.limit
+  delete request.sort
+  getCatalogueFacets(request,{signal:controller.signal})
+   .then(data=>setFacets(normalizeCatalogueFacets(data)))
+   .catch(error=>{if(!controller.signal.aborted&&error.code!=='ERR_CANCELED')setFacets(normalizeCatalogueFacets())})
+  return()=>controller.abort()
+ },[query,category,stockOnly,saleOnly])
+ useEffect(()=>{
+  const controller=new AbortController()
   setLoading(true)
   const request=buildCatalogueParams({page,limit:12,query,category,sort,minPrice,maxPrice,size:sizeFilter,color:colorFilter,inStock:stockOnly,sale:saleOnly})
   getProducts(request,{signal:controller.signal}).then(data=>{
@@ -144,8 +156,12 @@ export function Shop(){
  const filters={category,query,minPrice,maxPrice,size:sizeFilter,color:colorFilter,inStock:stockOnly,sale:saleOnly,sort}
  const items=source==='api'?remote:filterPreviewProducts(remote,filters)
  const displayedCount=source==='api'?totalCount:items.length
- const sizes=[...new Set(remote.flatMap(product=>product.sizes||[]))]
- const colors=[...new Set(remote.flatMap(product=>product.colors||[]))]
+ const previewSizes=[...new Set(remote.flatMap(product=>product.sizes||[]))]
+ const previewColors=[...new Set(remote.flatMap(product=>product.colors||[]))]
+ const sizes=source==='api'?facets.sizes.map(option=>option.value):previewSizes
+ const colors=source==='api'?facets.colors.map(option=>option.value):previewColors
+ const sizeOptions=sizeFilter&&!sizes.some(value=>value.toLowerCase()===sizeFilter.toLowerCase())?[sizeFilter,...sizes]:sizes
+ const colorOptions=colorFilter&&!colors.some(value=>value.toLowerCase()===colorFilter.toLowerCase())?[colorFilter,...colors]:colors
  const recommendations=[...remote].sort((a,b)=>(Number(b.rating)||0)-(Number(a.rating)||0)).slice(0,4)
  const selectedCategory=cats.find(item=>String(item.slug||'').toLowerCase()===category.toLowerCase()||String(item.name||'').toLowerCase()===category.toLowerCase())
  const categoryLabel=category==='All'?'All Products':selectedCategory?.name||category
@@ -158,8 +174,9 @@ export function Shop(){
   <div className="filter-row shop-classic-filter-row"><div className="shop-category-filters"><button type="button" className={category==='All'?'filter active':'filter'} onClick={()=>chooseCategory('All')}>All Products</button>{cats.map(item=>{const value=item.slug||slugifyCategory(item.name);const active=category===value||category===item.name;return <button type="button" className={active?'filter active':'filter'} key={item._id||value} onClick={()=>chooseCategory(value)}>{item.name}</button>})}</div><button type="button" className={filterOpen?'shop-refine-toggle active':'shop-refine-toggle'} onClick={()=>setFilterOpen(value=>!value)}><SlidersHorizontal size={15}/> Filters</button><select value={sort} onChange={event=>updateParam('sort',event.target.value)}><option value="recommended">Recommended</option><option value="newest">Latest</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option><option value="featured">Featured only</option><option value="best-seller">Best sellers</option></select></div>
   {filterOpen&&<div className="shop-refine-panel">
    <div className="shop-refine-field shop-refine-price-inputs"><b>Price range (BDT)</b><label>From ৳<input type="number" min="0" max={maxPrice} value={minPrice||''} onChange={event=>updateParam('minPrice',event.target.value)}/></label><strong>Up to ৳{maxPrice.toLocaleString('en-BD')}</strong><input type="range" min={minPrice} max="50000" step="100" value={Math.min(50000,maxPrice)} onChange={event=>updateParam('maxPrice',event.target.value)}/><small>৳{minPrice.toLocaleString('en-BD')} <span>৳50,000+</span></small></div>
-   {sizes.length>0&&<div className="shop-refine-field"><b>Choose size</b><div className="shop-refine-sizes">{sizes.map(size=><button type="button" key={size} className={sizeFilter===size?'selected':''} onClick={()=>updateParam('size',sizeFilter===size?'':size)}>{size}</button>)}</div></div>}
-   {colors.length>0&&<div className="shop-refine-field"><b>Choose colour</b><div className="shop-refine-sizes">{colors.map(color=><button type="button" key={color} className={colorFilter.toLowerCase()===String(color).toLowerCase()?'selected':''} onClick={()=>updateParam('color',colorFilter.toLowerCase()===String(color).toLowerCase()?'':color)}>{color}</button>)}</div></div>}
+   {sizeOptions.length>0&&<div className="shop-refine-field"><b>Choose size</b><div className="shop-refine-sizes">{sizeOptions.map(size=><button type="button" key={size} className={sizeFilter.toLowerCase()===size.toLowerCase()?'selected':''} onClick={()=>updateParam('size',sizeFilter.toLowerCase()===size.toLowerCase()?'':size)}>{size}</button>)}</div></div>}
+   {colorOptions.length>0&&<div className="shop-refine-field"><b>Choose colour</b><div className="shop-refine-sizes">{colorOptions.map(color=><button type="button" key={color} className={colorFilter.toLowerCase()===color.toLowerCase()?'selected':''} onClick={()=>updateParam('color',colorFilter.toLowerCase()===color.toLowerCase()?'':color)}>{color}</button>)}</div></div>}
+   {facets.minPrice!==null&&facets.maxPrice!==null&&<small className="shop-facet-price-range">Available catalogue range: ৳{facets.minPrice.toLocaleString('en-BD')}–৳{facets.maxPrice.toLocaleString('en-BD')}</small>}
    <label className="shop-refine-stock"><input type="checkbox" checked={stockOnly} onChange={event=>updateParam('stock',event.target.checked?'1':'')}/> শুধু স্টকে থাকা পণ্য</label>
    <label className="shop-refine-stock"><input type="checkbox" checked={saleOnly} onChange={event=>updateParam('sale',event.target.checked?'1':'')}/> শুধু অফার পণ্য</label>
    <button type="button" className="shop-refine-reset" onClick={clearFilters}>Reset filters</button>

@@ -20,6 +20,10 @@ export async function getCategories() {
   const { data } = await api.get('/categories')
   return data
 }
+export async function getCatalogueFacets(params = {}, config = {}) {
+  const { data } = await api.get('/products/facets', { ...config, params })
+  return data
+}
 export async function getAdminCategories() {
   const { data } = await api.get('/categories/admin/all')
   return data

@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { buildCatalogueParams, filterPreviewProducts } from '../src/utils/catalogue.js'
+import { buildCatalogueParams, filterPreviewProducts, normalizeCatalogueFacets } from '../src/utils/catalogue.js'
 test('builds compact API parameters for selected catalogue filters', () => {
   assert.deepEqual(buildCatalogueParams({page:2,limit:12,query:'  cotton tee ',category:'t-shirts',sort:'price-low',minPrice:500,maxPrice:1800,size:'M',color:'Navy',inStock:true,sale:true}), {
     page:2,limit:12,sort:'price-low',q:'cotton tee',category:'t-shirts',minPrice:500,maxPrice:1800,size:'M',color:'Navy',inStock:'true',sale:'true'
@@ -22,4 +22,21 @@ test('matches size and colour against the same variant for preview data', () => 
   const products=[{name:'Variant Jacket',category:'Outerwear',price:2200,stock:3,sizes:['M','L'],colors:['Black','Navy'],variantStocks:[{size:'M',color:'Black',stock:0},{size:'L',color:'Navy',stock:3}]}]
   assert.equal(filterPreviewProducts(products,{size:'M',color:'Navy',inStock:true}).length,0)
   assert.equal(filterPreviewProducts(products,{size:'L',color:'Navy',inStock:true}).length,1)
+})
+
+test('normalizes catalogue-wide facet options and removes duplicate or invalid values', () => {
+  assert.deepEqual(normalizeCatalogueFacets({
+    sizes: [{value:'M',count:4},{value:'m',count:9},{value:' XL ',count:2},{value:'',count:3}],
+    colors: ['Black', {value:'Navy',count:5}],
+    minPrice: '450', maxPrice: 3200, productCount: '12'
+  }), {
+    sizes: [{value:'M',count:4},{value:'XL',count:2}],
+    colors: [{value:'Black',count:0},{value:'Navy',count:5}],
+    minPrice: 450, maxPrice: 3200, productCount: 12
+  })
+})
+test('returns safe empty facets when the API payload is missing or malformed', () => {
+  assert.deepEqual(normalizeCatalogueFacets({sizes:'M',colors:null,minPrice:'invalid',maxPrice:-1,productCount:-2}), {
+    sizes:[],colors:[],minPrice:null,maxPrice:null,productCount:0
+  })
 })

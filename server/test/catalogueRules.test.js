@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { normalizeCatalogueQuery, buildCategoryLookup, buildCatalogueFilter, buildCatalogueSort, escapeCatalogueRegex } from '../src/services/catalogueRules.js'
+import { normalizeCatalogueQuery, buildCategoryLookup, buildCatalogueFilter, buildCatalogueSort, escapeCatalogueRegex, buildCatalogueFacetPipelines } from '../src/services/catalogueRules.js'
 const categoryId = '64a000000000000000000001'
 test('normalizes pagination, search, filters and allowed sort values', () => {
   assert.deepEqual(normalizeCatalogueQuery({page:'3',limit:'100',q:'  cotton tee ',category:'t-shirts',minPrice:'500',maxPrice:'2500',size:' M ',color:'Black',inStock:'true',sale:'1',sort:'price-low'}), {
@@ -40,4 +40,31 @@ test('uses deterministic catalogue ordering for supported sorts', () => {
   assert.deepEqual(buildCatalogueSort('price-low'),{price:1,_id:1})
   assert.deepEqual(buildCatalogueSort('price-high'),{price:-1,_id:-1})
   assert.deepEqual(buildCatalogueSort('recommended'),{isFeatured:-1,isBestSeller:-1,createdAt:-1,_id:-1})
+})
+
+test('builds catalogue-wide facets without narrowing them to selected size, colour or price', () => {
+  const filters = normalizeCatalogueQuery({
+    category: 't-shirts', q: 'cotton', minPrice: '500', maxPrice: '1500',
+    size: 'M', color: 'Black', inStock: 'true', sale: 'true'
+  })
+  const pipelines = buildCatalogueFacetPipelines(filters, categoryId)
+  const match = pipelines.sizes[0].$match
+  assert.equal(match.isPublished, true)
+  assert.equal(match.category, categoryId)
+  assert.equal(match.price, undefined)
+  assert.deepEqual(match.stock, { $gt: 0 })
+  assert.deepEqual(match.$expr, { $gt: [{ $ifNull: ['$compareAtPrice', 0] }, '$price'] })
+  assert.equal(match.$and.length, 1)
+  assert.equal(match.$and[0].$or[0].name.test('cotton shirt'), true)
+  assert.equal(pipelines.sizes[1].$project.values.$setUnion.length, 2)
+  assert.equal(pipelines.colors[1].$project.values.$setUnion.length, 2)
+  const legacyFilter = pipelines.sizes[1].$project.values.$setUnion[0].$filter
+  assert.deepEqual(legacyFilter.cond.$and[2], { $eq: [{ $size: { $ifNull: ['$variantStocks', []] } }, 0] })
+  const availableVariantFilter = pipelines.sizes[1].$project.values.$setUnion[1].$filter.input.$map.input.$filter
+  assert.deepEqual(availableVariantFilter.cond, { $gt: [{ $ifNull: ['$$variant.stock', 0] }, 0] })
+  assert.equal(pipelines.sizes[3].$group._id.product, '$_id')
+  assert.equal(pipelines.sizes[4].$group.count.$sum, 1)
+  assert.deepEqual(pipelines.priceRange[1].$group, {
+    _id: null, minPrice: { $min: '$price' }, maxPrice: { $max: '$price' }, productCount: { $sum: 1 }
+  })
 })

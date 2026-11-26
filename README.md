@@ -193,3 +193,10 @@ The starter deliberately does not create a default administrator or expose a pub
 - The storefront requests filtered pages from the API instead of downloading only the first 48 products and filtering that partial list in the browser. Search, category, sort, filter, and page state are shareable through URL query parameters.
 - Added a clearly labeled preview-catalogue filter fallback when the API is unavailable. Preview products remain non-purchasable.
 - Added pure backend and storefront catalogue helper tests. These do not replace MongoDB integration or browser end-to-end tests.
+
+## Catalogue-wide filter facets (2026-11-26)
+- Added public `GET /api/products/facets`, which aggregates available sizes and colours across the full matching published catalogue, not just the current paginated product page.
+- Facets combine legacy product-level size/colour arrays with size/colour values stored on variants, de-duplicate values per product, and include product counts plus the matching BDT price range.
+- Category, literal search, in-stock and sale constraints are respected; the selected size, colour and price range are intentionally excluded from facet discovery so customers can still see alternative options and clear a selected filter.
+- The Shop page now loads facet data independently with abortable requests, uses catalogue-wide options for API results, preserves a selected option when it temporarily has zero matches, and keeps preview-only options when the API is unavailable.
+- Added unit tests for aggregation pipeline construction and defensive storefront facet normalization. Real MongoDB aggregation and browser end-to-end verification remain outstanding.
