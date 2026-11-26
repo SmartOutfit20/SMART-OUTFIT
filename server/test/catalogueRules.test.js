@@ -62,8 +62,8 @@ test('builds catalogue-wide facets without narrowing them to selected size, colo
   assert.deepEqual(legacyFilter.cond.$and[2], { $eq: [{ $size: { $ifNull: ['$variantStocks', []] } }, 0] })
   const availableVariantFilter = pipelines.sizes[1].$project.values.$setUnion[1].$filter.input.$map.input.$filter
   assert.deepEqual(availableVariantFilter.cond, { $gt: [{ $ifNull: ['$$variant.stock', 0] }, 0] })
-  assert.equal(pipelines.sizes[4].$group._id.product, '$_id')
-  assert.equal(pipelines.sizes[5].$group.count.$sum, 1)
+  assert.equal(pipelines.sizes[3].$group._id.product, '$_id')
+  assert.equal(pipelines.sizes[4].$group.count.$sum, 1)
   assert.deepEqual(pipelines.priceRange[1].$group, {
     _id: null, minPrice: { $min: '$price' }, maxPrice: { $max: '$price' }, productCount: { $sum: 1 }
   })
