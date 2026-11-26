@@ -97,7 +97,13 @@ export function buildCatalogueFacetPipelines(filters, categoryId) {
               $filter: {
                 input: { $ifNull: ['$' + legacyField, []] },
                 as: 'value',
-                cond: { $and: [{ $eq: [{ $type: '$$value' }, 'string'] }, { $ne: [{ $trim: { input: '$$value' } }, ''] }] }
+                cond: {
+                  $and: [
+                    { $eq: [{ $type: '$$value' }, 'string'] },
+                    { $ne: [{ $trim: { input: '$$value' } }, ''] },
+                    filters.inStock ? { $eq: [{ $size: { $ifNull: ['$variantStocks', []] } }, 0] } : true
+                  ]
+                }
               }
             },
             {
@@ -124,7 +130,8 @@ export function buildCatalogueFacetPipelines(filters, categoryId) {
       }
     },
     { $unwind: '$values' },
-    { $group: { _id: { $toLower: { $trim: { input: '$values' } } }, label: { $min: { $trim: { input: '$values' } } }, count: { $sum: 1 } } },
+    { $group: { _id: { product: '$_id', value: { $toLower: { $trim: { input: '$values' } } } }, label: { $min: { $trim: { input: '$values' } } } } },
+    { $group: { _id: '$_id.value', label: { $min: '$label' }, count: { $sum: 1 } } },
     { $sort: { label: 1, _id: 1 } },
     { $limit: 100 }
   ]
