@@ -4,7 +4,7 @@ import { starterProducts } from '../data/starterProducts.js'
 import { requireAuth, requirePermission } from '../middleware/auth.js'
 import { hasPermission } from '../config/permissions.js'
 import sharp from 'sharp'
-import { normalizeCatalogueQuery, buildCategoryLookup, buildCatalogueFilter, buildCatalogueSort } from '../services/catalogueRules.js'
+import { normalizeCatalogueQuery, buildCategoryLookup, buildCatalogueFilter, buildCatalogueSort, buildCatalogueFacetPipelines } from '../services/catalogueRules.js'
 
 const router = Router()
 
@@ -234,6 +234,33 @@ router.get('/', async (req, res, next) => {
       .lean()
     const ratedItems = await attachReviewSummaries(items)
     res.json({ items: ratedItems, total, page, pages, limit: filters.limit })
+  } catch (e) { next(e) }
+})
+
+
+router.get('/facets', async (req, res, next) => {
+  try {
+    const filters = normalizeCatalogueQuery(req.query)
+    let categoryId
+    if (filters.category) {
+      const category = await Category.findOne(buildCategoryLookup(filters.category)).select('_id').lean()
+      if (!category) return res.json({ sizes: [], colors: [], minPrice: null, maxPrice: null, productCount: 0 })
+      categoryId = category._id
+    }
+    const pipelines = buildCatalogueFacetPipelines(filters, categoryId)
+    const [sizes, colors, priceRows] = await Promise.all([
+      Product.aggregate(pipelines.sizes),
+      Product.aggregate(pipelines.colors),
+      Product.aggregate(pipelines.priceRange)
+    ])
+    const range = priceRows[0]
+    res.json({
+      sizes: sizes.map(row => ({ value: row.label, count: Number(row.count) || 0 })),
+      colors: colors.map(row => ({ value: row.label, count: Number(row.count) || 0 })),
+      minPrice: range ? range.minPrice : null,
+      maxPrice: range ? range.maxPrice : null,
+      productCount: range ? range.productCount : 0
+    })
   } catch (e) { next(e) }
 })
 
