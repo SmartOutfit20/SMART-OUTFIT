@@ -83,3 +83,45 @@ export function buildCatalogueSort(sort) {
   }
   return sorts[SORTS.has(sort) ? sort : 'newest']
 }
+
+export function buildCatalogueFacetPipelines(filters, categoryId) {
+  const facetFilters = { ...filters, minPrice: null, maxPrice: null, size: '', color: '' }
+  const match = buildCatalogueFilter(facetFilters, categoryId)
+  const valuesPipeline = (legacyField, variantField) => [
+    { $match: match },
+    {
+      $project: {
+        values: {
+          $setUnion: [
+            {
+              $filter: {
+                input: { $ifNull: ['$' + legacyField, []] },
+                as: 'value',
+                cond: { $and: [{ $eq: [{ $type: '$$value' }, 'string'] }, { $ne: [{ $trim: { input: '$$value' } }, ''] }] }
+              }
+            },
+            {
+              $filter: {
+                input: { $map: { input: { $ifNull: ['$variantStocks', []] }, as: 'variant', in: '$$variant.' + variantField } },
+                as: 'value',
+                cond: { $and: [{ $eq: [{ $type: '$$value' }, 'string'] }, { $ne: [{ $trim: { input: '$$value' } }, ''] }] }
+              }
+            }
+          ]
+        }
+      }
+    },
+    { $unwind: '$values' },
+    { $group: { _id: { $toLower: { $trim: { input: '$values' } } }, label: { $min: { $trim: { input: '$values' } } }, count: { $sum: 1 } } },
+    { $sort: { label: 1, _id: 1 } },
+    { $limit: 100 }
+  ]
+  return {
+    sizes: valuesPipeline('sizes', 'size'),
+    colors: valuesPipeline('colors', 'color'),
+    priceRange: [
+      { $match: match },
+      { $group: { _id: null, minPrice: { $min: '$price' }, maxPrice: { $max: '$price' }, productCount: { $sum: 1 } } }
+    ]
+  }
+}
