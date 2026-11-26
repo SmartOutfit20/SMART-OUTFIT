@@ -47,3 +47,29 @@ export function filterPreviewProducts(products,filters={}) {
   else if(filters.sort==='recommended')matches.sort((a,b)=>Number(b.product.rating||0)-Number(a.product.rating||0)||a.index-b.index)
   return matches.map(item=>item.product)
 }
+
+export function normalizeCatalogueFacets(payload = {}) {
+  const normalizeOptions = values => {
+    const seen = new Set()
+    return (Array.isArray(values) ? values : []).reduce((result, item) => {
+      const rawValue = typeof item === 'string' ? item : item?.value ?? item?.label
+      const value = String(rawValue ?? '').trim()
+      const key = value.toLocaleLowerCase()
+      if (!value || seen.has(key)) return result
+      seen.add(key)
+      const count = Number(typeof item === 'object' ? item?.count : 0)
+      result.push({ value, count: Number.isFinite(count) && count > 0 ? Math.floor(count) : 0 })
+      return result
+    }, []).sort((a, b) => a.value.localeCompare(b.value, undefined, { sensitivity: 'base' }))
+  }
+  const minPrice = Number(payload.minPrice)
+  const maxPrice = Number(payload.maxPrice)
+  const productCount = Number(payload.productCount)
+  return {
+    sizes: normalizeOptions(payload.sizes),
+    colors: normalizeOptions(payload.colors),
+    minPrice: payload.minPrice != null && Number.isFinite(minPrice) && minPrice >= 0 ? minPrice : null,
+    maxPrice: payload.maxPrice != null && Number.isFinite(maxPrice) && maxPrice >= 0 ? maxPrice : null,
+    productCount: Number.isFinite(productCount) && productCount > 0 ? Math.floor(productCount) : 0
+  }
+}
