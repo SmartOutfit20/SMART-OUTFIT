@@ -41,3 +41,24 @@ test('uses deterministic catalogue ordering for supported sorts', () => {
   assert.deepEqual(buildCatalogueSort('price-high'),{price:-1,_id:-1})
   assert.deepEqual(buildCatalogueSort('recommended'),{isFeatured:-1,isBestSeller:-1,createdAt:-1,_id:-1})
 })
+
+test('builds catalogue-wide facets without narrowing them to selected size, colour or price', () => {
+  const filters = normalizeCatalogueQuery({
+    category: 't-shirts', q: 'cotton', minPrice: '500', maxPrice: '1500',
+    size: 'M', color: 'Black', inStock: 'true', sale: 'true'
+  })
+  const pipelines = buildCatalogueFacetPipelines(filters, categoryId)
+  const match = pipelines.sizes[0].$match
+  assert.equal(match.isPublished, true)
+  assert.equal(match.category, categoryId)
+  assert.equal(match.price, undefined)
+  assert.deepEqual(match.stock, { $gt: 0 })
+  assert.deepEqual(match.$expr, { $gt: [{ $ifNull: ['$compareAtPrice', 0] }, '$price'] })
+  assert.equal(match.$and.length, 1)
+  assert.equal(match.$and[0].$or[0].name.test('cotton shirt'), true)
+  assert.equal(pipelines.sizes[1].$project.values.$setUnion.length, 2)
+  assert.equal(pipelines.colors[1].$project.values.$setUnion.length, 2)
+  assert.deepEqual(pipelines.priceRange[1].$group, {
+    _id: null, minPrice: { $min: '$price' }, maxPrice: { $max: '$price' }, productCount: { $sum: 1 }
+  })
+})
