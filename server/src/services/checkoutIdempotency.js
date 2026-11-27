@@ -49,5 +49,5 @@ export function createCheckoutOrderId(customerId, idempotencyKey) {
   const key = normalizeCheckoutIdempotencyKey(idempotencyKey)
   if (!customer) throw new Error('A customer ID is required to scope checkout idempotency.')
   // A deterministic ObjectId provides a uniqueness backstop even before the compound index is built.
-  return createHash('sha256').update(customer + '\\0' + key).digest('hex').slice(0, 24)
+  return createHash('sha256').update(customer + '|' + key).digest('hex').slice(0, 24)
 }
