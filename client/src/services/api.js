@@ -43,7 +43,7 @@ export async function deleteProduct(id) {
 export async function placeOrder(payload, idempotencyKey) {
   if (!idempotencyKey) throw new Error('A checkout retry key is required.')
   const { data } = await api.post('/orders', payload, { headers: { 'Idempotency-Key': idempotencyKey } })
-  return { data }
+  return data
 }
 export async function createCategory(payload) {
   const { data } = await api.post('/categories', payload)
