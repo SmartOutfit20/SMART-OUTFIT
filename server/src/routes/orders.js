@@ -224,7 +224,8 @@ router.post('/', async (req, res, next) => {
       order: checkoutOrderResponse(order)
     })
   } catch (error) {
-    if (error?.code === 11000 && idempotencyOrderId) {
+    // A concurrent retry may have committed while this transaction was retrying or aborting.
+    if (idempotencyOrderId) {
       if (session) { await session.endSession(); session = null }
       try {
         const replay = await findCheckoutReplay(req.user.sub, idempotencyOrderId, idempotencyKey, checkoutFingerprint)
