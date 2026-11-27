@@ -200,3 +200,11 @@ The starter deliberately does not create a default administrator or expose a pub
 - Category, literal search, in-stock and sale constraints are respected; the selected size, colour and price range are intentionally excluded from facet discovery so customers can still see alternative options and clear a selected filter.
 - The Shop page now loads facet data independently with abortable requests, uses catalogue-wide options for API results, preserves a selected option when it temporarily has zero matches, and keeps preview-only options when the API is unavailable.
 - Added unit tests for aggregation pipeline construction and defensive storefront facet normalization. Real MongoDB aggregation and browser end-to-end verification remain outstanding.
+
+
+## Checkout reliability increment (2026-11-27)
+- Customer checkout now sends a cryptographically random `Idempotency-Key` and retains it locally against a SHA-256 fingerprint of the checkout payload until the API confirms the order.
+- The API scopes idempotency to the authenticated customer, hashes the normalized order payload, and returns the existing order on a safe retry instead of reserving stock or coupon usage twice.
+- A reused key with changed order details returns HTTP 409. A deterministic order `_id` also protects concurrent retries if the compound idempotency index has not yet been built.
+- Idempotency keys and request fingerprints are excluded from normal order query projections and removed from checkout responses.
+- Existing MongoDB transaction requirements remain: use Atlas or a replica set for checkout inventory and coupon atomicity. No payment provider is called; bKash/Nagad delivery-fee verification remains manual.

@@ -5,10 +5,25 @@ import { Order, Product, Coupon, Setting, ActivityLog } from '../models/index.js
 import { normalizeDeliveryAddress, deliveryAddressError, normalizeRequestedItems, calculateCouponDiscount, calculateDeliveryCharge } from '../services/checkoutRules.js'
 import { normalizeReturnRequest, normalizeReturnItems, assessReturnEligibility, normalizeReturnWindowDays, isGenericOrderStatusAllowed, buildReturnRequestCompareAndSetFilter, buildReturnRequestUpdate } from '../services/returnRules.js'
 import { isOrderStatusTransitionAllowed, getOrderStatusTransitionMessage } from '../services/orderStatusRules.js'
+import { normalizeCheckoutIdempotencyKey, createCheckoutFingerprint, createCheckoutOrderId } from '../services/checkoutIdempotency.js'
 
 const router = Router()
 router.use(requireAuth)
 const httpError = (message, status = 400) => Object.assign(new Error(message), { status })
+function checkoutOrderResponse(order) {
+  const value = typeof order?.toObject === 'function' ? order.toObject() : { ...order }
+  delete value.idempotencyKey
+  delete value.checkoutRequestHash
+  return value
+}
+async function findCheckoutReplay(customerId, orderId, idempotencyKey, fingerprint) {
+  const existing = await Order.findOne({ _id: orderId, customer: customerId }).select('+idempotencyKey +checkoutRequestHash').lean()
+  if (!existing) return null
+  if (existing.idempotencyKey !== idempotencyKey || existing.checkoutRequestHash !== fingerprint) {
+    throw httpError('This checkout key was already used with different order details. Refresh checkout and try again.', 409)
+  }
+  return existing
+}
 async function recordOrderActivity(req,action,order,metadata={}) {
  try { await ActivityLog.create({actor:req.user?.sub,action,resource:'order',resourceId:String(order?._id||''),ip:String(req.ip||'').slice(0,80),metadata}) }
  catch(error) { console.error('Order activity log could not be saved:',error.message) }
@@ -92,6 +107,9 @@ router.post('/coupon/validate', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   let session
+  let idempotencyKey = ''
+  let checkoutFingerprint = ''
+  let idempotencyOrderId = ''
   try {
     const address = normalizeDeliveryAddress(req.body.deliveryAddress)
     const addressError = deliveryAddressError(address)
@@ -101,6 +119,11 @@ router.post('/', async (req, res, next) => {
     const advancePaymentSender = String(req.body.advancePaymentSender || '').trim()
     const advancePaymentTransactionId = String(req.body.advancePaymentTransactionId || '').trim()
     const couponCode = String(req.body.couponCode || '').trim().toUpperCase()
+    idempotencyKey = normalizeCheckoutIdempotencyKey(req.get('Idempotency-Key'))
+    checkoutFingerprint = createCheckoutFingerprint({ items: requested, deliveryAddress: address, paymentMethod: 'cod', advancePaymentMethod, advancePaymentSender, advancePaymentTransactionId, couponCode })
+    idempotencyOrderId = createCheckoutOrderId(req.user.sub, idempotencyKey)
+    const replay = await findCheckoutReplay(req.user.sub, idempotencyOrderId, idempotencyKey, checkoutFingerprint)
+    if (replay) return res.status(200).json({ message: 'This order was already received; the existing order is shown below.', order: checkoutOrderResponse(replay) })
     let orderNumber, serialNumber, order
 
     session = await mongoose.startSession()
@@ -181,6 +204,7 @@ router.post('/', async (req, res, next) => {
       }
 
       const [created] = await Order.create([{
+        _id: idempotencyOrderId, idempotencyKey, checkoutRequestHash: checkoutFingerprint,
         orderNumber, serialNumber, customer: req.user.sub, items: lineItems, subtotal, deliveryCharge, discount,
         total: subtotal - discount + deliveryCharge, couponCode: coupon?.code || '', coupon: coupon?._id || undefined, couponUsageCounted: Boolean(coupon),
         statusHistory: [{ status: 'pending', note: 'Order placed successfully.' }],
@@ -197,10 +221,19 @@ router.post('/', async (req, res, next) => {
       message: order.advancePaymentAmount > 0
         ? 'Order submitted. Delivery charge payment is awaiting manual verification; remaining product amount is Cash on Delivery.'
         : 'Order placed. Product amount is Cash on Delivery.',
-      order
+      order: checkoutOrderResponse(order)
     })
-  } catch (error) { next(error) }
-  finally { if (session) await session.endSession() }
+  } catch (error) {
+    // A concurrent retry may have committed while this transaction was retrying or aborting.
+    if (idempotencyOrderId) {
+      if (session) { await session.endSession(); session = null }
+      try {
+        const replay = await findCheckoutReplay(req.user.sub, idempotencyOrderId, idempotencyKey, checkoutFingerprint)
+        if (replay) return res.status(200).json({ message: 'This order was already received; the existing order is shown below.', order: checkoutOrderResponse(replay) })
+      } catch (replayError) { return next(replayError) }
+    }
+    next(error)
+  } finally { if (session) await session.endSession() }
 })
 
 router.patch('/:id/advance-payment-verify', requirePermission('orders.verify_payment'), async (req, res, next) => {
