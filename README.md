@@ -208,3 +208,12 @@ The starter deliberately does not create a default administrator or expose a pub
 - A reused key with changed order details returns HTTP 409. A deterministic order `_id` also protects concurrent retries if the compound idempotency index has not yet been built.
 - Idempotency keys and request fingerprints are excluded from normal order query projections and removed from checkout responses.
 - Existing MongoDB transaction requirements remain: use Atlas or a replica set for checkout inventory and coupon atomicity. No payment provider is called; bKash/Nagad delivery-fee verification remains manual.
+
+
+## COD advance-payment accounting correction (2026-11-28)
+- Advance delivery-charge approval now records `partially_paid`, not `paid`, because the customer still owes the product balance on Cash on Delivery.
+- A COD order moves to `paid` only when the delivery workflow records it as delivered. This is consistent across the Orders and Delivery workspaces.
+- Orders with a verified advance payment remain protected from cancellation before delivery; repeat verification is rejected.
+- Refund eligibility continues to require a delivered/returned order with a fully settled payment status, so an advance-only payment cannot be refunded as if the full order total had been collected.
+- Customer and Admin views now explain the verified advance amount and remaining COD balance. Legacy orders incorrectly marked paid before delivery are displayed with the correct advance-paid/COD-due explanation.
+- Added payment lifecycle unit tests and a refund regression assertion. MongoDB transaction and live delivery reconciliation still require staging verification.
