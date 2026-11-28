@@ -32,6 +32,7 @@ test('a fully received order return can be fully refunded without refunding deli
 
 test('refund planning rejects unpaid, non-returned and invalid orders', () => {
   assert.throws(() => calculateRefundPlan({ ...baseOrder, paymentStatus: 'unpaid' }, 100), /no verified payment/)
+  assert.throws(() => calculateRefundPlan({ ...baseOrder, paymentStatus: 'partially_paid' }, 100), /no verified payment/)
   assert.throws(() => calculateRefundPlan({ ...baseOrder, status: 'shipped' }, 100), /only after the store receives/)
   assert.throws(() => calculateRefundPlan(baseOrder, 0), /valid refund amount/)
 })
