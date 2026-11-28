@@ -5,6 +5,7 @@ import { Order, Product, Coupon, Setting, ActivityLog } from '../models/index.js
 import { normalizeDeliveryAddress, deliveryAddressError, normalizeRequestedItems, calculateCouponDiscount, calculateDeliveryCharge } from '../services/checkoutRules.js'
 import { normalizeReturnRequest, normalizeReturnItems, assessReturnEligibility, normalizeReturnWindowDays, isGenericOrderStatusAllowed, buildReturnRequestCompareAndSetFilter, buildReturnRequestUpdate } from '../services/returnRules.js'
 import { isOrderStatusTransitionAllowed, getOrderStatusTransitionMessage } from '../services/orderStatusRules.js'
+import { getAdvancePaymentApprovalStatus, hasVerifiedAdvancePayment, getPaymentStatusAfterDelivery } from '../services/paymentStatusRules.js'
 import { normalizeCheckoutIdempotencyKey, createCheckoutFingerprint, createCheckoutOrderId } from '../services/checkoutIdempotency.js'
 
 const router = Router()
@@ -248,9 +249,9 @@ router.patch('/:id/advance-payment-verify', requirePermission('orders.verify_pay
       if (!order) throw httpError('Order not found.', 404)
       if (!order.advancePaymentTransactionId || !order.advancePaymentAmount) throw httpError('This order has no advance delivery payment to verify.', 409)
       if (order.status === 'cancelled') throw httpError('This order has already been cancelled.', 409)
-      if (order.paymentStatus === 'paid') throw httpError('Advance payment has already been approved.', 409)
+      if (hasVerifiedAdvancePayment(order) || order.paymentStatus === 'paid') throw httpError('Advance payment has already been approved.', 409)
       if (order.paymentStatus !== 'pending') throw httpError('This payment is not awaiting verification.', 409)
-      order.paymentStatus = decision === 'approve' ? 'paid' : 'failed'
+      order.paymentStatus = getAdvancePaymentApprovalStatus(decision)
       order.advancePaymentVerifiedAt = new Date()
       order.advancePaymentVerifiedBy = req.user.sub
       order.advancePaymentNote = String(req.body.note || '').trim().slice(0, 300)
@@ -323,7 +324,7 @@ router.patch('/:id/status', requirePermission('orders.update'), async (req, res,
         throw httpError(getOrderStatusTransitionMessage(order.status, req.body.status), 409)
       }
       if (req.body.status === 'cancelled') {
-        if (order.paymentStatus === 'paid' && Number(order.advancePaymentAmount) > 0) throw httpError('This order has a verified advance payment. Resolve its refund before cancelling.', 409)
+        if (hasVerifiedAdvancePayment(order)) throw httpError('This order has a verified advance payment. Resolve its refund before cancelling.', 409)
         const reason = String(req.body.cancellationReason || '').trim()
         if (reason.length < 5) throw httpError('Please enter a cancellation reason (at least 5 characters) so the customer can see the notice.', 400)
         order.cancellationReason = reason.slice(0, 500)
@@ -343,7 +344,7 @@ router.patch('/:id/status', requirePermission('orders.update'), async (req, res,
         note: req.body.status === 'cancelled' ? order.cancellationReason : (req.body.note ? String(req.body.note).slice(0, 300) : 'Order status updated.'),
         createdAt: new Date()
       })
-      if (req.body.status === 'delivered' && order.paymentMethod === 'cod') order.paymentStatus = 'paid'
+      if (req.body.status === 'delivered' && order.paymentMethod === 'cod') order.paymentStatus = getPaymentStatusAfterDelivery(order)
       await order.save({ session })
       updatedOrder = order
     })
